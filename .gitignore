@@ -1,0 +1,15 @@
+.coverage
+.env
+.idea/
+collective_decision/__pycache__/
+dashboard/__pycache__/
+geolocalisation/__pycache__/
+goup/__pycache__/
+group_member/__pycache__/
+point_provider/__pycache__/
+product/__pycache__/
+settings/__pycache__/
+static/__pycache__/
+templates/__pycache__/
+user/__pycache__/
+Le système de points

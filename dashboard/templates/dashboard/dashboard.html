@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+{% block content %}
+<body>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+      <div class="list-group">
+  <form class="list-group-item list-group-item-action active" aria-current="true">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">Nom Communauté</h5>
+      <small>Image</small>
+        <div style="display: flex; flex-direction: column">
+            <button type="button" class="btn btn-link">Rejoindre</button>
+        <button type="button" class="btn btn-link">Catalogue</button>
+        </div>
+    </div>
+    <p class="mb-1">Nombre de membres : 3</p>
+      <p class="mb-1">Nombre de points : 30</p>
+      <p class="mb-1">Nombre de produits : 10</p>
+      <p class="mb-1">Points par utilisateur : 10</p>
+      <p class="mb-1">Adresse : 20 rue de la Chine - Paris</p>
+  </form>
+  <a href="#" class="list-group-item list-group-item-action">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">Nom Communauté</h5>
+      <small>Image</small>
+        <div style="display: flex; flex-direction: column">
+            <button type="button" class="btn btn-link">Rejoindre</button>
+        <button type="button" class="btn btn-link">Catalogue</button>
+        </div>
+    </div>
+        <p class="mb-1">Nombre de membres : 3</p>
+      <p class="mb-1">Nombre de points : 30</p>
+      <p class="mb-1">Nombre de produits : 10</p>
+      <p class="mb-1">Points par utilisateur : 10</p>
+      <p class="mb-1">Ville : Paris</p>
+  </a>
+  <a href="#" class="list-group-item list-group-item-action">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">Community Name</h5>
+      <small class="text-muted">Number of users</small>
+    </div>
+    <p class="mb-1">Community Description</p>
+    <small class="text-muted">Number of products</small>
+  </a>
+</div>
+    </div>
+    <div class="col">
+        <div class="row row-cols-2">
+            <div class="col">
+                <div class="card">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Product title</h5>
+                        <small class="text-muted">Price</small>
+                        <br />
+                        <small class="text-muted">Community Name</small>
+                        <p class="card-text">This is a longer description with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <img src="{% static 'the.jpg' %}" class="card-img-top" alt="Un produit"height="30px" width="1px">
+                    <div class="card-body">
+                        <h5 class="card-title">Product title</h5>
+                        <small class="text-muted">Price</small>
+                        <br />
+                        <small class="text-muted">Community Name</small>
+                        <p class="card-text">This is a longer description with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <img src="{% static 'the.jpg' %}" class="card-img-top" alt="Un produit"height="30px" width="1px">
+                    <div class="card-body">
+                        <h5 class="card-title">Product title</h5>
+                        <small class="text-muted">Price</small>
+                        <br />
+                        <small class="text-muted">Community Name</small>
+                        <p class="card-text">This is a longer description with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Product title</h5>
+                        <small class="text-muted">Price</small>
+                        <br />
+                        <small class="text-muted">Community Name</small>
+                        <p class="card-text">This is a longer description with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+</body>
+{% endblock content %}
+</html>
