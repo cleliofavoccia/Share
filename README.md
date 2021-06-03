@@ -90,6 +90,3 @@ Pour obtenir la PS5, il faut :
 Lorsque le produit est emprunté, pour chaque jour qu'on le 
 possède, on récupère un point par jour.
 Lorsqu'on rend l'objet à la communauté, on récupère tous ses points.
-
-# Note
-Soit je fais un point = un jour, et jme dis, on peut emprunter la PS4 le nombre de jour qu'on a de point seulement si notre capital est égal ou supérieur à sa valeur. Donc on peut emprunter la PS4 que si un utilisateur a 25pts. Donc ça reprends mon idée d'origine que j'aime bien de faire en sorte que les objets les plus chers ne sont empruntable que si on rajoute des objets avec un prix similaire ou supérieur, ce qui encourage les communautés à mettre des choses intéressantes en emprunt si ils veulent emprunter des choses intéressante.Et du coup ça veut dire que le choix de son prix (au moment où on l'ajoute) décide en fait d'une sorte de date maximum d'emprunt (ici 25jours), pareil, en sachant qu'on peut l'emprunter moins (donc solution très similaire à la 1er)
