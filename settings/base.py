@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'point_provider.apps.PointProviderConfig',
     'product.apps.ProductConfig',
     'user.apps.UserConfig',
+    'django_extensions',
     # The following apps are required for django-allauth:
     'django.contrib.sites',
     'allauth',
@@ -189,4 +190,12 @@ SOCIALACCOUNT_PROVIDERS = {
     },
 }
 
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTIFICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+# ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# DEFAULT_FROM_EMAIL = 'hello@share.org'
 

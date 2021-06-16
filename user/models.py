@@ -11,3 +11,7 @@ class User(AbstractUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
+
+    def __str__(self):
+        """Print attribute as title's object in Django admin"""
+        return '%s' % self.email

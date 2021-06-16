@@ -31,3 +31,10 @@ class Decision(models.Model):
                 fields=['group_member', 'group'], name='user_group_uniq'
             )
         ]
+
+    def __str__(self):
+        """Print attribute as title's object in Django admin"""
+        return '%s, %s, %s, %s, %s' % (
+            self.delete_group_vote, self.modify_group_vote,
+            self.delete_member_vote, self.group_member,
+            self.group)

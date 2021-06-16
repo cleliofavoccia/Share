@@ -17,3 +17,7 @@ class Group(models.Model):
     decision_makers = models.ManyToManyField('group_member.GroupMember',
                                              through="collective_decision.Decision",
                                              related_name='vote_of_members_in_group')
+
+    def __str__(self):
+        """Print attribute as title's object in Django admin"""
+        return '%s' % self.name

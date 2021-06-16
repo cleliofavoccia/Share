@@ -2,14 +2,26 @@
 .env
 .idea/
 collective_decision/__pycache__/
+collective_decision/migrations/__pycache__/
 dashboard/__pycache__/
+dashboard/migrations/__pycache__/
 geolocalisation/__pycache__/
+geolocalisation/migrations/__pycache__/
 goup/__pycache__/
+goup/migrations/__pycache__/
 group_member/__pycache__/
+group_member/migrations/__pycache__/
 point_provider/__pycache__/
+point_provider/migrations/__pycache__/
 product/__pycache__/
+product/migrations/__pycache__/
 settings/__pycache__/
+settings/migrations/__pycache__/
 static/__pycache__/
+static/migrations/__pycache__/
 templates/__pycache__/
+templates/migrations/__pycache__/
 user/__pycache__/
+user/migrations/__pycache__/
+static
 Le système de points
