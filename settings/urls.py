@@ -22,7 +22,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('dashboard.urls')),
+    path('', include('dashboard.urls'), name='dashboard'),
     path('account/', include('allauth.urls'), name='allauth'),
     path('', lambda request: HttpResponse('index'), name='index'),
     path('group/', include('group.urls')),

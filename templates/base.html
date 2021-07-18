@@ -11,7 +11,7 @@
   <header>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'explorer' %}">LOGO</a>
+    <a class="navbar-brand" href="{% url 'dashboard:explorer' %}">LOGO</a>
       <form class="d-flex">
       <input class="form-control me-2" type="search" placeholder="Rechercher une communauté" aria-label="Search">
       <button class="btn btn-outline-success" type="submit">Chercher</button>
@@ -22,11 +22,11 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
         <a class="nav-link active" aria-current="page" href="#">A propos</a>
-        <a class="nav-link active" aria-current="page" href="{% url 'explorer' %}">Explorer</a>
+        <a class="nav-link active" aria-current="page" href="{% url 'dashboard:explorer' %}">Explorer</a>
         {% if not user.is_authenticated %}
             <a class="nav-link active" aria-current="page" href="{% url 'account_login' %}">Se connecter</a>
         {% else %}
-            <a class="nav-link active" aria-current="page" href="{% url 'my_communities' %}">Mes communautés</a>
+            <a class="nav-link active" aria-current="page" href="{% url 'dashboard:my_communities' %}">Mes communautés</a>
             <a class="nav-link active" aria-current="page" href="#">Mes produits loués</a>
             <a class="nav-link active" aria-current="page" href="{% url 'product:mes_produits_fournis' %}">Mes produits fournis</a>
             <a class="nav-link active" aria-current="page" href="#">Mon Compte</a>

@@ -23,7 +23,7 @@ class Product(models.Model):
     group = models.ForeignKey('group.Group',
                               on_delete=models.CASCADE,
                               related_name='group_owns_product')
-    image = models.ImageField()
+    image = models.ImageField(null=True, blank=True)
     estimator = models.ManyToManyField('group_member.GroupMember',
                                        through="collective_decision.Estimation",
                                        related_name=
