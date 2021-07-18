@@ -53,8 +53,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     # Providers provide by django-allauth:
     'allauth.socialaccount.providers.discord',
-    'allauth.socialaccount.providers.steam',
-    'allauth.socialaccount.providers.twitter',
 ]
 
 MIDDLEWARE = [
@@ -135,7 +133,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fr'
 
 TIME_ZONE = 'UTC'
 
@@ -176,26 +174,19 @@ SOCIALACCOUNT_PROVIDERS = {
             # https://discord.com/api/oauth2/authorize?client_id=850037364838760459&redirect_uri=http%3A%2F%2F127.0.0.1%3A8000%2Faccounts%2Fdiscord%2Flogin%2Fcallback%2F&response_type=code&scope=email
         }
     },
-
-    'steam': {
-        # For each OAuth based provider, either add a ``SocialApp``
-        # (``socialaccount`` app) containing the required client
-        # credentials, or list them here:
-        'APP': {
-            'client_id': 'BEF6B3D2EA6BAC038D6E718E6D901139',
-            'secret': 'BEF6B3D2EA6BAC038D6E718E6D901139',
-            'key': ''
-
-        }
-    },
 }
-
+LOGIN_URL = "account_login"
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTIFICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
+LOGIN_REDIRECT_URL = 'explorer'
+
 # ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # DEFAULT_FROM_EMAIL = 'hello@share.org'
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+MEDIA_URL = "/media/"

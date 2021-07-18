@@ -9,12 +9,43 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
   </head>
   <header>
-    <nav class="navbar navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand">Navbar</a>
-            <a class="nav-link" href="#">Account</a>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'explorer' %}">LOGO</a>
+      <form class="d-flex">
+      <input class="form-control me-2" type="search" placeholder="Rechercher une communauté" aria-label="Search">
+      <button class="btn btn-outline-success" type="submit">Chercher</button>
+    </form>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link active" aria-current="page" href="#">A propos</a>
+        <a class="nav-link active" aria-current="page" href="{% url 'explorer' %}">Explorer</a>
+        {% if not user.is_authenticated %}
+            <a class="nav-link active" aria-current="page" href="{% url 'account_login' %}">Se connecter</a>
+        {% else %}
+            <a class="nav-link active" aria-current="page" href="{% url 'my_communities' %}">Mes communautés</a>
+            <a class="nav-link active" aria-current="page" href="#">Mes produits loués</a>
+            <a class="nav-link active" aria-current="page" href="{% url 'product:mes_produits_fournis' %}">Mes produits fournis</a>
+            <a class="nav-link active" aria-current="page" href="#">Mon Compte</a>
+            <a class="nav-link active" aria-current="page" href="{% url 'account_logout' %}">Se déconnecter</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</nav>
+    <div class="container">
+        {% if not user.is_authenticated %}
+        <div style="height: 200px;">
+            <h1 style="text-align: center; padding-top: 30px;">Qu'est-ce que SHARE ?</h1>
+            <p style="text-align: center;">Mettre en commun des biens pour davantage d'émancipation matérielle avec
+            un système de gestion d'emprunt qui donne un intérêt à la fois individuel et collectif de
+            partager ses biens avec ses voisins, ses amis ou encore sa famille !</p>
         </div>
-    </nav>
+        {% endif %}
+    </div>
   </header>
   <body>
     <!-- Content-->

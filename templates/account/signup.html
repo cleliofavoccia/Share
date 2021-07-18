@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% load i18n %} 
+
+{% block head_title %}{% trans "Signup" %}{% endblock %} 
+
+{% block content %}
+<div class="container">
+<h1>S'inscrire</h1>
+
+<p>{% blocktrans %}Avez vous déjà un compte? <a href="{{ login_url }}">Connectez vous ici</a>.{% endblocktrans %}</p>
+<p>Inscrivez-vous directement avec votre compte Discord.</p>
+<div class="socialaccount_ballot">
+
+  <ul class="socialaccount_providers">
+    {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+  </ul>
+
+  <div class="login-or">{% trans 'or' %}</div>
+
+</div>
+<p>Remplissez ce formulaire d'inscription</p>
+<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}"> 
+    {% csrf_token %} 
+    {{ form.as_p }} 
+    {% if redirect_field_value %} 
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" /> 
+    {% endif %} 
+     <button type="submit">S'inscrire</button>
+  </form>
+</div>
+{% endblock %}

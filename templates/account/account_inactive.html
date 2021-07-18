@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Account Inactive" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+<h1>Vous n'êtes plus actif depuis un moment</h1>
+
+<p>Veuillez vous <a href="{% url 'account_login' %}">reconnecter</a></p>
+</div>
+
+{% endblock %}

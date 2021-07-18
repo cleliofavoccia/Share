@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ group.name }}</title>
+</head>
+<body>
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+            <div class="col d-flex flex-row align-items-center">
+                <h1 class="pe-5">{{ group.name }}</h1>
+                <img class="group-image" src="{{ group.image.url }}">
+            </div>
+            <p>Nombre de membres : {{ members_number }}</p>
+            <p>Nombre de points : {{ group.points }}</p>
+            <p>Nombre de produits : {{ products_number }}</p>
+            <p>Points par utilisateur : {{ group.members_points }}</p>
+            <p>Adresse : {{ group.address }}</p>
+        </div>
+        {% if group.name in group_member_list %}
+            <div class="col d-flex flex-column border border-2">
+                {% if not modify_group_vote %}
+                <form method="POST" action="{% url 'collective_decision:modify_vote_group' %}">
+                    {% csrf_token %}
+                    <button class="btn btn-link primary d-inline" value="submit">Modifier la communauté</button>
+                    <input type="hidden" name="group_member" value="{{ group_member.id }}"/>
+                    <input type="hidden" name="group" value="{{ group.id }}"/>
+                </form>
+                {% else %}
+                <form method="POST" action="{% url 'collective_decision:against_modify_vote_group' %}">
+                    {% csrf_token %}
+                    <button class="btn btn-link primary d-inline" value="submit">Modifier la communauté</button>
+                    <input type="hidden" name="group_member" value="{{ group_member.id }}"/>
+                    <input type="hidden" name="group" value="{{ group.id }}"/>
+                </form>
+                {% endif %}
+                <a class="link-primary d-inline" href="">Inscrire un produit</a>
+                {% if not delete_group_vote %}
+                <form method="POST" action="{% url 'collective_decision:delete_vote_group' %}">
+                    {% csrf_token %}
+                    <button class="btn btn-link danger d-inline" value="submit">Supprimer la communauté</button>
+                    <input type="hidden" name="group_member" value="{{ group_member.id }}"/>
+                    <input type="hidden" name="group" value="{{ group.id }}"/>
+                </form>
+                {% else %}
+                <form method="POST" action="{% url 'collective_decision:against_delete_vote_group' %}">
+                    {% csrf_token %}
+                    <button class="btn btn-link danger d-inline" value="submit">Supprimer la communauté</button>
+                    <input type="hidden" name="group_member" value="{{ group_member.id }}"/>
+                    <input type="hidden" name="group" value="{{ group.id }}"/>
+                </form>
+                {% endif %}
+                <form method="POST" action="{% url 'group_member:delete_group_members' %}">
+                    {% csrf_token %}
+                    <button class="btn btn-danger d-inline" value="submit">Partir de la communauté</button>
+                    <input type="hidden" name="user" value="{{ user.id }}"/>
+                    <input type="hidden" name="group" value="{{ group.id }}"/>
+                </form>
+
+            </div>
+        {% else %}
+            <div class="col d-flex flex-column" style="margin-top: 50px;">
+                <p>Rejoindre la communauté vous permettra de pouvoir emprunter les produits mise à
+                disposition par les membres du groupe et également de pouvoir partager vos propres
+                produits ! N'hésitez pas à aller voir le lien laisser par la communauté, cela peut
+                vous permettre de les découvrir avant de participer au partage de produits avec eux !</p>
+                <form method="POST" action="{% url 'group_member:add_group_members' %}">
+                    {% csrf_token %}
+                    <button class="btn btn-link d-inline" value="submit">Rejoindre la communauté !</button>
+                    <input type="hidden" name="user" value="{{ user.id }}"/>
+                    <input type="hidden" name="group" value="{{ group.id }}"/>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        {% for product in group_products_list %}
+        <div class="col">
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img class="product-image" src="{{ product.image.url }}" alt="...">
+                    </div>
+                <div class="col-md-8 w-50 h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                            {% if product.tenant %}
+                            <p class="card-text">{{ product.points }} | Utilisations restantes: 3</p>
+                            {% else %}
+                            <p class="card-text">{{ product.points }}</p>
+                            {% endif %}
+                            <p class="card-text"><a href="" class="text-muted">Voir produit</a></p>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div>
+                {% if not product.tenant %}
+                <a class="btn btn-outline-primary" href="">Louer</a>
+                {% else %}
+                <a class="btn btn-outline-secondary disabled" href="">Indisponible</a>
+                {% endif %}
+                {% if product.user_provider == user %}
+                <a class="btn btn-outline-light" href="">Modifier</a>
+                <a class="btn btn-outline-danger" href="">Supprimer</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+</div>
+<style>
+    .product-image{
+        width: 180px;
+        height: 100px;
+    }
+    .group-image{
+        width: 100px;
+    }
+</style>
+{% endblock content %}
+</body>
+</html>

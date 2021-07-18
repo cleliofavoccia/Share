@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mes produits fournis</title>
+</head>
+<body>
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        {% if supplied_products %}
+            {% for product in supplied_products %}
+            <div class="col">
+                <div class="card mb-3" style="max-width: 540px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img class="product-image" src="{{ product.image }}" alt="...">
+                        </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="card-text"> {{ product.points }}</p>
+                                {% if product.tenant %}
+                                <p>Utilisations restantes: 3</p>
+                                {% endif %}
+                                <p class="card-text"><a href="" class="text-muted">Voir produit</a></p>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div>
+                    {% if not product.tenant %}
+                    <a class="btn btn-outline-primary" href="">Louer</a>
+                    {% else %}
+                    <a class="btn btn-outline-secondary disabled" href="">Indisponible</a>
+                    {% endif %}
+                    {% if product.user_provider == user %}
+                    <a class="btn btn-outline-light" href="">Modifier</a>
+                    <a class="btn btn-outline-danger" href="">Supprimer</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <h1>Vous n'avez fournis aucun produit ! </h1>
+            <h2>Il est temps d'en fournir un ! Rendez-vous dans la page de une de vos communautés et cliquer sur "Inscrire un produit" </h2>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}
+</body>
+</html>

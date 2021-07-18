@@ -25,3 +25,5 @@ user/__pycache__/
 user/migrations/__pycache__/
 static
 Le système de points
+images_tests
+media

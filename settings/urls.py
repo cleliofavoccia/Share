@@ -15,9 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.http import HttpResponse
+
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('dashboard.urls')),
-    path('compte/', include('allauth.account.urls')),
+    path('account/', include('allauth.urls'), name='allauth'),
+    path('', lambda request: HttpResponse('index'), name='index'),
+    path('group/', include('group.urls')),
+    path('product/', include('product.urls')),
+    path('user/', include('user.urls')),
+    path('group_member/', include('group_member.urls')),
+    path('collective_decision/', include('collective_decision.urls'), name='collective_decision')
 ]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

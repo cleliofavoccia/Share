@@ -29,6 +29,8 @@ class Product(models.Model):
                                        related_name=
                                        'product_cost_estimation_of_members_in_group')
 
+    points = models.IntegerField(null=True, blank=True)
+
     def __str__(self):
         """Print attribute as title's object in Django admin"""
         return '%s, %s, %s' % (

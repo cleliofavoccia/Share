@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ product.name }}</title>
+</head>
+<body>
+{% block content %}
+<div class="col d-flex flex-row">
+        <h1>{{ product.group.name }}</h1>
+        <img src="{{ group.image.url }}">
+</div>
+<h3>Nombre de membres : {{ members_number }}</h3>
+<h3>Nombre de points : {{ product.group.points }}</h3>
+<h3>Nombre de produits : {{ products_number }}</h3>
+{% if current_group_member_points %}
+    <h3>Mes points : {{ current_group_member_points }}</h3>
+{% endif %}
+<h3>Adresse : {{ product.group.address }}</h3>
+
+<h1>{{ product.name }}</h1>
+<img style="width: 300px;" src="{{ product.image.url }}">
+<p>{{ product.description }}</p>
+{% if product.user_provider %}
+  <h3>Fournisseur : {{ product.user_provider.user.username }}</h3>
+{% else %}
+  <h3>Fournisseur : {{ product.group_provider.group.name }}</h3>
+{% endif %}
+<h3>Coût : {{ product.points }}</h3>
+<div>
+    {% if not product.tenant %}
+    <a class="btn btn-outline-primary" href="">Louer</a>
+    {% else %}
+    <a class="btn btn-outline-secondary disabled" href="">Indisponible</a>
+    {% endif %}
+    {% if product.user_provider == user %}
+    <a class="btn btn-outline-light" href="">Modifier</a>
+    <a class="btn btn-outline-danger" href="">Supprimer</a>
+    {% endif %}
+</div>
+
+{% endblock content %}
+</body>
+</html>

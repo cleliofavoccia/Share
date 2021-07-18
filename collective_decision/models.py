@@ -1,3 +1,4 @@
+"""Manage collective_decision's objects"""
 from django.db import models
 
 
@@ -34,7 +35,5 @@ class Decision(models.Model):
 
     def __str__(self):
         """Print attribute as title's object in Django admin"""
-        return '%s, %s, %s, %s, %s' % (
-            self.delete_group_vote, self.modify_group_vote,
-            self.delete_member_vote, self.group_member,
-            self.group)
+        return f'{self.group_member} a voté {self.delete_group_vote} pour supprimer {self.group},' \
+               f'{self.modify_group_vote} pour modifier {self.group}'
