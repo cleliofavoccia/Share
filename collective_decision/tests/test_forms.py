@@ -1,12 +1,13 @@
 """Tests of collective_decision django forms"""
+
 from django.test import TestCase
 
 from user.models import User
-from ..forms import GroupMemberVoteForm
-
-from collective_decision.models import Decision
 from group.models import Group
 from group_member.models import GroupMember
+
+from ..models import Decision
+from ..forms import GroupMemberVoteForm
 
 
 class GroupMemberVoteFormTest(TestCase):
@@ -14,9 +15,16 @@ class GroupMemberVoteFormTest(TestCase):
     @classmethod
     def setUp(cls):
         """Set up a context to test GroupMemberVoteForm object"""
-        cls.user = User.objects.create_user(username='Frodon', email='frodon@gmail.com', password='sam')
+        cls.user = User.objects.create_user(
+            username='Frodon',
+            email='frodon@gmail.com',
+            password='sam'
+        )
         cls.group = Group.objects.create(name="La communauté de l'anneau")
-        cls.group_member = GroupMember.objects.create(user=cls.user, group=cls.group)
+        cls.group_member = GroupMember.objects.create(
+            user=cls.user,
+            group=cls.group
+        )
 
         cls.cleaned_data = {
             'group_member': None,
@@ -45,7 +53,7 @@ class GroupMemberVoteFormTest(TestCase):
         try:
             group = Group.objects.get(name="Mordor")
         except Group.DoesNotExist:
-            group = {'name': 'Mordor', 'id' : '1'}
+            group = {'name': 'Mordor', 'id': '1'}
 
         form = GroupMemberVoteForm(data={
             'group_member': group_member.id,
@@ -56,11 +64,11 @@ class GroupMemberVoteFormTest(TestCase):
         try:
             user = User.objects.get(username='Sam')
         except User.DoesNotExist:
-            user = {'name': 'Sam', 'id' : '1'}
+            user = {'name': 'Sam', 'id': '1'}
         try:
             group_member = GroupMember.objects.get(user=user['id'])
         except GroupMember.DoesNotExist:
-            group_member = {'name': 'Sam', 'id' : '1'}
+            group_member = {'name': 'Sam', 'id': '1'}
         try:
             group = Group.objects.get(name="Mordor")
         except Group.DoesNotExist:
@@ -124,7 +132,10 @@ class GroupMemberVoteFormTest(TestCase):
         user = User.objects.get(username='Frodon')
         group_member = GroupMember.objects.get(user=user)
         self.cleaned_data['group_member'] = group_member.id
-        self.assertEqual(group_member, GroupMemberVoteForm.clean_group_member(self))
+        self.assertEqual(
+            group_member,
+            GroupMemberVoteForm.clean_group_member(self)
+        )
 
     def test_clean_group(self):
         """Test GroupMemberVoteForm verify if Group

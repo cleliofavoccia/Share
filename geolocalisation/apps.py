@@ -1,3 +1,5 @@
+"""Manage geolocalisation django application"""
+
 from django.apps import AppConfig
 
 

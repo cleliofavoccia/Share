@@ -8,12 +8,18 @@
 </head>
 <body>
 {% block content %}
+{% if group.private and group.name in group_member_list or not group.private %}
 <div class="container">
     <div class="row">
         <div class="col-8">
             <div class="col d-flex flex-row align-items-center">
                 <h1 class="pe-5">{{ group.name }}</h1>
                 <img class="group-image" src="{{ group.image.url }}">
+                {% if group.url %}
+                <a class="ms-5" href="{{ group.url }}">Site web ou Discord de la communauté</a>
+                {% else %}
+                <p class="ms-5 text-danger">Cette communauté n'a pas de site web ou Discord</p>
+                {% endif %}
             </div>
             <p>Nombre de membres : {{ members_number }}</p>
             <p>Nombre de points : {{ group.points }}</p>
@@ -116,7 +122,9 @@
         {% endfor %}
     </div>
 </div>
-
+{% else %}
+<h1> Vous n'avez pas accès à cette communauté car celle-ci est privée !</h1>
+{% endif %}
 </div>
 <style>
     .product-image{

@@ -1,11 +1,12 @@
 """Tests of collective_decision django views"""
+
 from django.test import TestCase
 from django.urls import reverse
-from django.shortcuts import render, redirect
 
 from group_member.models import GroupMember
 from group.models import Group
 from user.models import User
+
 from ..models import Decision
 
 
@@ -14,21 +15,32 @@ class GroupMemberDeleteVoteGroupTest(TestCase):
     @classmethod
     def setUp(cls):
         """Set up a context to test GroupMemberDeleteVoteGroup generic view"""
-        cls.user = User.objects.create_user(username='Frodon', email='frodon@gmail.com', password='sam')
+        cls.user = User.objects.create_user(
+            username='Frodon',
+            email='frodon@gmail.com',
+            password='sam'
+        )
         cls.group = Group.objects.create(name="La communauté de l'anneau")
-        cls.group_member = GroupMember.objects.create(user=cls.user, group=cls.group)
+        cls.group_member = GroupMember.objects.create(
+            user=cls.user,
+            group=cls.group
+        )
 
     def test_redirect_if_not_logged_in(self):
         """Test user can't access to GroupMemberDeleteVoteGroup generic view
          and it is redirect to login form"""
-        response = self.client.get(reverse('collective_decision:delete_vote_group'))
+        response = self.client.get(
+            reverse('collective_decision:delete_vote_group')
+        )
         self.assertRedirects(
             response,
-            f'{reverse("account_login")}?next={reverse("collective_decision:delete_vote_group")}'
+            f'{reverse("account_login")}'
+            f'?next={reverse("collective_decision:delete_vote_group")}'
         )
 
     def test_view_url_accessible_by_name(self):
-        """Test view can accessible by GroupMemberDeleteVoteGroup generic view's name"""
+        """Test view can accessible by
+        GroupMemberDeleteVoteGroup generic view's name"""
         self.client.force_login(self.user)
         group = Group.objects.get(name="La communauté de l'anneau")
         group_member = GroupMember.objects.get(user=self.user)
@@ -72,7 +84,7 @@ class GroupMemberDeleteVoteGroupTest(TestCase):
 
         self.assertRedirects(
             false_response,
-            reverse('collective_decision:fail')
+            reverse('website:fail')
         )
 
 
@@ -80,22 +92,34 @@ class GroupMemberAgainstDeleteVoteGroupTest(TestCase):
     """Tests on GroupMemberAgainstDeleteVoteGroup generic view"""
     @classmethod
     def setUp(cls):
-        """Set up a context to test GroupMemberAgainstDeleteVoteGroup generic view"""
-        cls.user = User.objects.create_user(username='Frodon', email='frodon@gmail.com', password='sam')
+        """Set up a context to test
+        GroupMemberAgainstDeleteVoteGroup generic view"""
+        cls.user = User.objects.create_user(
+            username='Frodon',
+            email='frodon@gmail.com',
+            password='sam'
+        )
         cls.group = Group.objects.create(name="La communauté de l'anneau")
-        cls.group_member = GroupMember.objects.create(user=cls.user, group=cls.group)
+        cls.group_member = GroupMember.objects.create(
+            user=cls.user,
+            group=cls.group
+        )
 
     def test_redirect_if_not_logged_in(self):
         """Test user can't access to GroupMemberAgainstDeleteVoteGroup generic view
         and it is redirect to login form"""
-        response = self.client.get(reverse('collective_decision:against_delete_vote_group'))
+        response = self.client.get(
+            reverse('collective_decision:against_delete_vote_group')
+        )
         self.assertRedirects(
             response,
-            f'{reverse("account_login")}?next={reverse("collective_decision:against_delete_vote_group")}'
+            f'{reverse("account_login")}'
+            f'?next={reverse("collective_decision:against_delete_vote_group")}'
         )
 
     def test_view_url_accessible_by_name(self):
-        """Test view can accessible by GroupMemberAgainstDeleteVoteGroup generic view's name"""
+        """Test view can accessible by
+        GroupMemberAgainstDeleteVoteGroup generic view's name"""
         self.client.force_login(self.user)
         group = Group.objects.get(name="La communauté de l'anneau")
         group_member = GroupMember.objects.get(user=self.user)
@@ -139,7 +163,7 @@ class GroupMemberAgainstDeleteVoteGroupTest(TestCase):
 
         self.assertRedirects(
             false_response,
-            reverse('collective_decision:fail')
+            reverse('website:fail')
         )
 
 
@@ -148,21 +172,32 @@ class GroupMemberModifyVoteGroupTest(TestCase):
     @classmethod
     def setUp(cls):
         """Set up a context to test GroupMemberModifyVoteGroup generic view"""
-        cls.user = User.objects.create_user(username='Frodon', email='frodon@gmail.com', password='sam')
+        cls.user = User.objects.create_user(
+            username='Frodon',
+            email='frodon@gmail.com',
+            password='sam'
+        )
         cls.group = Group.objects.create(name="La communauté de l'anneau")
-        cls.group_member = GroupMember.objects.create(user=cls.user, group=cls.group)
+        cls.group_member = GroupMember.objects.create(
+            user=cls.user,
+            group=cls.group
+        )
 
     def test_redirect_if_not_logged_in(self):
         """Test user can't access to GroupMemberModifyVoteGroup generic view
         and it is redirect to login form"""
-        response = self.client.get(reverse('collective_decision:modify_vote_group'))
+        response = self.client.get(
+            reverse('collective_decision:modify_vote_group')
+        )
         self.assertRedirects(
             response,
-            f'{reverse("account_login")}?next={reverse("collective_decision:modify_vote_group")}'
+            f'{reverse("account_login")}'
+            f'?next={reverse("collective_decision:modify_vote_group")}'
         )
 
     def test_view_url_accessible_by_name(self):
-        """Test view can accessible by GroupMemberModifyVoteGroup generic view's name"""
+        """Test view can accessible by
+        GroupMemberModifyVoteGroup generic view's name"""
         self.client.force_login(self.user)
         group = Group.objects.get(name="La communauté de l'anneau")
         group_member = GroupMember.objects.get(user=self.user)
@@ -206,7 +241,7 @@ class GroupMemberModifyVoteGroupTest(TestCase):
 
         self.assertRedirects(
             false_response,
-            reverse('collective_decision:fail')
+            reverse('website:fail')
         )
 
 
@@ -214,22 +249,34 @@ class GroupMemberAgainstModifyVoteGroupTest(TestCase):
     """Tests on GroupMemberAgainstModifyVoteGroup generic view"""
     @classmethod
     def setUp(cls):
-        """Set up a context to test GroupMemberAgainstModifyVoteGroup generic view"""
-        cls.user = User.objects.create_user(username='Frodon', email='frodon@gmail.com', password='sam')
+        """Set up a context to test
+        GroupMemberAgainstModifyVoteGroup generic view"""
+        cls.user = User.objects.create_user(
+            username='Frodon',
+            email='frodon@gmail.com',
+            password='sam'
+        )
         cls.group = Group.objects.create(name="La communauté de l'anneau")
-        cls.group_member = GroupMember.objects.create(user=cls.user, group=cls.group)
+        cls.group_member = GroupMember.objects.create(
+            user=cls.user,
+            group=cls.group
+        )
 
     def test_redirect_if_not_logged_in(self):
         """Test user can't access to GroupMemberAgainstModifyVoteGroup generic view
         and it is redirect to login form"""
-        response = self.client.get(reverse('collective_decision:against_modify_vote_group'))
+        response = self.client.get(
+            reverse('collective_decision:against_modify_vote_group')
+        )
         self.assertRedirects(
             response,
-            f'{reverse("account_login")}?next={reverse("collective_decision:against_modify_vote_group")}'
+            f'{reverse("account_login")}'
+            f'?next={reverse("collective_decision:against_modify_vote_group")}'
         )
 
     def test_view_url_accessible_by_name(self):
-        """Test view can accessible by GroupMemberAgainstModifyVoteGroup generic view's name"""
+        """Test view can accessible by
+        GroupMemberAgainstModifyVoteGroup generic view's name"""
         self.client.force_login(self.user)
         group = Group.objects.get(name="La communauté de l'anneau")
         group_member = GroupMember.objects.get(user=self.user)
@@ -273,7 +320,7 @@ class GroupMemberAgainstModifyVoteGroupTest(TestCase):
 
         self.assertRedirects(
             false_response,
-            reverse('collective_decision:fail')
+            reverse('website:fail')
         )
 
 
@@ -283,26 +330,43 @@ class GroupVoteViewTest(TestCase):
     @classmethod
     def setUp(cls):
         """Set up a context to test GroupVoteView generic detail view"""
-        cls.user1 = User.objects.create_user(username='Frodon', email='frodon@gmail.com', password='sam')
-        cls.user2 = User.objects.create_user(username='Sam', email='sam@gmail.com', password='frodon')
+        cls.user1 = User.objects.create_user(
+            username='Frodon',
+            email='frodon@gmail.com',
+            password='sam'
+        )
+        cls.user2 = User.objects.create_user(
+            username='Sam',
+            email='sam@gmail.com',
+            password='frodon'
+        )
 
         cls.group = Group.objects.create(name="La communauté de l'anneau")
-        cls.group_member1 = GroupMember.objects.create(user=cls.user1, group=cls.group)
-        cls.group_member2 = GroupMember.objects.create(user=cls.user2, group=cls.group)
+        cls.group_member1 = GroupMember.objects.create(
+            user=cls.user1,
+            group=cls.group
+        )
+        cls.group_member2 = GroupMember.objects.create(
+            user=cls.user2,
+            group=cls.group
+        )
 
-    # QUE VEUX DIRE DES ACCESSIONS QUI FONCTIONNENT AVEC REVERSE MAIS PAS REDIRECT ?
     def test_redirect_if_not_logged_in(self):
         """Test user can't access to GroupMemberAgainstModifyVoteGroup generic view
         and it is redirect to login form"""
         group = Group.objects.get(name="La communauté de l'anneau")
-        response = self.client.get(reverse("collective_decision:vote", args=[group.pk]))
+        response = self.client.get(
+            reverse("collective_decision:vote", args=[group.pk])
+        )
         self.assertRedirects(
             response,
-            f'{reverse("account_login")}?next={reverse("collective_decision:vote", args=[group.pk])}'
+            f'{reverse("account_login")}'
+            f'?next={reverse("collective_decision:vote", args=[group.pk])}'
         )
 
     def test_view_url_accessible_by_name(self):
-        """Test view can accessible by GroupVoteView generic detail view's name"""
+        """Test view can accessible by GroupVoteView
+        generic detail view's name"""
         self.client.force_login(self.user1)
         group = Group.objects.get(name="La communauté de l'anneau")
 
@@ -316,12 +380,15 @@ class GroupVoteViewTest(TestCase):
         """Test GroupVoteView use the correct template"""
         self.client.force_login(self.user1)
         group = Group.objects.get(name="La communauté de l'anneau")
-        response = self.client.get(reverse('collective_decision:vote', args=[group.id]))
+        response = self.client.get(
+            reverse('collective_decision:vote', args=[group.id])
+        )
 
         self.assertTemplateUsed(response, 'collective_decision/vote.html')
 
-    def test_group_modification_is_true_if_users_are_voted_for_modification(self):
-        """Test users can modify group if all users are voted for modification"""
+    def test_group_modification_is_true_if_users_are_voted_for(self):
+        """Test users can modify group if all users
+        are voted for modification"""
         self.client.force_login(self.user1)
         user1 = User.objects.get(username='Frodon')
         user2 = User.objects.get(username='Sam')
@@ -329,8 +396,16 @@ class GroupVoteViewTest(TestCase):
         group_member1 = GroupMember.objects.get(user=user1, group=group)
         group_member2 = GroupMember.objects.get(user=user2, group=group)
 
-        decision1 = Decision.objects.create(group=group, group_member=group_member1, modify_group_vote=True)
-        decision2 = Decision.objects.create(group=group, group_member=group_member2, modify_group_vote=True)
+        Decision.objects.create(
+            group=group,
+            group_member=group_member1,
+            modify_group_vote=True
+        )
+        Decision.objects.create(
+            group=group,
+            group_member=group_member2,
+            modify_group_vote=True
+        )
 
         response = self.client.get(
             reverse('collective_decision:vote', args=[group.id])
@@ -347,57 +422,29 @@ class GroupVoteViewTest(TestCase):
         group_member1 = GroupMember.objects.get(user=user1, group=group)
         group_member2 = GroupMember.objects.get(user=user2, group=group)
 
-        decision1 = Decision.objects.create(group=group, group_member=group_member1, delete_group_vote=True)
-        decision2 = Decision.objects.create(group=group, group_member=group_member2, delete_group_vote=True)
+        Decision.objects.create(
+            group=group,
+            group_member=group_member1,
+            delete_group_vote=True
+        )
+        Decision.objects.create(
+            group=group,
+            group_member=group_member2,
+            delete_group_vote=True
+        )
 
         response = self.client.get(
             reverse('collective_decision:vote', args=[group.id])
         )
 
-        self.assertEqual(response.context['delete'], 'La communauté a bien été supprimé')
-
-        # Verify if community is well deleted in database
-        self.assertRaises(Group.DoesNotExist, Group.objects.get, name="La communauté de l'anneau")
-
-
-class FailViewTest(TestCase):
-    """Test FailView generic View"""
-    @classmethod
-    def setUp(cls):
-        """Set up a context to test FailView generic view"""
-        cls.user = User.objects.create_user(username='Frodon', email='frodon@gmail.com', password='sam')
-
-    def test_redirect_if_not_logged_in(self):
-        """Test user can't access to FailView generic view
-        and it is redirect to login form"""
-        response = self.client.get(reverse('collective_decision:fail'))
-        self.assertRedirects(
-            response,
-            f'{reverse("account_login")}?next={reverse("collective_decision:fail")}'
+        self.assertEqual(
+            response.context['delete'],
+            'La communauté a bien été supprimé'
         )
 
-    def test_view_url_accessible_by_name(self):
-        """Test view can accessible by FailView generic view's name"""
-        self.client.force_login(self.user)
-        response = self.client.get(reverse('collective_decision:fail'))
-
-        # Check that we got a response "success"
-        self.assertEqual(response.status_code, 200)
-        # Check our user is logged in
-        self.assertEqual(response.context['user'].username, 'Frodon')
-
-    def test_view_fail_message(self):
-        """Test view display the desired message"""
-        self.client.force_login(self.user)
-        response = self.client.get(reverse('collective_decision:fail'))
-
-        self.assertEqual(response.context['msg_fail'], "Oups ! Il a dû se produire une erreur. Réessayer ou bien,"
-                                                       "en cas de persistence du problème, contactez l'administration"
-                                                       "du site")
-
-    def test_view_uses_correct_template(self):
-        """Test FailView use the correct template"""
-        self.client.force_login(self.user)
-        response = self.client.get(reverse('collective_decision:fail'))
-
-        self.assertTemplateUsed(response, 'collective_decision/fail.html')
+        # Verify if community is well deleted in database
+        self.assertRaises(
+            Group.DoesNotExist,
+            Group.objects.get,
+            name="La communauté de l'anneau"
+        )

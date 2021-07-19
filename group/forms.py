@@ -1,21 +1,28 @@
+"""Manage group app forms"""
+
+from django import forms
 
 from product.models import Product
-from .models import Group
 from geolocalisation.models import Address
 from collective_decision.models import Estimation
-from django import forms
+
+from .models import Group
 
 
 class GroupInscriptionForm(forms.ModelForm):
-    """ Sign in forms to permit the users to modify him"""
+    """ModelForm to create a group"""
 
     class Meta:
         model = Group
-        fields = ['name', 'address', 'image']
+        fields = [
+            'name', 'address', 'image',
+            'url', 'private'
+        ]
 
 
 class ProductInscriptionForm(forms.ModelForm):
-    """ Sign in forms to permit the users to modify him"""
+    """ModelForm to create a product"""
+
     group_member = forms.BooleanField()
     community = forms.BooleanField()
 
@@ -25,6 +32,7 @@ class ProductInscriptionForm(forms.ModelForm):
 
 
 class CostEstimationForm(forms.ModelForm):
+    """ModelForm to create a product cost estimation"""
 
     class Meta:
         model = Estimation
@@ -32,6 +40,7 @@ class CostEstimationForm(forms.ModelForm):
 
 
 class AddressForm(forms.ModelForm):
+    """ModelForm to create a postal address"""
 
     class Meta:
         model = Address

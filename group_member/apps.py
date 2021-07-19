@@ -1,3 +1,5 @@
+"""Manage group_member django application"""
+
 from django.apps import AppConfig
 
 

@@ -1,9 +1,12 @@
+"""Manage group_member's app objects"""
+
 from django.db import models
+
 from django.conf import settings
 
 
 class GroupMember(models.Model):
-    """Association class that associate a
+    """Association model that associate a
     User and a community (a Group object)"""
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
@@ -17,4 +20,3 @@ class GroupMember(models.Model):
             self.user, self.group,
             self.points_posseded
         )
-

@@ -1,11 +1,14 @@
+"""Views of group app"""
+
 from django.views.generic import DetailView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 
-from .models import Group
 from product.models import Product
 from group_member.models import GroupMember
 from collective_decision.models import Estimation, Decision
+
+from .models import Group
 from .forms import GroupInscriptionForm, ProductInscriptionForm, CostEstimationForm, AddressForm
 
 
@@ -43,7 +46,12 @@ class CommunityDetailView(DetailView):
             # Increment total products cost
             community.points += sum_product_cost // estimation_numbers
         # Points per community member
-        community.members_points = community.points // community.members.count()
+        try:
+            community.members_points = (
+                    community.points // community.members.count()
+            )
+        except ZeroDivisionError:
+            community.members_points = 0
         # Save points per community member for each user
         community_members = GroupMember.objects.filter(group=community)
         for group_member in community_members:
@@ -70,16 +78,18 @@ class CommunityDetailView(DetailView):
                 except Decision.DoesNotExist:
                     Decision.objects.create(group=community, group_member=member)
 
+            community_member = GroupMember.objects.filter(user=user, group=community)
             # Fetch the User votes
-            group_member = GroupMember.objects.filter(user=user, group=community)[0]
-            context['group_member'] = group_member
-            delete_group_vote = Decision.objects.filter(group_member=group_member, group=community)
-            delete_group_vote = delete_group_vote[0].delete_group_vote
-            context['delete_group_vote'] = delete_group_vote
+            if community_member:
+                group_member = GroupMember.objects.filter(user=user, group=community)[0]
+                context['group_member'] = group_member
+                delete_group_vote = Decision.objects.filter(group_member=group_member, group=community)
+                delete_group_vote = delete_group_vote[0].delete_group_vote
+                context['delete_group_vote'] = delete_group_vote
 
-            modify_group_vote = Decision.objects.filter(group_member=group_member, group=community)
-            modify_group_vote = modify_group_vote[0].modify_group_vote
-            context['modify_group_vote'] = modify_group_vote
+                modify_group_vote = Decision.objects.filter(group_member=group_member, group=community)
+                modify_group_vote = modify_group_vote[0].modify_group_vote
+                context['modify_group_vote'] = modify_group_vote
 
         return context
 
@@ -108,13 +118,17 @@ class GroupInscriptionView(LoginRequiredMixin, View):
             address_form = AddressForm(request.POST)
             # check whether it's valid:
             if group_form.is_valid() and address_form.is_valid():
-                name = group_form.cleaned_data['name']
-                image = group_form.cleaned_data['image']
 
                 group_form.save()
                 address_form.save()
+                group = Group.objects.get(
+                    name=request.POST['name']
+                )
+                group_member = GroupMember.objects.create(
+                    user=request.user, group=group
+                )
                 # redirect to a new URL:
-                return redirect('website:index')
+                return redirect('index')
             else:
                 return render(request, 'group/group_inscription.html',
                               {'product_form': group_form,
@@ -128,13 +142,13 @@ class ProductInscriptionView(LoginRequiredMixin, DetailView):
 
     # def get(self, request, pk):
     #     """Method GET to print user informations"""
-        # product_form = ProductInscriptionForm(request.POST)
-        # estimation_form = CostEstimationForm(request.POST)
+    # product_form = ProductInscriptionForm(request.POST)
+    # estimation_form = CostEstimationForm(request.POST)
 
-        # return render(request, 'product/product_inscription.html',
-        #               {'product_form': product_form,
-        #                'estimation_form': estimation_form},
-        #               )
+    # return render(request, 'product/product_inscription.html',
+    #               {'product_form': product_form,
+    #                'estimation_form': estimation_form},
+    #               )
 
     def get_context_data(self, request, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -153,8 +167,14 @@ class ProductInscriptionView(LoginRequiredMixin, DetailView):
         if request.method == 'POST':
             # create a form instance and
             # populate it with data from the request:
-            product_form = ProductInscriptionForm(request.POST, instance=self.request.user)
-            estimation_form = CostEstimationForm(request.POST, instance=self.request.user)
+            product_form = ProductInscriptionForm(
+                request.POST,
+                instance=self.request.user
+            )
+            estimation_form = CostEstimationForm(
+                request.POST,
+                instance=self.request.user
+            )
             # check whether it's valid:
             if product_form.is_valid() and estimation_form.is_valid():
                 product_form.save()

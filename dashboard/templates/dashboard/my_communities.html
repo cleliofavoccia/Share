@@ -13,54 +13,23 @@
 <!--    List Community group for PC  -->
     <div class="col-3 d-none d-lg-block">
         <div class="list-group">
-            <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
-                <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">Nom Communauté</h5>
-                    <small>Image</small>
-                    <div style="display: flex; flex-direction: column">
-                        <button type="button" class="btn btn-outline-primary">Rejoindre</button>
-                        <button type="button" class="btn btn-outline-primary">Catalogue</button>
-                    </div>
-                </div>
-                <p class="mb-1">Membres : 3</p>
-                <p class="mb-1">Points : 30</p>
-                <p class="mb-1">Produits : 10</p>
-                <p class="mb-1">Points par utilisateur : 10</p>
-                <p class="mb-1">Adresse : 20 rue de la Chine - Paris</p>
-                <small>Small description</small>
-            </a>
+            {% for community in my_communities %}
             <a href="#" class="list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">Nom Communauté</h5>
-                    <small>Image</small>
+                    <h5 class="mb-1">{{ community.group.name }}</h5>
+                    <img class="group-image" src="{{ community.group.image.url }}">
                     <div style="display: flex; flex-direction: column">
-                        <button type="button" class="btn btn-light">Rejoindre</button>
-                        <button type="button" class="btn btn-light">Catalogue</button>
+                        <a role="button" href="{% url 'group:community' community.group.pk %}" class="btn btn-outline-primary">Catalogue</a>
                     </div>
                 </div>
-                <p class="mb-1">Nombre de membres : 3</p>
-                <p class="mb-1">Nombre de points : 30</p>
-                <p class="mb-1">Nombre de produits : 10</p>
-                <p class="mb-1">Points par utilisateur : 10</p>
-                <p class="mb-1">Adresse : 20 rue de la Chine - Paris</p>
+                <p class="mb-1">Membres : {{ community.group.members.count }}</p>
+                <p class="mb-1">Points : {{ community.group.points }}</p>
+                <p class="mb-1">Produits : {{ community.group.group_owns_product.count }}</p>
+                <p class="mb-1">Points par utilisateur : {{ community.group.members_points }}</p>
+                <p class="mb-1">Adresse : {{ community.group.address }}</p>
                 <small>Small description</small>
             </a>
-            <a href="#" class="list-group-item list-group-item-action">
-                <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">Nom Communauté</h5>
-                    <small>Image</small>
-                    <div style="display: flex; flex-direction: column">
-                        <button type="button" class="btn btn-link">Rejoindre</button>
-                        <button type="button" class="btn btn-link">Catalogue</button>
-                    </div>
-                </div>
-                <p class="mb-1">Nombre de membres : 3</p>
-                <p class="mb-1">Nombre de points : 30</p>
-                <p class="mb-1">Nombre de produits : 10</p>
-                <p class="mb-1">Points par utilisateur : 10</p>
-                <p class="mb-1">Adresse : 20 rue de la Chine - Paris</p>
-                <small>Small description</small>
-            </a>
+            {% endfor %}
         </div>
     </div>
 <!--    List Community for smartphone  -->
@@ -68,119 +37,47 @@
         <button id="communities" class="btn btn-light" data-bs-toggle="collapse" href="#community_smartphone" role="button" aria-expanded="false" aria-controls="multiCollapseExample1"><span class="navbar-toggler-icon">\o/</span></button>
         <div class="collapse multi-collapse" id="community_smartphone">
             <div class="list-group">
-                <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">Nom Communauté</h5>
-                        <small>Image</small>
-                        <div style="display: flex; flex-direction: column">
-                            <button type="button" class="btn btn-outline-primary">Rejoindre</button>
-                            <button type="button" class="btn btn-outline-primary">Catalogue</button>
+                {% for community in my_communities %}
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ community.group.name }}</h5>
+                            <img class="group-image" src="{{ community.group.image.url }}">
+                            <div style="display: flex; flex-direction: column">
+                                <a class="btn btn-outline-primary" href="{% url 'group:community' community.group.pk %}">Catalogue</a>
+                            </div>
                         </div>
-                    </div>
-                    <p class="mb-1">Membres : 3</p>
-                    <p class="mb-1">Points : 30</p>
-                    <p class="mb-1">Produits : 10</p>
-                    <p class="mb-1">Points par utilisateur : 10</p>
-                    <p class="mb-1">Adresse : 20 rue de la Chine - Paris</p>
-                    <small>Small description</small>
-                </a>
-                <a href="#" class="list-group-item list-group-item-action">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">Nom Communauté</h5>
-                        <small>Image</small>
-                        <div style="display: flex; flex-direction: column">
-                            <button type="button" class="btn btn-light">Rejoindre</button>
-                            <button type="button" class="btn btn-light">Catalogue</button>
-                        </div>
-                    </div>
-                    <p class="mb-1">Nombre de membres : 3</p>
-                    <p class="mb-1">Nombre de points : 30</p>
-                    <p class="mb-1">Nombre de produits : 10</p>
-                    <p class="mb-1">Points par utilisateur : 10</p>
-                    <p class="mb-1">Adresse : 20 rue de la Chine - Paris</p>
-                    <small>Small description</small>
-                </a>
-                <a href="#" class="list-group-item list-group-item-action">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">Nom Communauté</h5>
-                        <small>Image</small>
-                        <div style="display: flex; flex-direction: column">
-                            <button type="button" class="btn btn-link">Rejoindre</button>
-                            <button type="button" class="btn btn-link">Catalogue</button>
-                        </div>
-                    </div>
-                    <p class="mb-1">Nombre de membres : 3</p>
-                    <p class="mb-1">Nombre de points : 30</p>
-                    <p class="mb-1">Nombre de produits : 10</p>
-                    <p class="mb-1">Points par utilisateur : 10</p>
-                    <p class="mb-1">Adresse : 20 rue de la Chine - Paris</p>
-                    <small>Small description</small>
-                </a>
+                        <p class="mb-1">Membres : {{ community.group.members_number }}</p>
+                        <p class="mb-1">Points : {{ community.group.points }}</p>
+                        <p class="mb-1">Produits : {{ community.group.products_number }}</p>
+                        <p>Mes points : {{ user.points_posseded }}</p>
+                        <p class="mb-1">Points par utilisateur : {{ community.group.points_by_members }}</p>
+                        <p class="mb-1">Adresse : {{ community.group.address }}</p>
+                        <small>Small description</small>
+                    </a>
+                {% endfor %}
             </div>
         </div>
     </div>
     <div id="products" class="col">
         <div class="row row-cols-2" >
             <div class="col">
-                <div class="card mb-3" style="max-width: 540px;">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            <img class="product-image" src="{% static 'the.jpg' %}" alt="...">
+                {% for product in community.group.group_owns_product.all %}
+                    <div class="card mb-3" style="max-width: 540px;">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <img class="product-image" src="{{ product.image.url }}" alt="...">
+                            </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                    <p class="card-text">{{ product.points }}</p>
+                                    <p class="card-text">Utilisations restantes : 3</p>
+                                    <p class="card-text"><a class="text-muted" href="{% url 'product:product' product.pk %}">Voir produit</a></p>
+                            </div>
                         </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">Nom Produit</h5>
-                                <p class="card-text">25 points</p>
-                                <p class="card-text">Utilisations restantes : 3</p>
-                                <p class="card-text"><a class="text-muted">Voir produit</a></p>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                <div class="card mb-3" style="max-width: 540px;">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            <img class="product-image" src="{% static 'the.jpg' %}" alt="...">
-                        </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">Un nom de produit très long pour décrire ce que c'est</h5>
-                                <p class="card-text">25 points</p>
-                                <p class="card-text"><small class="text-muted">Voir produit</small></p>
                         </div>
                     </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card mb-3" style="max-width: 540px;">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            <img class="product-image" src="{% static 'the.jpg' %}" alt="...">
-                        </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                                <p class="card-text">25 points</p>
-                                <p class="card-text"><small class="text-muted">Voir produit</small></p>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                <div class="card mb-3" style="max-width: 540px;">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            <img class="product-image" src="{% static 'the.jpg' %}" alt="...">
-                        </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                                <p class="card-text">25 points</p>
-                                <p class="card-text"><small class="text-muted">Voir produit</small></p>
-                        </div>
-                    </div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
     </div>
     </div>
@@ -190,6 +87,10 @@
 <style>
     .product-image{
         width: 120px;
+    }
+
+    .group-image{
+        width: 100px;
     }
 
     .list-group-item.active{

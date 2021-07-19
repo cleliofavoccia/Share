@@ -1,17 +1,20 @@
-"""Manage collective_decision forms"""
-from django import forms
-from django.core.exceptions import ValidationError
+"""Manage collective_decision app forms"""
 
-from psycopg2 import *
-from .models import Decision
+from django import forms
+
 from group.models import Group
 from group_member.models import GroupMember
+
+from .models import Decision
 
 
 class GroupMemberVoteForm(forms.Form):
     """Form to manage GroupMembers votes objects
     about Group modification"""
-    group_member = forms.IntegerField(widget=forms.HiddenInput(), required=True)
+    group_member = forms.IntegerField(
+        widget=forms.HiddenInput(),
+        required=True
+    )
     group = forms.IntegerField(widget=forms.HiddenInput(), required=True)
 
     def clean_group_member(self):
@@ -36,7 +39,7 @@ class GroupMemberVoteForm(forms.Form):
 
         return group
 
-    def save_delete_group_vote(self, user, commit=True):
+    def save_delete_group_vote(self, commit=True):
         """Save the GroupMember delete vote community
         build with his inputs"""
         group_member = self.cleaned_data['group_member']
@@ -49,9 +52,9 @@ class GroupMemberVoteForm(forms.Form):
                 decision.delete()
 
                 decision = Decision(
-                group_member=group_member, group=group,
-                delete_group_vote=True
-            )
+                    group_member=group_member, group=group,
+                    delete_group_vote=True
+                )
                 decision.save()
 
         except Decision.DoesNotExist:
@@ -65,7 +68,7 @@ class GroupMemberVoteForm(forms.Form):
 
         return decision
 
-    def save_against_delete_group_vote(self, user, commit=True):
+    def save_against_delete_group_vote(self, commit=True):
         """Save the GroupMember against delete vote community
         build with his inputs"""
         group_member = self.cleaned_data['group_member']
@@ -94,7 +97,7 @@ class GroupMemberVoteForm(forms.Form):
 
         return decision
 
-    def save_modify_group_vote(self, user, commit=True):
+    def save_modify_group_vote(self, commit=True):
         """Save the GroupMember modify vote community
         build with his inputs"""
         group_member = self.cleaned_data['group_member']
@@ -123,7 +126,7 @@ class GroupMemberVoteForm(forms.Form):
 
         return decision
 
-    def save_against_modify_group_vote(self, user, commit=True):
+    def save_against_modify_group_vote(self, commit=True):
         """Save the GroupMember against modify vote community
         build with his inputs"""
         group_member = self.cleaned_data['group_member']

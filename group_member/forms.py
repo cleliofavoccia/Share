@@ -1,14 +1,16 @@
-"""Forms of GroupMember app"""
+"""Manage group_member app forms"""
+
 from django import forms
 
 from group.models import Group
 from user.models import User
+
 from .models import GroupMember
-from django.core.exceptions import ValidationError
 
 
 class GroupMemberInscriptionForm(forms.Form):
-    """Form to add GroupMembers objects"""
+    """Form to add GroupMembers objects,
+    to user community inscription"""
     user = forms.IntegerField(widget=forms.HiddenInput(), required=True)
     group = forms.IntegerField(widget=forms.HiddenInput(), required=True)
 
@@ -47,8 +49,7 @@ class GroupMemberInscriptionForm(forms.Form):
         return group_member
 
     def delete(self, user, commit=True):
-        """Save the object GroupMember build by
-        user's profil and the group input by user"""
+        """Delete the object GroupMember request by user"""
         user = self.cleaned_data['user']
         group = self.cleaned_data['group']
         group_member = GroupMember.objects.filter(

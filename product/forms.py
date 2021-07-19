@@ -1,7 +1,9 @@
+"""Manage product app forms"""
+
+from django import forms
+from collective_decision.models import Estimation
 
 from .models import Product
-from collective_decision.models import Estimation
-from django import forms
 
 
 class ProductInscriptionForm(forms.ModelForm):
@@ -11,7 +13,10 @@ class ProductInscriptionForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = ['name', 'description', 'image']
+        fields = [
+            'name', 'description', 'image',
+            'user_provider', 'group_provider',
+            'group', 'estimator']
 
 
 class CostEstimationForm(forms.ModelForm):

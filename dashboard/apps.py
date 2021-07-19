@@ -1,4 +1,5 @@
 """Manage dashboard django application"""
+
 from django.apps import AppConfig
 
 

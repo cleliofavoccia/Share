@@ -7,7 +7,8 @@ from group_member.models import GroupMember
 
 
 def update_communities_informations():
-    """Calculate communities's products cost, total products cost, points per community member"""
+    """Calculate communities's products cost,
+    total products cost, points per community member"""
 
     communities = Group.objects.all()
 
@@ -21,12 +22,27 @@ def update_communities_informations():
             sum_product_cost = 0
             for estimation in cost_estimations:
                 sum_product_cost += estimation.cost
-            product.points = sum_product_cost // estimation_numbers
+            try:
+                product.points = sum_product_cost // estimation_numbers
+            except ZeroDivisionError:
+                product.points = 0
             product.save()
+
             # Increment total products cost
-            community.points += sum_product_cost // estimation_numbers
+            try:
+                community.points += (
+                        sum_product_cost // estimation_numbers
+                )
+            except ZeroDivisionError:
+                community.points = 0
         # Points per community member
-        community.members_points = community.points // community.members.count()
+        try:
+            community.members_points = (
+                    community.points // community.members.count()
+            )
+        except ZeroDivisionError:
+            community.members_points = 0
+
         # Save points per community member for each user
         community_members = GroupMember.objects.filter(group=community)
         for group_member in community_members:

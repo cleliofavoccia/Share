@@ -1,4 +1,5 @@
-"""Manage admin views of collective_decision's objects"""
+"""Manage admin views of collective_decision's app objects"""
+
 from django.contrib import admin
 
 from .models import Estimation, Decision
@@ -10,7 +11,6 @@ class EstimationAdmin(admin.ModelAdmin):
 
 class DecisionAdmin(admin.ModelAdmin):
     """Class that manage Decision objects in Django admin """
-    pass
 
 
 # Register the admin class with the associated model

@@ -29,6 +29,7 @@ urlpatterns = [
     path('product/', include('product.urls')),
     path('user/', include('user.urls')),
     path('group_member/', include('group_member.urls')),
-    path('collective_decision/', include('collective_decision.urls'), name='collective_decision')
+    path('collective_decision/', include('collective_decision.urls'), name='collective_decision'),
+    path('', include('website.urls'))
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

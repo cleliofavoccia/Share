@@ -1,3 +1,5 @@
+"""Manage product django application"""
+
 from django.apps import AppConfig
 
 

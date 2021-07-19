@@ -3,11 +3,12 @@
 from django.test import TestCase
 from django.db import IntegrityError
 
-from ..models import *
 from user.models import User
 from group.models import Group
 from group_member.models import GroupMember
 from product.models import Product
+
+from ..models import Estimation, Decision
 
 
 class EstimationModelTest(TestCase):
@@ -15,7 +16,11 @@ class EstimationModelTest(TestCase):
     @classmethod
     def setUp(cls):
         """Set up a context to test Estimation object"""
-        user = User.objects.create_user(username='Frodon', email='frodon@gmail.com', password='sam')
+        user = User.objects.create_user(
+            username='Frodon',
+            email='frodon@gmail.com',
+            password='sam'
+        )
         group = Group.objects.create(name="La communauté de l'anneau ")
 
         cls.group_member = GroupMember.objects.create(user=user, group=group)
@@ -61,7 +66,8 @@ class EstimationModelTest(TestCase):
         self.assertTrue(product)
 
     def test_constraints_one_estimation_per_product_and_group_member(self):
-        """Test if constraint of one Estimation object between product and group_member is respected"""
+        """Test if constraint of one Estimation object between
+        product and group_member is respected"""
         try:
             estimation_two = Estimation.objects.create(
                 cost=6,
@@ -80,10 +86,17 @@ class DecisionModelTest(TestCase):
     @classmethod
     def setUp(cls):
         """Set up a context to test Decision object"""
-        user = User.objects.create_user(username='Frodon', email='frodon@gmail.com', password='sam')
+        user = User.objects.create_user(
+            username='Frodon',
+            email='frodon@gmail.com',
+            password='sam'
+        )
         cls.group = Group.objects.create(name="La communauté de l'anneau")
 
-        cls.group_member = GroupMember.objects.create(user=user, group=cls.group)
+        cls.group_member = GroupMember.objects.create(
+            user=user,
+            group=cls.group
+        )
 
         cls.decision = Decision.objects.create(
             delete_group_vote=True,
@@ -123,7 +136,8 @@ class DecisionModelTest(TestCase):
         self.assertTrue(group)
 
     def test_constraints_one_decision_per_group_and_group_member(self):
-        """Test if constraint of one Decision object between group and group_member is respected"""
+        """Test if constraint of one Decision object between
+        group and group_member is respected"""
         try:
             decision_two = Decision.objects.create(
                 delete_group_vote=True,

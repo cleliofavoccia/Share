@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'point_provider.apps.PointProviderConfig',
     'product.apps.ProductConfig',
     'user.apps.UserConfig',
+    'website.apps.WebsiteConfig',
     'django_extensions',
     # The following apps are required for django-allauth:
     'django.contrib.sites',
@@ -180,7 +181,7 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTIFICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
-LOGIN_REDIRECT_URL = 'explorer'
+LOGIN_REDIRECT_URL = 'dashboard:explorer'
 
 # ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 

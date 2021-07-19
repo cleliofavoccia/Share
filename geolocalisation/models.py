@@ -1,3 +1,5 @@
+"""Manage geolocalisation's app objects"""
+
 from django.db import models
 
 

@@ -1,4 +1,7 @@
+"""Manage dashboard's app urls"""
+
 from django.urls import path
+
 from .views import Explorer, MyCommunities
 
 app_name = 'dashboard'

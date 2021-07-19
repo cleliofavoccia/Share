@@ -1,4 +1,5 @@
 """Manage collective_decision django application"""
+
 from django.apps import AppConfig
 
 
