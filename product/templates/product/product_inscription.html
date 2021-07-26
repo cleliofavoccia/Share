@@ -7,10 +7,13 @@
 <!-- Content-->
 {% block content %}
 <div class="container mt-5">
+    <h1>Ajouter un nouveau produit</h1>
     <div class="col-8">
         <div class="col d-flex flex-row align-items-center">
-            <h1 class="pe-5">{{ group.name }}</h1>
+            <h1 class="pe-5 mt-3">{{ group.name }}</h1>
+            {% if group.image %}
             <img class="group-image" src="{{ group.image.url }}">
+            {% endif %}
         </div>
         <p>Nombre de membres : {{ members_number }}</p>
         <p>Nombre de points : {{ group.points }}</p>
@@ -33,18 +36,25 @@
         {{ product_form.description }}
     </div>
     <div class="form-group">
-        <label class="mt-3">Fournisseur : Est-ce vous ou la communauté qui met en commun ce produit ? </label>
+        <label class="mt-3">Fournisseur : Est-ce vous ou la communauté qui partage le produit ? </label>
         <div> Moi : {{ product_form.group_member }}</div>
-        <div> La communauté : {{ product_form.community }}</div>
     </div>
     <div class="form-group">
         <label class="mt-3">Coût : </label>
         {{ estimation_form.cost }}
     </div>
     <input id="button-submit" class="btn btn-primary mt-5" type="submit" value="Inscrire le produit">
-    <input type="hidden" name="user" value="{{ user.id }}"/>
-    <input type="hidden" name="group" value="{{ group.id }}"/>
+
 </form>
 
 </div>
+<style>
+    .product-image{
+        width: 180px;
+        height: 100px;
+    }
+    .group-image{
+        width: 100px;
+    }
+</style>
 {% endblock content %}

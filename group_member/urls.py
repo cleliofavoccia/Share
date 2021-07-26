@@ -12,4 +12,10 @@ urlpatterns = [
     path('delete_group_members/',
          views.GroupMemberUnsubscribe.as_view(),
          name='delete_group_members'),
+    path('rent/',
+         views.GroupMemberRental.as_view(),
+         name='rent'),
+    path('cancel_rent/',
+         views.GroupMemberRentalAnnulation.as_view(),
+         name='cancel_rent'),
     ]

@@ -1,6 +1,14 @@
-from django.views.generic import DetailView, View
+"""Manage views of website app"""
+
+from django.views.generic import View, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
+
+
+class AboutView(TemplateView):
+    """View to print vote not changed"""
+
+    template_name = "website/about.html"
 
 
 class FailView(LoginRequiredMixin, View):

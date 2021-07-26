@@ -42,7 +42,7 @@ class CommunityDetailViewTest(TestCase):
         response = self.client.get(
             reverse("group:community", args=[group.pk])
         )
-        self.assertFalse(response.context['group_member_list'])
+        self.assertRaises(KeyError)
 
     def test_login_user_dont_see_same_things_if_not_group_member(self):
         """Test user can't access to some informations
@@ -66,7 +66,7 @@ class CommunityDetailViewTest(TestCase):
         self.assertEqual(group_member_list, response.context['group_member_list'])
 
     def test_view_url_accessible_by_name(self):
-        """Test view can accessible by GroupVoteView
+        """Test view can accessible by CommunityDetailView
         generic detail view's name"""
         user = User.objects.get(username='Frodon')
         self.client.force_login(user)
@@ -213,7 +213,7 @@ class GroupInscriptionViewTest(TestCase):
             data=false_request
         )
 
-        self.assertRedirects(
-            false_response,
-            reverse('group:group_inscription')
+        self.assertEqual(
+            false_response.status_code,
+            200
         )

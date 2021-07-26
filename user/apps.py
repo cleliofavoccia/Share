@@ -1,3 +1,5 @@
+"""Manage user django application"""
+
 from django.apps import AppConfig
 
 

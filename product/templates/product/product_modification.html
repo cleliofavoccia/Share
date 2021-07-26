@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Modifer produit{% endblock title %}
+
+<!-- Content-->
+{% block content %}
+<div class="container mt-5">
+  <h1>Modifier {{ product.name }}</h1>
+    <div class="col-8">
+        <div class="col d-flex flex-row align-items-center">
+            <h1 class="pe-5 mt-3">{{ group.name }}</h1>
+            {% if group.image %}
+            <img class="group-image" src="{{ group.image.url }}">
+            {% endif %}
+        </div>
+        <p>Nombre de membres : {{ members_number }}</p>
+        <p>Nombre de points : {{ group.points }}</p>
+        <p>Nombre de produits : {{ products_number }}</p>
+        <p>Points par utilisateur : {{ group.members_points }}</p>
+        <p>Adresse : {{ group.address }}</p>
+    </div>
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label>Nom du produit : </label>
+        {{ product_form.name }}
+    </div>
+    <div class="form-group">
+        <label class="mt-3">Image : </label>
+        {{ product_form.image }}
+    </div>
+    <div class="form-group">
+        <label class="mt-3">Description : </label>
+        {{ product_form.description }}
+    </div>
+    <div class="form-group">
+        <label class="mt-3">Fournisseur : Est-ce vous ou la communauté qui partage le produit ? </label>
+        <div> Moi : {{ product_form.group_member }}</div>
+    </div>
+    <div class="form-group">
+        <label class="mt-3">Coût : </label>
+        {{ estimation_form.cost }}
+    </div>
+    <input id="button-submit" class="btn btn-primary mt-5" type="submit" value="Modifier le produit">
+
+</form>
+
+</div>
+<style>
+    .product-image{
+        width: 180px;
+        height: 100px;
+    }
+    .group-image{
+        width: 100px;
+    }
+</style>
+{% endblock content %}

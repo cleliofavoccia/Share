@@ -8,39 +8,99 @@
 </head>
 <body>
 {% block content %}
-<div class="col d-flex flex-row">
-        <h1>{{ product.group.name }}</h1>
-        <img src="{{ group.image.url }}">
-</div>
-<h3>Nombre de membres : {{ members_number }}</h3>
-<h3>Nombre de points : {{ product.group.points }}</h3>
-<h3>Nombre de produits : {{ products_number }}</h3>
-{% if current_group_member_points %}
-    <h3>Mes points : {{ current_group_member_points }}</h3>
-{% endif %}
-<h3>Adresse : {{ product.group.address }}</h3>
+<div class="container">
+    <div class="row">
+        <div class="col mt-5">
+            <div class="col d-flex flex-row">
+                    <h1>{{ product.group.name }}</h1>
+                    {% if product.group.image %}
+                    <img class="group-image" src="{{ product.group.image.url }}">
+                    {% endif %}
+            </div>
+            <p>Nombre de membres : {{ members_number }}</p>
+            <p>Nombre de points : {{ product.group.points }}</p>
+            <p>Nombre de produits : {{ products_number }}</p>
+            <p>Points par utilisateur : {{ product.group.members_points }}</p>
+            <p>Adresse : {{ product.group.address }}</p>
+            {% if product.group.url %}
+                <a href="{{ product.group.url }}">Site web ou Discord de la communauté</a>
+            {% else %}
+                <p class="text-danger">Cette communauté n'a pas de site web ou Discord</p>
+            {% endif %}
+            {% if product.group in group_member_list %}
+                <form method="POST" action="{% url 'group_member:add_group_members' %}">
+                        {% csrf_token %}
+                        <button class="btn btn-link d-inline" value="submit">Rejoindre la communauté !</button>
+                        <input type="hidden" name="user" value="{{ user.id }}"/>
+                        <input type="hidden" name="group" value="{{ group.id }}"/>
+                </form>
+            {% endif %}
+            <a role="button" href="{% url 'group:community' product.group.pk %}" class="btn btn-outline-primary">Catalogue</a>
+        </div>
+        <div class="col">
+            <h1 class="mt-5">{{ product.name }}</h1>
+            {% if product.image %}
+            <img style="width: 300px;" src="{{ product.image.url }}">
+            {% endif %}
+            <p>{{ product.description }}</p>
+            {% if product.user_provider %}
+              <p>Fournisseur : {{ product.user_provider.user.username }}</p>
+            {% else %}
+              <p>Fournisseur : {{ product.group_provider.group.name }}</p>
+            {% endif %}
+            <div class="col d-flex flex-row">
+                <p>Coût : {{ product.points }}</p>
+                {% if product.user_provider == member %}
+                <a class="ms-5" href="{% url 'collective_decision:estimation' product.pk %}">Estimez ou réestimez son coût</a>
+                {% endif %}
+            </div>
+            <div>
+                {% if not product.tenant %}
+                <form method="POST" action="{% url 'group_member:rent' %}">
+                        {% csrf_token %}
+                        <button class="btn btn-outline-primary" value="submit">Louer</button>
+                        <input type="hidden" name="product" value="{{ product.id }}"/>
+                        <input type="hidden" name="group_member" value="{{ member.id }}"/>
+                </form>
+                {% else %}
+                <a class="btn btn-outline-secondary disabled" href="">Indisponible</a>
+                {% if product.user_provider == member %}
+                <a class="btn btn-outline-primary" href="">Livré</a>
+                {% endif %}
+                {% endif %}
+                {% if member %}
+                {% if product.tenant == member %}
+                <form method="POST" action="{% url 'group_member:cancel_rent' %}">
+                        {% csrf_token %}
+                        <button class="btn btn-outline-danger" value="submit">Rendre</button>
+                        <input type="hidden" name="product" value="{{ product.id }}"/>
+                        <input type="hidden" name="group_member" value="{{ member.id }}"/>
+                </form>
+                {% endif %}
+                {% if product.user_provider == member %}
+                <a class="btn btn-outline-secondary" href="{% url 'product:modify_product' product.group.pk product.pk %}">Modifier</a>
+                <form method="POST" action="{% url 'product:delete_product' %}">
+                        {% csrf_token %}
+                        <button class="btn btn-outline-danger" value="submit">Supprimer</button>
+                        <input type="hidden" name="product_to_delete" value="{{ product.id }}"/>
+                        <input type="hidden" name="group" value="{{ product.group.id }}"/>
+                </form>
 
-<h1>{{ product.name }}</h1>
-<img style="width: 300px;" src="{{ product.image.url }}">
-<p>{{ product.description }}</p>
-{% if product.user_provider %}
-  <h3>Fournisseur : {{ product.user_provider.user.username }}</h3>
-{% else %}
-  <h3>Fournisseur : {{ product.group_provider.group.name }}</h3>
-{% endif %}
-<h3>Coût : {{ product.points }}</h3>
-<div>
-    {% if not product.tenant %}
-    <a class="btn btn-outline-primary" href="">Louer</a>
-    {% else %}
-    <a class="btn btn-outline-secondary disabled" href="">Indisponible</a>
-    {% endif %}
-    {% if product.user_provider == user %}
-    <a class="btn btn-outline-light" href="">Modifier</a>
-    <a class="btn btn-outline-danger" href="">Supprimer</a>
-    {% endif %}
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </div>
-
+<style>
+    .product-image{
+        width: 180px;
+        height: 100px;
+    }
+    .group-image{
+        width: 100px;
+    }
+</style>
 {% endblock content %}
 </body>
 </html>

@@ -9,10 +9,13 @@ from group_member.models import GroupMember
 from collective_decision.models import Estimation, Decision
 
 from .models import Group
-from .forms import GroupInscriptionForm, ProductInscriptionForm, CostEstimationForm, AddressForm
+from .forms import GroupInscriptionForm, AddressForm
 
 
 class CommunityDetailView(DetailView):
+    """Generic class-based Group detail view to print all
+    informations about a community and all actions the
+    user can do with it"""
 
     model = Group
 
@@ -41,10 +44,17 @@ class CommunityDetailView(DetailView):
             sum_product_cost = 0
             for estimation in cost_estimations:
                 sum_product_cost += estimation.cost
-            product.points = sum_product_cost // estimation_numbers
+            try:
+                product.points = sum_product_cost // estimation_numbers
+            except ZeroDivisionError:
+                product.points = 0
             product.save()
+
             # Increment total products cost
-            community.points += sum_product_cost // estimation_numbers
+            try:
+                community.points += sum_product_cost // estimation_numbers
+            except ZeroDivisionError:
+                community.points = 0
         # Points per community member
         try:
             community.members_points = (
@@ -71,23 +81,36 @@ class CommunityDetailView(DetailView):
                 group_member_list.append(community_inscription.group.name)
             context['group_member_list'] = group_member_list
 
-            # Create Decisions objects for group members who have made no decision
+            # Create Decisions objects for group members
+            # who have made no decision
             for member in community_members:
                 try:
-                    Decision.objects.get(group=community, group_member=member)
+                    Decision.objects.get(
+                        group=community, group_member=member
+                    )
                 except Decision.DoesNotExist:
-                    Decision.objects.create(group=community, group_member=member)
+                    Decision.objects.create(
+                        group=community, group_member=member
+                    )
 
-            community_member = GroupMember.objects.filter(user=user, group=community)
+            community_member = GroupMember.objects.filter(
+                user=user, group=community
+            )
             # Fetch the User votes
             if community_member:
-                group_member = GroupMember.objects.filter(user=user, group=community)[0]
+                group_member = GroupMember.objects.filter(
+                    user=user, group=community
+                )[0]
                 context['group_member'] = group_member
-                delete_group_vote = Decision.objects.filter(group_member=group_member, group=community)
+                delete_group_vote = Decision.objects.filter(
+                    group_member=group_member, group=community
+                )
                 delete_group_vote = delete_group_vote[0].delete_group_vote
                 context['delete_group_vote'] = delete_group_vote
 
-                modify_group_vote = Decision.objects.filter(group_member=group_member, group=community)
+                modify_group_vote = Decision.objects.filter(
+                    group_member=group_member, group=community
+                )
                 modify_group_vote = modify_group_vote[0].modify_group_vote
                 context['modify_group_vote'] = modify_group_vote
 
@@ -95,10 +118,12 @@ class CommunityDetailView(DetailView):
 
 
 class GroupInscriptionView(LoginRequiredMixin, View):
-    """View detailed user profile"""
+    """Generic class-based view that permit to user
+    to add a community (Group object)"""
 
     def get(self, request):
-        """Method GET to print user informations"""
+        """Method GET to print all inputs that user
+        must fill to add a community"""
         group_form = GroupInscriptionForm(request.POST)
         address_form = AddressForm(request.POST)
 
@@ -109,7 +134,7 @@ class GroupInscriptionView(LoginRequiredMixin, View):
 
     def post(self, request):
         """Method POST to send datas input by user
-        and modify a User object (user account)"""
+        and register a Group object (community)"""
         # if this is a POST request we need to process the form data
         if request.method == 'POST':
             # create a form instance and
@@ -124,7 +149,7 @@ class GroupInscriptionView(LoginRequiredMixin, View):
                 group = Group.objects.get(
                     name=request.POST['name']
                 )
-                group_member = GroupMember.objects.create(
+                GroupMember.objects.create(
                     user=request.user, group=group
                 )
                 # redirect to a new URL:
@@ -136,53 +161,60 @@ class GroupInscriptionView(LoginRequiredMixin, View):
                               )
 
 
-class ProductInscriptionView(LoginRequiredMixin, DetailView):
-    """View detailed user profile"""
-    model = Group
+class GroupChangeView(LoginRequiredMixin, View):
+    """Generic class-based view that permit to group member
+    to modify a community (Group object)"""
 
-    # def get(self, request, pk):
-    #     """Method GET to print user informations"""
-    # product_form = ProductInscriptionForm(request.POST)
-    # estimation_form = CostEstimationForm(request.POST)
+    def get(self, request, pk):
+        """Method GET to print community informations"""
+        group = Group.objects.get(id=pk)
 
-    # return render(request, 'product/product_inscription.html',
-    #               {'product_form': product_form,
-    #                'estimation_form': estimation_form},
-    #               )
+        group_form = GroupInscriptionForm(
+            instance=group
+        )
+        address_form = AddressForm(
+            instance=group.address
+        )
 
-    def get_context_data(self, request, **kwargs):
-        context = super().get_context_data(**kwargs)
-        product_form = ProductInscriptionForm(request.POST)
-        estimation_form = CostEstimationForm(request.POST)
+        return render(
+            request, 'group/group_modification.html',
+            {
+                  'group_form': group_form,
+                  'address_form': address_form
+              }
+        )
 
-        context['product_form'] = product_form
-        context['estimation_form'] = estimation_form
-
-        return context
-
-    def post(self, request):
+    def post(self, request, pk):
         """Method POST to send datas input by user
         and modify a User object (user account)"""
-        # if this is a POST request we need to process the form data
+
+        group = Group.objects.get(id=pk)
+
         if request.method == 'POST':
             # create a form instance and
             # populate it with data from the request:
-            product_form = ProductInscriptionForm(
+            group_form = GroupInscriptionForm(
                 request.POST,
-                instance=self.request.user
+                instance=group
             )
-            estimation_form = CostEstimationForm(
+            address_form = AddressForm(
                 request.POST,
-                instance=self.request.user
+                instance=group.address
             )
+
             # check whether it's valid:
-            if product_form.is_valid() and estimation_form.is_valid():
-                product_form.save()
-                estimation_form.save()
+            if group_form.is_valid() and address_form.is_valid():
+
+                group_form.save()
+                address_form.save()
+
                 # redirect to a new URL:
-                return redirect('website:index')
+                return redirect('group:community', group.pk)
             else:
-                return render(request, 'product/product_inscription.html',
-                              {'product_form': product_form,
-                               'estimation_form': estimation_form}
-                              )
+                return render(
+                    request, 'group/group_modification.html',
+                    {
+                        'group_form': group_form,
+                        'address_form': address_form
+                    }
+                )

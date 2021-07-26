@@ -1,4 +1,4 @@
-"""Tests of collective_decision django views"""
+"""Tests of website django views"""
 
 from django.test import TestCase
 from django.urls import reverse

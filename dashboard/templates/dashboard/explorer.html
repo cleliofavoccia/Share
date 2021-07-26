@@ -14,10 +14,12 @@
     <div class="col-3 d-none d-lg-block">
         <div class="list-group">
             {% for community in communities %}
-            <a href="#" class="list-group-item list-group-item-action">
+            <div class="list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">{{ community.name }}</h5>
+                    <a href="{% url 'group:community' community.pk %}"><h5 class="mb-1">{{ community.name }}</h5></a>
+                    {% if community.image %}
                     <img class="group-image" src="{{ community.image.url }}">
+                    {% endif %}
                     <div style="display: flex; flex-direction: column">
                         {% if not community.name in group_member_list %}
                         {% if user.is_authenticated %}
@@ -28,10 +30,10 @@
                             <input type="hidden" name="group" value="{{ community.id }}"/>
                         </form>
                         {% else %}
-                        <a role="button" href="{% url 'group:community' community.pk %}" class="btn btn-outline-primary">Rejoindre</a>
+                        <a id="join-community" role="button" href="{% url 'group:community' community.pk %}" class="btn btn-outline-primary">Rejoindre</a>
                         {% endif %}
                         {% endif %}
-                        <a role="button" href="{% url 'group:community' community.pk %}" class="btn btn-outline-primary">Catalogue</a>
+                        <a id="community-page" role="button" href="{% url 'group:community' community.pk %}" class="btn btn-outline-primary">Catalogue</a>
                     </div>
                 </div>
                 <p class="mb-1">Membres : {{ community.members.count }}</p>
@@ -40,7 +42,7 @@
                 <p class="mb-1">Points par utilisateur : {{ community.members_points }}</p>
                 <p class="mb-1">Adresse : {{ community.address }}</p>
                 <small>Small description</small>
-            </a>
+            </div>
             {% endfor %}
         </div>
     </div>
@@ -53,7 +55,9 @@
                     <a href="#" class="list-group-item list-group-item-action">
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1">{{ community.name }}</h5>
+                            {% if community.image %}
                             <img class="group-image" src="{{ community.image.url }}">
+                            {% endif %}
                             <div style="display: flex; flex-direction: column">
                                 <button type="button" class="btn btn-outline-primary">Rejoindre</button>
                                 <a class="btn btn-outline-primary" href="{% url 'group:community' community.pk %}">Catalogue</a>
@@ -76,11 +80,13 @@
     <div id="products" class="col">
         <div class="row row-cols-2" >
             <div class="col">
-                {% for product in community.group_owns_product.all %}
+                {% for product in group.group_owns_product.all %}
                     <div class="card mb-3" style="max-width: 540px;">
                         <div class="row g-0">
                             <div class="col-md-4">
+                                {% if product.image %}
                                 <img class="product-image" src="{{ product.image.url }}" alt="...">
+                                {% endif %}
                             </div>
                         <div class="col-md-8">
                             <div class="card-body">
@@ -114,11 +120,14 @@
         border-color: #0d6efd !important;
 </style>
 <script>
-    let communities = document.querySelector("#communities");
-    communities.addEventListener("click", function (event) {
+    let community = document.querySelector(".list-group-item");
+    community.addEventListener("click", function (event) {
         event.preventDefault();
-        let products = document.querySelector("#products");
-        products.setAttribute("hidden");
+
+        fetch("/group_products", { method: 'GET'})
+            .then(function(response) {
+                console.log(response.object_list);
+            })
     });
 </script>
 {% endblock content %}

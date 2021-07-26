@@ -14,10 +14,12 @@
     <div class="col-3 d-none d-lg-block">
         <div class="list-group">
             {% for community in my_communities %}
-            <a href="#" class="list-group-item list-group-item-action">
+            <div class="list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">{{ community.group.name }}</h5>
+                    <a href="{% url 'group:community' community.pk %}"><h5 class="mb-1">{{ community.group.name }}</h5></a>
+                    {% if community.group.image %}
                     <img class="group-image" src="{{ community.group.image.url }}">
+                    {% endif %}
                     <div style="display: flex; flex-direction: column">
                         <a role="button" href="{% url 'group:community' community.group.pk %}" class="btn btn-outline-primary">Catalogue</a>
                     </div>
@@ -28,7 +30,7 @@
                 <p class="mb-1">Points par utilisateur : {{ community.group.members_points }}</p>
                 <p class="mb-1">Adresse : {{ community.group.address }}</p>
                 <small>Small description</small>
-            </a>
+            </div>
             {% endfor %}
         </div>
     </div>
@@ -41,7 +43,9 @@
                     <a href="#" class="list-group-item list-group-item-action">
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1">{{ community.group.name }}</h5>
+                            {% if community.group.image %}
                             <img class="group-image" src="{{ community.group.image.url }}">
+                            {% endif %}
                             <div style="display: flex; flex-direction: column">
                                 <a class="btn btn-outline-primary" href="{% url 'group:community' community.group.pk %}">Catalogue</a>
                             </div>
@@ -65,7 +69,9 @@
                     <div class="card mb-3" style="max-width: 540px;">
                         <div class="row g-0">
                             <div class="col-md-4">
+                                {% if product.image %}
                                 <img class="product-image" src="{{ product.image.url }}" alt="...">
+                                {% endif %}
                             </div>
                         <div class="col-md-8">
                             <div class="card-body">

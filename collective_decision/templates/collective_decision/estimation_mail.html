@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Estimation Mail</title>
+</head>
+<body>
+<h1>Hello {{ username }} !</h1>
+{% if not modify %}
+<h2>Un nouveau produit a été ajouté ! </h2>
+{% else %}
+<h2>Un produit a été modifié ! </h2>
+{% endif %}
+
+<div class="col">
+      <h1 class="mt-5">{{ product.name }}</h1>
+      {% if product.image %}
+      <img style="width: 300px;" src="{{ product.image.url }}">
+      {% endif %}
+      <p>{{ product.description }}</p>
+</div>
+{% if not modify %}
+<a href="{{ estimation_link }}">Cliquez sur lien suivant et choisissez le coût du nouveau produit ajouté !</a>
+{% else %}
+<a href="{{ estimation_link }}">Cliquez sur lien suivant et choisissez le coût du produit modifié !</a>
+{% endif %}
+
+</body>
+<style>
+    .product-image{
+        width: 180px;
+        height: 100px;
+    }
+    .group-image{
+        width: 100px;
+    }
+</style>
+</html>

@@ -30,9 +30,7 @@ def update_communities_informations():
 
             # Increment total products cost
             try:
-                community.points += (
-                        sum_product_cost // estimation_numbers
-                )
+                community.points += product.points
             except ZeroDivisionError:
                 community.points = 0
         # Points per community member

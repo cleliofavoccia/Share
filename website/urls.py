@@ -1,9 +1,12 @@
-"""URLS of products app"""
+"""Manage website's app urls"""
+
 from django.urls import path
 
-from . import views
+from .views import *
 
 app_name = 'website'
 urlpatterns = [
-    path('fail/', views.FailView.as_view(), name='fail')
+    path('fail/', FailView.as_view(), name='fail'),
+    path('about/', AboutView.as_view(), name='about'),
+
     ]

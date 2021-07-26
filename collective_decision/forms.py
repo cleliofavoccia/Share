@@ -5,7 +5,7 @@ from django import forms
 from group.models import Group
 from group_member.models import GroupMember
 
-from .models import Decision
+from .models import Decision, Estimation
 
 
 class GroupMemberVoteForm(forms.Form):
@@ -154,3 +154,11 @@ class GroupMemberVoteForm(forms.Form):
                 decision.save()
 
         return decision
+
+
+class CostEstimationForm(forms.ModelForm):
+    """ Sign in forms to permit the users to modify him"""
+
+    class Meta:
+        model = Estimation
+        fields = ['cost']

@@ -6,6 +6,7 @@ from django.urls import reverse
 from group_member.models import GroupMember
 from group.models import Group
 from user.models import User
+from product.models import Product
 
 from ..models import Decision
 
@@ -447,4 +448,107 @@ class GroupVoteViewTest(TestCase):
             Group.DoesNotExist,
             Group.objects.get,
             name="La communauté de l'anneau"
+        )
+
+
+class CostEstimationViewTest(TestCase):
+    """Tests on CostEstimationView generic view"""
+    @classmethod
+    def setUp(cls):
+        """Set up a context to test CostEstimationView generic view"""
+
+        cls.user = User.objects.create_user(
+            username='Frodon',
+            email='frodon@gmail.com',
+            password='sam'
+        )
+        cls.group = Group.objects.create(name="La communauté de l'anneau")
+        cls.group_member = GroupMember.objects.create(
+            user=cls.user,
+            group=cls.group
+        )
+
+        cls.product = Product.objects.create(
+            name='Epée',
+            user_provider=cls.group_member,
+            tenant=cls.group_member,
+            group=cls.group,
+        )
+
+    def test_redirect_if_not_logged_in(self):
+        """Test user can't access to CostEstimationView generic view
+         and it is redirect to login form"""
+
+        product = Product.objects.get(name="Epée")
+
+        response = self.client.get(
+            reverse('collective_decision:estimation', args=[product.pk])
+        )
+        self.assertRedirects(
+            response,
+            f'{reverse("account_login")}'
+            f'?next={reverse("collective_decision:estimation", args=[product.pk])}'
+        )
+
+    def test_view_url_accessible_by_name(self):
+        """Test view can accessible by
+        CostEstimationView generic view's name"""
+
+        user = User.objects.get(username='Frodon')
+        self.client.force_login(user)
+        product = Product.objects.get(name="Epée")
+
+        get_response = self.client.get(
+            reverse("collective_decision:estimation", args=[product.pk]),
+        )
+
+        post_response = self.client.post(
+            reverse("collective_decision:estimation", args=[product.pk]),
+            data={
+                'csrfmiddlewaretoken':
+                    ['2NFhGPdsobAfUWtJZFxBnkUL7uSdSe5hj'
+                     '17l20tZbFZaLtxaTbx9NbKaZDfwTMfU'],
+                'cost': ['25']
+            }
+        )
+
+        # Check that we got a response "success"
+        self.assertEqual(get_response.status_code, 200)
+        self.assertEqual(post_response.status_code, 302)
+
+    def test_view_verify_datas_with_form(self):
+        """Test GroupInscriptionView generic view
+        verify datas correctly"""
+
+        self.client.force_login(self.user)
+        product = Product.objects.get(name="Epée")
+
+        true_request = {
+                'csrfmiddlewaretoken':
+                ['2NFhGPdsobAfUWtJZFxBnkUL7uSdSe5hj'
+                    '17l20tZbFZaLtxaTbx9NbKaZDfwTMfU'],
+                'cost': ['25']
+            }
+        true_response = self.client.post(
+            reverse("collective_decision:estimation", args=[product.pk]),
+            data=true_request
+        )
+
+        self.assertRedirects(
+            true_response,
+            reverse('index')
+        )
+
+        false_request = {
+            'group_member': ['1'],
+            'group': ['Y']
+                        }
+        false_response = self.client.post(
+            reverse("collective_decision:estimation", args=[product.pk]),
+            data=false_request
+        )
+
+        self.assertEqual(
+            false_response.status_code,
+            200
         )

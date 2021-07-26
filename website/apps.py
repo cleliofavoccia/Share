@@ -1,3 +1,5 @@
+"""Manage website django application"""
+
 from django.apps import AppConfig
 
 

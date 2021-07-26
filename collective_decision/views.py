@@ -1,14 +1,14 @@
-"""Views of collective_decision app"""
+"""Manage views of collective_decision app"""
 
 from django.views.generic import DetailView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 
 from group_member.models import GroupMember
 from product.models import Product
 from group.models import Group
 
-from .forms import GroupMemberVoteForm
+from .forms import GroupMemberVoteForm, CostEstimationForm
 from .models import Decision, Estimation
 
 
@@ -230,3 +230,75 @@ class GroupVoteView(LoginRequiredMixin, DetailView):
         context['modify_group_vote'] = modify_group_vote
 
         return context
+
+
+class CostEstimationView(LoginRequiredMixin, View):
+    """Generic class-based view that permit to user
+    to add an Estimation on a Product object cost"""
+
+    def get(self, request, pk):
+        """Method GET to print user informations"""
+        product = Product.objects.get(id=pk)
+        group_member = GroupMember.objects.get(
+            user=self.request.user,
+            group=product.group
+        )
+
+        estimation_form = CostEstimationForm(request.POST)
+
+        return render(request, 'collective_decision/cost_estimation.html',
+                      {
+                          'estimation_form': estimation_form,
+                          'group_member': group_member,
+                          'product': product,
+                          'group': product.group
+                       },
+                      )
+
+    def post(self, request, pk):
+        """Method POST to send datas input by user
+        and modify a User object (user account)"""
+        # if this is a POST request we need to process the form data
+        product = Product.objects.get(id=pk)
+        group_member = GroupMember.objects.get(
+            user=self.request.user,
+            group=product.group
+        )
+
+        if request.method == 'POST':
+            # create a form instance and
+            # populate it with data from the request:
+
+            estimation_form = CostEstimationForm(
+                request.POST,
+            )
+            # check whether it's valid:
+            if estimation_form.is_valid():
+
+                estimation = estimation_form.save(commit=False)
+                estimation.group_member = group_member
+                estimation.product = product
+
+                # Verify if an Estimation already exist and
+                # delete it if it the case
+                try:
+                    existant_estimation = Estimation.objects.get(
+                        group_member=group_member,
+                        product=product
+                    )
+                    existant_estimation.delete()
+                    estimation.save()
+                except Estimation.DoesNotExist:
+                    estimation.save()
+
+                # redirect to a new URL:
+                return redirect('index')
+            else:
+                return render(request, 'product/product_inscription.html',
+                              {
+                               'estimation_form': estimation_form,
+                               'group': product.group,
+                               'group_member': group_member,
+                               'product': product
+                               }
+                              )

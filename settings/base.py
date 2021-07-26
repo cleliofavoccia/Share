@@ -183,10 +183,16 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 LOGIN_REDIRECT_URL = 'dashboard:explorer'
 
-# ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.live.com'
+EMAIL_HOST_USER = 'favoccia.c@live.fr'
+EMAIL_HOST_PASSWORD = 'Juve1898,'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# DEFAULT_FROM_EMAIL = 'hello@share.org'
+
+DEFAULT_FROM_EMAIL = 'favoccia.c@live.fr'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 

@@ -90,10 +90,10 @@
         <div>{{ vote.group_member}} est {% if vote.modify_group_vote %}pour !{% else %} contre !{% endif %}</div>
     {% endfor %}
     {% if modification_group_activate %}
-    <h2>Modifier {{ community.name }}</h2>
-    <p>formulaire</p>
+    <h2 class="mt-3">Modifier {{ group.name }}</h2>
+    <a class="link-success" href="{% url 'group:modify_group' group.pk %}">Cliquez ici pour modifier la communauté !</a>
     {% endif %}
-    <h2>Votes pour la suppression de {{ group.name }}</h2>
+    <h2 class="mt-3">Votes pour la suppression de {{ group.name }}</h2>
     {% for vote in delete_votes %}
         <div>{{ vote.group_member}} est {% if vote.delete_group_vote %}pour !{% else %} contre !{% endif %}</div>
     {% endfor %}

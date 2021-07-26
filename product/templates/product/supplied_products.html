@@ -11,44 +11,78 @@
 <div class="container-fluid">
     <div class="row">
         {% if supplied_products %}
+        <div class="container mt-5 mb-3">
+            <h1> Vos produits </h1>
+        </div>
             {% for product in supplied_products %}
-            <div class="col">
+            <div class="container mt-3">
                 <div class="card mb-3" style="max-width: 540px;">
                     <div class="row g-0">
                         <div class="col-md-4">
-                            <img class="product-image" src="{{ product.image }}" alt="...">
+                            {% if product.image %}
+                            <img class="product-image" src="{{ product.image.url }}" alt="...">
+                            {% endif %}
                         </div>
                     <div class="col-md-8">
                         <div class="card-body">
-                            <h5 class="card-title">{{ product.name }}</h5>
+                            <a href="{% url 'product:product' product.pk %}"><h5 class="card-title">{{ product.name }}</h5></a>
                                 <p class="card-text"> {{ product.points }}</p>
                                 {% if product.tenant %}
                                 <p>Utilisations restantes: 3</p>
                                 {% endif %}
-                                <p class="card-text"><a href="" class="text-muted">Voir produit</a></p>
+                                <p class="card-text"><a href="{% url 'group:community' product.group.pk %}" class="text-muted">Communauté : {{ product.group }}</a></p>
                         </div>
                     </div>
                     </div>
                 </div>
                 <div>
                     {% if not product.tenant %}
-                    <a class="btn btn-outline-primary" href="">Louer</a>
-                    {% else %}
-                    <a class="btn btn-outline-secondary disabled" href="">Indisponible</a>
-                    {% endif %}
-                    {% if product.user_provider == user %}
-                    <a class="btn btn-outline-light" href="">Modifier</a>
-                    <a class="btn btn-outline-danger" href="">Supprimer</a>
-                    {% endif %}
+                <form method="POST" action="{% url 'group_member:rent' %}">
+                        {% csrf_token %}
+                        <button class="btn btn-outline-primary" value="submit">Louer</button>
+                        <input type="hidden" name="product" value="{{ product.id }}"/>
+                        <input type="hidden" name="group_member" value="{{ product.user_provider.id }}"/>
+                </form>
+                {% else %}
+                <a class="btn btn-outline-secondary disabled" href="">Indisponible</a>
+                <a class="btn btn-outline-warning" href="">Livré</a>
+                {% endif %}
+                {% if member %}
+                {% if product.tenant == product.user_provider %}
+                <form method="POST" action="{% url 'group_member:cancel_rent' %}">
+                        {% csrf_token %}
+                        <button class="btn btn-outline-danger" value="submit">Rendre</button>
+                        <input type="hidden" name="product" value="{{ product.id }}"/>
+                        <input type="hidden" name="group_member" value="{{ product.user_provider.id }}"/>
+                </form>
+                {% endif %}
+                <a class="btn btn-outline-secondary" href="">Modifier</a>
+                <form method="POST" action="{% url 'product:delete_product' %}">
+                        {% csrf_token %}
+                        <button class="btn btn-outline-danger" value="submit">Supprimer</button>
+                        <input type="hidden" name="product_to_delete" value="{{ product.id }}"/>
+                        <input type="hidden" name="group" value="{{ product.group.id }}"/>
+                </form>
+
+                {% endif %}
                 </div>
             </div>
             {% endfor %}
         {% else %}
-            <h1>Vous n'avez fournis aucun produit ! </h1>
-            <h2>Il est temps d'en fournir un ! Rendez-vous dans la page de une de vos communautés et cliquer sur "Inscrire un produit" </h2>
+            <h1 class="mt-5">Vous n'avez fournis aucun produit ! </h1>
+            <p>Il est temps d'en fournir un ! Rendez-vous dans la page de une de vos communautés et cliquer sur "Inscrire un produit" </p>
         {% endif %}
     </div>
 </div>
+<style>
+    .product-image{
+        width: 180px;
+        height: 100px;
+    }
+    .group-image{
+        width: 100px;
+    }
+</style>
 {% endblock content %}
 </body>
 </html>
