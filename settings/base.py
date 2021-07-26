@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ujk%4%ipp%+df=&q2wx3n24f1(7)y%m+%v--3)z(sx&h4pivp!'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -103,9 +103,9 @@ WSGI_APPLICATION = 'settings.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'share',
-        'USER': 'postgres',
-        'PASSWORD': 'root',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': '127.0.0.1',
         'PORT': '5432'
     }
@@ -169,7 +169,7 @@ SOCIALACCOUNT_PROVIDERS = {
         # credentials, or list them here:
         'APP': {
             'client_id': '850037364838760459',
-            'secret': 'XBDvGVoqFiv9kD7iNOgjBigI3phnKDYl',
+            'secret': os.getenv('DISCORD_SECRET'),
             'key': ''
             # sign with email
             # https://discord.com/api/oauth2/authorize?client_id=850037364838760459&redirect_uri=http%3A%2F%2F127.0.0.1%3A8000%2Faccounts%2Fdiscord%2Flogin%2Fcallback%2F&response_type=code&scope=email
@@ -186,13 +186,13 @@ LOGIN_REDIRECT_URL = 'dashboard:explorer'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.live.com'
-EMAIL_HOST_USER = 'favoccia.c@live.fr'
-EMAIL_HOST_PASSWORD = 'Juve1898,'
+EMAIL_HOST_USER = os.getenv('EMAIL')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 
-DEFAULT_FROM_EMAIL = 'favoccia.c@live.fr'
+DEFAULT_FROM_EMAIL = os.getenv('EMAIL')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
