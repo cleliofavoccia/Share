@@ -12,6 +12,7 @@ coverage = "*"
 cronitor = "*"
 sentry-sdk = "*"
 django-extensions = "*"
+django-allauth = "*"
 
 [dev-packages]
 
