@@ -13,7 +13,7 @@ install:
   - pipenv install --dev
 
 # database to use
-env: DJANGO_SETTINGS_MODULE=pur_beurre.settings.travis
+env: DJANGO_SETTINGS_MODULE=settings.travis
 
 services:
   - postgresql
