@@ -1,4 +1,4 @@
-"""Manage views of user app"""
+"""Manage user app views"""
 
 from django.shortcuts import render, redirect
 from django.views import View

@@ -1,14 +1,18 @@
-"""Manage views of dashboard app"""
+"""Manage dashboard app views"""
+import json
 
 from django.views.generic import ListView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
 from django.http import HttpResponse
+from django.core import serializers
 
 from group.models import Group
 from product.models import Product
 from group_member.models import GroupMember
 from collective_decision.models import Estimation
+
+from .forms import CommunityResearchForm
 
 
 class Explorer(ListView):
@@ -66,6 +70,7 @@ class Explorer(ListView):
             community_members = GroupMember.objects.filter(group=community)
             for group_member in community_members:
                 group_member.points_posseded = community.members_points
+                group_member.points_posseded -= group_member.points_penalty
                 group_member.save()
 
             community.save()
@@ -133,6 +138,7 @@ class MyCommunities(LoginRequiredMixin, ListView):
             )
             for group_member in community_members:
                 group_member.points_posseded = community.group.members_points
+                group_member.points_posseded -= group_member.points_penalty
                 group_member.save()
 
             community.group.save()
@@ -145,31 +151,22 @@ class GroupProductsView(View):
     def get(self, request, pk):
 
         group = Group.objects.get(id=pk)
-        products = Product.objects.filter(group=group.pk)
+        products = Product.objects.filter(group=group)
 
-        response = HttpResponse(headers=[{'communities_products': products}])
-
-        return response
+        return HttpResponse(serializers.serialize("json", products))
 
 
 class CommunityResearchView(ListView):
-    """Generic class-based Group list view to print all public communities"""
+    """Generic class-based GroupMember list view to print all communities
+    where user has suscribed"""
     model = Group
     template_name = 'dashboard/explorer.html'
 
-    def get_queryset(self):
-        """Method that return supplementary attributes for Group objects"""
-        return super().get_queryset().annotate(
-            products_number=Count('group_owns_product', distinct=True),
-        )
-
-    def get_context_data(self, **kwargs, ):
+    def get_context_data(self, **kwargs):
         """Method that return an enriched context"""
-        user = self.request.user
         context = super().get_context_data(**kwargs)
-        search_community = self.request.GET.get('research')
-        communities = self.get_queryset().filter(name__icontains=search_community)
-        communities = communities.filter(private=False)
+        research = self.request.GET.get('research')
+        communities = Group.objects.filter(name__icontains=research)
         context['communities'] = communities
 
         # Calculate communities's products cost, total products cost,
@@ -189,7 +186,6 @@ class CommunityResearchView(ListView):
                 except ZeroDivisionError:
                     product.points = 0
                 product.save()
-
                 # Increment total products cost
                 try:
                     community.points += (
@@ -204,23 +200,15 @@ class CommunityResearchView(ListView):
                 )
             except ZeroDivisionError:
                 community.members_points = 0
-
             # Save points per community member for each user
-            community_members = GroupMember.objects.filter(group=community)
+            community_members = GroupMember.objects.filter(
+                group=community
+            )
             for group_member in community_members:
                 group_member.points_posseded = community.members_points
+                group_member.points_posseded -= group_member.points_penalty
                 group_member.save()
 
             community.save()
-
-        # Add communities in which user has suscribed in a list
-        # that added to context to verify if user is in a displayed
-        # community
-        if user.is_authenticated:
-            group_member_list = list()
-            group_member = GroupMember.objects.filter(user=user)
-            for community in group_member:
-                group_member_list.append(community.group.name)
-            context['group_member_list'] = group_member_list
 
         return context

@@ -39,6 +39,8 @@ class Product(models.Model):
 
     delivered = models.BooleanField(default=False)
 
+    rental_end = models.DateTimeField(null=True, blank=True)
+
     # class Meta:
     #     constraints = [
     #         models.CheckConstraint(

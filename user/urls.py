@@ -1,4 +1,4 @@
-"""Manage user's app urls"""
+"""Manage user app urls"""
 
 from django.urls import path
 

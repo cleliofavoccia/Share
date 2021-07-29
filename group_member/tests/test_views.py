@@ -5,6 +5,9 @@ from django.urls import reverse
 
 from group.models import Group
 from user.models import User
+from product.models import Product
+
+from ..models import GroupMember
 
 
 class GroupMemberInscriptionTest(TestCase):
@@ -153,6 +156,115 @@ class GroupMemberUnsubscribeTest(TestCase):
         }
         false_response = self.client.post(
             reverse('group_member:delete_group_members'),
+            data=false_request
+        )
+
+        self.assertRedirects(
+            false_response,
+            reverse('website:fail')
+        )
+
+
+class GroupMemberRentalTest(TestCase):
+    """Tests on GroupMemberRental generic view"""
+    @classmethod
+    def setUp(cls):
+        """Set up a context to test GroupMemberRental generic view"""
+        cls.user = User.objects.create_user(
+            username='Frodon',
+            email='frodon@gmail.com',
+            password='sam'
+        )
+        cls.group = Group.objects.create(name="La communauté de l'anneau")
+
+        cls.group_member = GroupMember.objects.create(
+            user=cls.user,
+            group=cls.group,
+            points_posseded=15
+
+        )
+
+        cls.product = Product.objects.create(
+            name='Epée',
+            user_provider=cls.group_member,
+            group=cls.group,
+            points=10
+        )
+
+    def test_redirect_if_not_logged_in(self):
+        """Test user can't access to GroupMemberRental generic view
+         and it is redirect to login form"""
+        response = self.client.get(
+            reverse('group_member:rent')
+        )
+        self.assertRedirects(
+            response,
+            f'{reverse("account_login")}'
+            f'?next={reverse("group_member:rent")}'
+        )
+
+    def test_view_url_accessible_by_name(self):
+        """Test view can accessible by
+        GroupMemberRental generic view's name"""
+
+        user = User.objects.get(username='Frodon')
+        group = Group.objects.get(name="La communauté de l'anneau")
+
+        group_member = GroupMember.objects.get(
+            user=user,
+            group=group
+        )
+
+        product = Product.objects.get(name='Epée')
+
+        self.client.force_login(user)
+
+        response = self.client.post(
+            reverse('group_member:rent'),
+            data={
+                'group_member': group_member.id,
+                'product': product.id}
+        )
+
+        # Check that we got a response "success"
+        self.assertEqual(response.status_code, 302)
+
+    def test_view_verify_datas_with_form(self):
+        """Test GroupMemberRental generic view
+        verify datas correctly"""
+
+        user = User.objects.get(username='Frodon')
+        group = Group.objects.get(name="La communauté de l'anneau")
+
+        group_member = GroupMember.objects.get(
+            user=user,
+            group=group
+        )
+
+        product = Product.objects.get(name='Epée')
+
+        self.client.force_login(user)
+
+        true_request = {
+            'group_member': group_member.id,
+            'product': product.id
+                        }
+        true_response = self.client.post(
+            reverse('group_member:rent'),
+            data=true_request
+        )
+
+        self.assertRedirects(
+            true_response,
+            reverse('product:product', args=[product.pk])
+        )
+
+        false_request = {
+            'group_member': ['1'],
+            'product': ['Y']
+                        }
+        false_response = self.client.post(
+            reverse('group_member:rent'),
             data=false_request
         )
 

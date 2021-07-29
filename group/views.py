@@ -66,6 +66,7 @@ class CommunityDetailView(DetailView):
         community_members = GroupMember.objects.filter(group=community)
         for group_member in community_members:
             group_member.points_posseded = community.members_points
+            group_member.points_posseded -= group_member.points_penalty
             group_member.save()
 
         community.save()

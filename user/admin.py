@@ -1,4 +1,4 @@
-"""Manage admin views of user's app objects"""
+"""Manage admin views of user app objects"""
 
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin

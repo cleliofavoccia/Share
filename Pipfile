@@ -8,6 +8,9 @@ django = "*"
 psycopg2 = "*"
 selenium = "*"
 webdriver-manager = "*"
+coverage = "*"
+cronitor = "*"
+sentry-sdk = "*"
 
 [dev-packages]
 

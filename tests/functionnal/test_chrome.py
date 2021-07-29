@@ -2,19 +2,18 @@
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.contrib.auth import get_user_model
-from django.conf import settings
 
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 
 from webdriver_manager.chrome import ChromeDriverManager
 
+from product.models import Product
 from group.models import Group
 
 # Call chrome options class
 chrome_options = webdriver.ChromeOptions()
 # Headless mode
-# chrome_options.add_argument('--headless')
+chrome_options.add_argument('--headless')
 # Navigate in a certain window
 chrome_options.add_argument('window-size=1920x1080')
 
@@ -54,8 +53,13 @@ class ChromeFunctionalTestCases(StaticLiveServerTestCase):
             password='sam'
         )
 
-        Group.objects.create(
+        group = Group.objects.create(
             name="La communauté de l'anneau"
+        )
+
+        Product.objects.create(
+            name='Epée',
+            group=group,
         )
 
     def test_user_can_connect_and_disconnect(self):
@@ -105,8 +109,6 @@ class ChromeFunctionalTestCases(StaticLiveServerTestCase):
             "frodon"
         )
         self.driver.find_element_by_css_selector('#button-submit').click()
-        # Test connection
-        self.driver.find_element_by_css_selector('#button-account').click()
 
     def test_user_can_access_to_his_page_account(self):
         """Test if user with a Chrome session can access
@@ -136,14 +138,332 @@ class ChromeFunctionalTestCases(StaticLiveServerTestCase):
 
         self.driver.get(self.live_server_url)
 
+        self.driver.find_element_by_css_selector('#community-page').click()
+
         self.driver.find_element_by_css_selector('#join-community').click()
 
     def test_user_can_leave_a_community(self):
-        """Test if user with a Chrome session can join
+        """Test if user with a Chrome session can leave
         a community"""
 
         self.driver.get(self.live_server_url)
 
+        # Connect
+        self.driver.find_element_by_css_selector('#button-login').click()
+        self.driver.find_element_by_name('login').send_keys(
+            "frodon@gmail.com"
+        )
+        self.driver.find_element_by_css_selector('#id_password').send_keys(
+            "sam"
+        )
+        self.driver.find_element_by_css_selector('#button-submit').click()
+
+        self.driver.find_element_by_css_selector('#community-page').click()
+
         self.driver.find_element_by_css_selector('#join-community').click()
 
         self.driver.find_element_by_css_selector('#leave-community').click()
+
+    def test_user_can_vote_to_modify_community(self):
+        """Test if user with a Chrome session can vote
+        to modify a community"""
+
+        self.driver.get(self.live_server_url)
+
+        # Connect
+        self.driver.find_element_by_css_selector('#button-login').click()
+        self.driver.find_element_by_name('login').send_keys(
+            "frodon@gmail.com"
+        )
+        self.driver.find_element_by_css_selector('#id_password').send_keys(
+            "sam"
+        )
+        self.driver.find_element_by_css_selector('#button-submit').click()
+
+        self.driver.find_element_by_css_selector('#community-page').click()
+
+        self.driver.find_element_by_css_selector('#join-community').click()
+
+        self.driver.find_element_by_css_selector('#collective-decision').click()
+
+        self.driver.find_element_by_css_selector('#vote-to-modify').click()
+
+    def test_user_can_modify_community(self):
+        """Test if user with a Chrome session can
+        modify a community"""
+
+        self.driver.get(self.live_server_url)
+
+        # Connect
+        self.driver.find_element_by_css_selector('#button-login').click()
+        self.driver.find_element_by_name('login').send_keys(
+            "frodon@gmail.com"
+        )
+        self.driver.find_element_by_css_selector('#id_password').send_keys(
+            "sam"
+        )
+        self.driver.find_element_by_css_selector('#button-submit').click()
+
+        self.driver.find_element_by_css_selector('#community-page').click()
+
+        self.driver.find_element_by_css_selector('#join-community').click()
+
+        self.driver.find_element_by_css_selector('#collective-decision').click()
+
+        self.driver.find_element_by_css_selector('#vote-to-modify').click()
+
+        self.driver.find_element_by_css_selector('#modify-community').click()
+
+    def test_user_can_vote_to_delete_community(self):
+        """Test if user with a Chrome session can vote
+        to delete a community"""
+
+        self.driver.get(self.live_server_url)
+
+        # Connect
+        self.driver.find_element_by_css_selector('#button-login').click()
+        self.driver.find_element_by_name('login').send_keys(
+            "frodon@gmail.com"
+        )
+        self.driver.find_element_by_css_selector('#id_password').send_keys(
+            "sam"
+        )
+        self.driver.find_element_by_css_selector('#button-submit').click()
+
+        self.driver.find_element_by_css_selector('#community-page').click()
+
+        self.driver.find_element_by_css_selector('#join-community').click()
+
+        self.driver.find_element_by_css_selector('#collective-decision').click()
+
+        self.driver.find_element_by_css_selector('#vote-to-delete').click()
+
+    def test_user_can_delete_community(self):
+        """Test if user with a Chrome session can
+        delete a community"""
+
+        self.driver.get(self.live_server_url)
+
+        # Connect
+        self.driver.find_element_by_css_selector('#button-login').click()
+        self.driver.find_element_by_name('login').send_keys(
+            "frodon@gmail.com"
+        )
+        self.driver.find_element_by_css_selector('#id_password').send_keys(
+            "sam"
+        )
+        self.driver.find_element_by_css_selector('#button-submit').click()
+
+        self.driver.find_element_by_css_selector('#community-page').click()
+
+        self.driver.find_element_by_css_selector('#join-community').click()
+
+        self.driver.find_element_by_css_selector('#collective-decision').click()
+
+        self.driver.find_element_by_css_selector('#vote-to-delete').click()
+
+    def test_user_can_view_a_product(self):
+        """Test if user with a Chrome session can look
+        a product"""
+
+        self.driver.get(self.live_server_url)
+
+        self.driver.find_element_by_css_selector('#community-page').click()
+
+        self.driver.find_element_by_name('Epée').click()
+
+    def test_user_can_estimate_a_product_cost(self):
+        """Test if user with a Chrome session can estimate
+        a product cost"""
+
+        self.driver.get(self.live_server_url)
+
+        # Connect
+        self.driver.find_element_by_css_selector('#button-login').click()
+        self.driver.find_element_by_name('login').send_keys(
+            "frodon@gmail.com"
+        )
+        self.driver.find_element_by_css_selector('#id_password').send_keys(
+            "sam"
+        )
+        self.driver.find_element_by_css_selector('#button-submit').click()
+
+        self.driver.find_element_by_css_selector('#community-page').click()
+
+        self.driver.find_element_by_css_selector('#join-community').click()
+
+        self.driver.find_element_by_name('Epée').click()
+
+        self.driver.find_element_by_css_selector('#estimation').click()
+
+    def test_user_can_create_community(self):
+        """Test if user with a Chrome session can create
+        a community"""
+
+        self.driver.get(self.live_server_url)
+
+        # Connect
+        self.driver.find_element_by_css_selector('#button-login').click()
+        self.driver.find_element_by_name('login').send_keys(
+            "frodon@gmail.com"
+        )
+        self.driver.find_element_by_css_selector('#id_password').send_keys(
+            "sam"
+        )
+        self.driver.find_element_by_css_selector('#button-submit').click()
+
+        self.driver.find_element_by_css_selector('#create-community').click()
+
+    def test_user_can_add_product(self):
+        """Test if user with a Chrome session can add
+        a product"""
+
+        self.driver.get(self.live_server_url)
+
+        # Connect
+        self.driver.find_element_by_css_selector('#button-login').click()
+        self.driver.find_element_by_name('login').send_keys(
+            "frodon@gmail.com"
+        )
+        self.driver.find_element_by_css_selector('#id_password').send_keys(
+            "sam"
+        )
+        self.driver.find_element_by_css_selector('#button-submit').click()
+
+        self.driver.find_element_by_css_selector('#community-page').click()
+
+        self.driver.find_element_by_css_selector('#join-community').click()
+
+        self.driver.find_element_by_css_selector('#create-product').click()
+
+        self.driver.find_element_by_name('name').send_keys(
+            "Dague"
+        )
+        self.driver.find_element_by_name('description').send_keys(
+            "Une dague de test"
+        )
+
+        self.driver.find_element_by_css_selector('#id_group_member').click()
+
+        self.driver.find_element_by_name('cost').send_keys(
+            "10"
+        )
+        self.driver.find_element_by_css_selector('#button-submit').click()
+
+    def test_user_can_delete_product(self):
+        """Test if user with a Chrome session can delete
+        a product that he added"""
+
+        self.driver.get(self.live_server_url)
+
+        # Connect
+        self.driver.find_element_by_css_selector('#button-login').click()
+        self.driver.find_element_by_name('login').send_keys(
+            "frodon@gmail.com"
+        )
+        self.driver.find_element_by_css_selector('#id_password').send_keys(
+            "sam"
+        )
+        self.driver.find_element_by_css_selector('#button-submit').click()
+
+        self.driver.find_element_by_css_selector('#community-page').click()
+
+        self.driver.find_element_by_css_selector('#join-community').click()
+
+        self.driver.find_element_by_css_selector('#create-product').click()
+
+        self.driver.find_element_by_name('name').send_keys(
+            "Dague"
+        )
+        self.driver.find_element_by_name('description').send_keys(
+            "Une dague de test"
+        )
+
+        self.driver.find_element_by_css_selector('#id_group_member').click()
+
+        self.driver.find_element_by_name('cost').send_keys(
+            "10"
+        )
+        self.driver.find_element_by_css_selector('#button-submit').click()
+
+        self.driver.find_element_by_name('Dague').click()
+
+        self.driver.find_element_by_css_selector('#delete-product').click()
+
+    def test_user_can_modify_product(self):
+        """Test if user with a Chrome session can modify
+        a product"""
+
+        self.driver.get(self.live_server_url)
+
+        # Connect
+        self.driver.find_element_by_css_selector('#button-login').click()
+        self.driver.find_element_by_name('login').send_keys(
+            "frodon@gmail.com"
+        )
+        self.driver.find_element_by_css_selector('#id_password').send_keys(
+            "sam"
+        )
+        self.driver.find_element_by_css_selector('#button-submit').click()
+
+        self.driver.find_element_by_css_selector('#community-page').click()
+
+        self.driver.find_element_by_css_selector('#join-community').click()
+
+        self.driver.find_element_by_css_selector('#create-product').click()
+
+        self.driver.find_element_by_name('name').send_keys(
+            "Dague"
+        )
+        self.driver.find_element_by_name('description').send_keys(
+            "Une dague de test"
+        )
+
+        self.driver.find_element_by_css_selector('#id_group_member').click()
+
+        self.driver.find_element_by_name('cost').send_keys(
+            "10"
+        )
+        self.driver.find_element_by_css_selector('#button-submit').click()
+
+        self.driver.find_element_by_name('Dague').click()
+
+        self.driver.find_element_by_css_selector('#modify-product').click()
+
+    def test_user_can_rent_product(self):
+        """Test if user with a Chrome session can rent
+        a product"""
+
+        self.driver.get(self.live_server_url)
+
+        # Connect
+        self.driver.find_element_by_css_selector('#button-login').click()
+        self.driver.find_element_by_name('login').send_keys(
+            "frodon@gmail.com"
+        )
+        self.driver.find_element_by_css_selector('#id_password').send_keys(
+            "sam"
+        )
+        self.driver.find_element_by_css_selector('#button-submit').click()
+
+        self.driver.find_element_by_css_selector('#community-page').click()
+
+        self.driver.find_element_by_css_selector('#join-community').click()
+
+        self.driver.find_element_by_css_selector('#create-product').click()
+
+        self.driver.find_element_by_name('name').send_keys(
+            "Dague"
+        )
+        self.driver.find_element_by_name('description').send_keys(
+            "Une dague de test"
+        )
+
+        self.driver.find_element_by_css_selector('#id_group_member').click()
+
+        self.driver.find_element_by_name('cost').send_keys(
+            "10"
+        )
+        self.driver.find_element_by_css_selector('#button-submit').click()
+
+        self.driver.find_element_by_css_selector('.rent').click()

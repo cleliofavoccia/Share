@@ -27,41 +27,13 @@
             <p>Nombre de points : {{ group.points }}</p>
             <p>Nombre de produits : {{ products_number }}</p>
             <p>Points par utilisateur : {{ group.members_points }}</p>
+            <p>Mes points : {{ group_member.points_posseded }}</p>
             <p>Adresse : {{ group.address }}</p>
         </div>
         {% if group.name in group_member_list %}
             <div class="col d-flex flex-column mt-5">
-                {% if not modify_group_vote %}
-                <form method="POST" action="{% url 'collective_decision:modify_vote_group' %}">
-                    {% csrf_token %}
-                    <button class="btn btn-link primary d-inline" value="submit">Modifier la communauté</button>
-                    <input type="hidden" name="group_member" value="{{ group_member.id }}"/>
-                    <input type="hidden" name="group" value="{{ group.id }}"/>
-                </form>
-                {% else %}
-                <form method="POST" action="{% url 'collective_decision:against_modify_vote_group' %}">
-                    {% csrf_token %}
-                    <button class="btn btn-link primary d-inline" value="submit">Modifier la communauté</button>
-                    <input type="hidden" name="group_member" value="{{ group_member.id }}"/>
-                    <input type="hidden" name="group" value="{{ group.id }}"/>
-                </form>
-                {% endif %}
-                <a class="link-primary d-inline ms-3" href="{% url 'product:add_product' group.pk %}">Inscrire un produit</a>
-                {% if not delete_group_vote %}
-                <form method="POST" action="{% url 'collective_decision:delete_vote_group' %}">
-                    {% csrf_token %}
-                    <button class="btn btn-link danger d-inline" value="submit">Supprimer la communauté</button>
-                    <input type="hidden" name="group_member" value="{{ group_member.id }}"/>
-                    <input type="hidden" name="group" value="{{ group.id }}"/>
-                </form>
-                {% else %}
-                <form method="POST" action="{% url 'collective_decision:against_delete_vote_group' %}">
-                    {% csrf_token %}
-                    <button class="btn btn-link danger d-inline" value="submit">Supprimer la communauté</button>
-                    <input type="hidden" name="group_member" value="{{ group_member.id }}"/>
-                    <input type="hidden" name="group" value="{{ group.id }}"/>
-                </form>
-                {% endif %}
+                <a id="collective-decision" class="link-primary d-inline ms-3 mb-2" href="{% url 'collective_decision:vote' group.pk %}">Décisions collective</a>
+                <a id="create-product" class="link-primary d-inline ms-3 mb-2" href="{% url 'product:add_product' group.pk %}">Inscrire un produit</a>
                 <form method="POST" action="{% url 'group_member:delete_group_members' %}">
                     {% csrf_token %}
                     <button id="leave-community" class="btn btn-danger d-inline" value="submit">Partir de la communauté</button>
@@ -100,7 +72,7 @@
                     </div>
                 <div class="col-md-4 w-100 h-100">
                     <div class="card-body">
-                        <a href="{% url 'product:product' product.pk %}"><h5 class="card-title">{{ product.name }}</h5></a>
+                        <a name="{{ product.name }}" href="{% url 'product:product' product.pk %}"><h5 class="card-title">{{ product.name }}</h5></a>
                             {% if product.tenant %}
                             <p class="card-text">{{ product.points }} | Utilisations restantes: 3</p>
                             {% else %}
@@ -115,7 +87,7 @@
                 {% if not product.tenant %}
                 <form method="POST" action="{% url 'group_member:rent' %}">
                         {% csrf_token %}
-                        <button class="btn btn-outline-primary" value="submit">Louer</button>
+                        <button class="rent btn btn-outline-primary" value="submit">Louer</button>
                         <input type="hidden" name="product" value="{{ product.id }}"/>
                         <input type="hidden" name="group_member" value="{{ group_member.id }}"/>
                 </form>

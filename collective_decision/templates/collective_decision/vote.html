@@ -32,7 +32,7 @@
                 {% if not modify_group_vote %}
                 <form method="POST" action="{% url 'collective_decision:modify_vote_group' %}">
                     {% csrf_token %}
-                    <button class="btn btn-link primary d-inline" value="submit">Modifier la communauté</button>
+                    <button id="vote-to-modify" class="btn btn-link primary d-inline" value="submit">Modifier la communauté</button>
                     <input type="hidden" name="group_member" value="{{ group_member.id }}"/>
                     <input type="hidden" name="group" value="{{ group.id }}"/>
                 </form>
@@ -48,7 +48,7 @@
                 {% if not delete_group_vote %}
                 <form method="POST" action="{% url 'collective_decision:delete_vote_group' %}">
                     {% csrf_token %}
-                    <button class="btn btn-link danger d-inline" value="submit">Supprimer la communauté</button>
+                    <button id="vote-to-delete"  class="btn btn-link danger d-inline" value="submit">Supprimer la communauté</button>
                     <input type="hidden" name="group_member" value="{{ group_member.id }}"/>
                     <input type="hidden" name="group" value="{{ group.id }}"/>
                 </form>
@@ -87,15 +87,15 @@
 <div class="container">
     <h2>Votes pour la modification de {{ group.name }}</h2>
     {% for vote in modify_votes %}
-        <div>{{ vote.group_member}} est {% if vote.modify_group_vote %}pour !{% else %} contre !{% endif %}</div>
+        <div>{{ vote.group_member.user.username }} est {% if vote.modify_group_vote %}pour !{% else %} contre !{% endif %}</div>
     {% endfor %}
     {% if modification_group_activate %}
     <h2 class="mt-3">Modifier {{ group.name }}</h2>
-    <a class="link-success" href="{% url 'group:modify_group' group.pk %}">Cliquez ici pour modifier la communauté !</a>
+    <a id="modify-community" class="link-success" href="{% url 'group:modify_group' group.pk %}">Cliquez ici pour modifier la communauté !</a>
     {% endif %}
     <h2 class="mt-3">Votes pour la suppression de {{ group.name }}</h2>
     {% for vote in delete_votes %}
-        <div>{{ vote.group_member}} est {% if vote.delete_group_vote %}pour !{% else %} contre !{% endif %}</div>
+        <div>{{ vote.group_member.user.username }} est {% if vote.delete_group_vote %}pour !{% else %} contre !{% endif %}</div>
     {% endfor %}
 </div>
 <style>

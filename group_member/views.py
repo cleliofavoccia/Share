@@ -58,11 +58,37 @@ class GroupMemberRental(LoginRequiredMixin, View):
         # community
         except ValueError:
 
-            product = Product.objects.get(
-                id=int(request.POST['product'])
-            )
+            # In case of product is invalid
+            try:
+                product = Product.objects.get(
+                    id=request.POST['product']
+                )
 
-            return redirect('group:community', product.group.id)
+                return redirect('group:community', product.group.id)
+
+            except ValueError:
+                return redirect('website:fail')
+
+            except Product.DoesNotExist:
+                return redirect('website:fail')
+
+        # In case of a group_member not exist
+
+        except GroupMember.DoesNotExist:
+
+            # In case of product is invalid
+            try:
+                product = Product.objects.get(
+                    id=request.POST['product']
+                )
+
+                return redirect('group:community', product.group.id)
+
+            except ValueError:
+                return redirect('website:fail')
+
+            except Product.DoesNotExist:
+                return redirect('website:fail')
 
         if product.points <= group_member.points_posseded:
             form = GroupMemberRentalForm(request.POST)

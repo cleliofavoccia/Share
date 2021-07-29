@@ -13,10 +13,10 @@ class GroupMember(models.Model):
     group = models.ForeignKey('group.Group',
                               on_delete=models.CASCADE)
     points_posseded = models.IntegerField(blank=True, null=True)
+    points_penalty = models.IntegerField(default=0)
 
     def __str__(self):
         """Print attribute as title's object in Django admin"""
-        return '%s, %s, %s' % (
+        return '%s, %s' % (
             self.user, self.group,
-            self.points_posseded
         )

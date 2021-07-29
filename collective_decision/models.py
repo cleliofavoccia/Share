@@ -1,4 +1,4 @@
-"""Manage collective_decision's app objects"""
+"""Manage collective_decision app objects"""
 
 from django.db import models
 
@@ -19,6 +19,11 @@ class Estimation(models.Model):
                 fields=['group_member', 'product'], name='user_product_uniq'
             )
         ]
+
+    def __str__(self):
+        """Print attribute as title's object in Django admin"""
+        return f'{self.group_member} a estimé {self.product} ' \
+               f'à {self.cost} points'
 
 
 class Decision(models.Model):

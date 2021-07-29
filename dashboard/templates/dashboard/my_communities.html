@@ -12,6 +12,7 @@
   <div class="row">
 <!--    List Community group for PC  -->
     <div class="col-3 d-none d-lg-block">
+        <a id="create-community" role="button" href="{% url 'group:group_inscription' %}" class="btn btn-outline-primary mb-3">Créer une communauté</a>
         <div class="list-group">
             {% for community in my_communities %}
             <div class="list-group-item list-group-item-action">

@@ -157,7 +157,7 @@ class GroupMemberVoteForm(forms.Form):
 
 
 class CostEstimationForm(forms.ModelForm):
-    """ Sign in forms to permit the users to modify him"""
+    """Form to permit user to gie an product cost estimation"""
 
     class Meta:
         model = Estimation

@@ -1,5 +1,7 @@
 """Views of product app"""
 
+import datetime
+
 from django.views.generic import DetailView, ListView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
@@ -8,6 +10,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.urls import reverse
+from django.utils import timezone
 
 from group.models import Group
 from group_member.models import GroupMember
@@ -74,6 +77,7 @@ class ProductDetailView(DetailView):
         community_members = GroupMember.objects.filter(group=community)
         for group_member in community_members:
             group_member.points_posseded = community.members_points
+            group_member.points_posseded -= group_member.points_penalty
             group_member.save()
 
         community.save()
@@ -418,3 +422,22 @@ class ProductSuppressionView(LoginRequiredMixin, View):
                 form.delete()
                 return redirect('group:community', request.POST['group'])
             return redirect('website:fail')
+
+
+def do_delivery(request):
+    """Assign rental end date of product"""
+
+    product = Product.objects.get(id=int(request.POST['product']))
+
+    today = timezone.now()
+
+    duration = datetime.timedelta(days=product.points)
+
+    product.rental_end = (today + duration)
+
+    product.delivered = True
+    product.save()
+
+    return redirect('product:product', product.pk)
+
+

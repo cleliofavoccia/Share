@@ -353,7 +353,7 @@ class GroupVoteViewTest(TestCase):
         )
 
     def test_redirect_if_not_logged_in(self):
-        """Test user can't access to GroupMemberAgainstModifyVoteGroup generic view
+        """Test user can't access to GroupVoteView generic view
         and it is redirect to login form"""
         group = Group.objects.get(name="La communauté de l'anneau")
         response = self.client.get(
@@ -487,7 +487,8 @@ class CostEstimationViewTest(TestCase):
         self.assertRedirects(
             response,
             f'{reverse("account_login")}'
-            f'?next={reverse("collective_decision:estimation", args=[product.pk])}'
+            f'?next='
+            f'{reverse("collective_decision:estimation", args=[product.pk])}'
         )
 
     def test_view_url_accessible_by_name(self):
@@ -517,7 +518,7 @@ class CostEstimationViewTest(TestCase):
         self.assertEqual(post_response.status_code, 302)
 
     def test_view_verify_datas_with_form(self):
-        """Test GroupInscriptionView generic view
+        """Test CostEstimationView generic view
         verify datas correctly"""
 
         self.client.force_login(self.user)

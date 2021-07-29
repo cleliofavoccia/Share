@@ -24,4 +24,7 @@ urlpatterns = [
     path('delete_product/',
          views.ProductSuppressionView.as_view(),
          name='delete_product'),
+    path('delivery/',
+         views.do_delivery,
+         name='delivery'),
     ]

@@ -1,4 +1,4 @@
-"""Manage admin views of collective_decision's app objects"""
+"""Manage admin views of collective_decision app objects"""
 
 from django.contrib import admin
 

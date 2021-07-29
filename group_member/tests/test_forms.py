@@ -167,7 +167,8 @@ class GroupMemberRentalFormTest(TestCase):
         cls.product = Product.objects.create(
             name='Epée',
             user_provider=cls.group_member,
-            group=cls.group
+            group=cls.group,
+            points=12
         )
 
         cls.cleaned_data = {

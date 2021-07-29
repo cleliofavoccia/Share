@@ -99,8 +99,10 @@ class GroupMemberRentalForm(forms.Form):
         group_member = self.cleaned_data['group_member']
 
         product.tenant = group_member
+        group_member.points_penalty += product.points
 
         if commit:
+            group_member.save()
             product.save()
         return product
 
@@ -110,8 +112,11 @@ class GroupMemberRentalForm(forms.Form):
         product = self.cleaned_data['product']
         group_member = self.cleaned_data['group_member']
 
+        group_member.points_penalty = 0
+
         product.tenant = None
 
         if commit:
+            group_member.save()
             product.save()
         return product

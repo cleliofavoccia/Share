@@ -1,4 +1,4 @@
-"""Manage views of collective_decision app"""
+"""Manage collective_decision app views"""
 
 from django.views.generic import DetailView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -84,11 +84,13 @@ class GroupVoteView(LoginRequiredMixin, DetailView):
     """Generic class-based Group detail view to print all votes
     about a community and to print modification community page or
     to execute community suppression"""
+
     model = Group
     template_name = 'collective_decision/vote.html'
 
     def get_context_data(self, **kwargs):
         """Method that return an enriched context"""
+
         user = self.request.user
         context = super().get_context_data(**kwargs)
         community = super().get_object()
@@ -113,10 +115,14 @@ class GroupVoteView(LoginRequiredMixin, DetailView):
             sum_product_cost = 0
             for estimation in cost_estimations:
                 sum_product_cost += estimation.cost
-            product.points = sum_product_cost // estimation_numbers
-            product.save()
-            # Increment total products cost
-            community.points += sum_product_cost // estimation_numbers
+            try:
+                product.points = sum_product_cost // estimation_numbers
+                product.save()
+                # Increment total products cost
+                community.points += sum_product_cost // estimation_numbers
+            except ZeroDivisionError:
+                product.points = 0
+                community.points = 0
         # Points per community member
         try:
             community.members_points = (
@@ -131,6 +137,7 @@ class GroupVoteView(LoginRequiredMixin, DetailView):
         for group_member in community_members:
             # Save points per community member for each user
             group_member.points_posseded = community.members_points
+            group_member.points_posseded -= group_member.points_penalty
             group_member.save()
 
             # Create Decisions objects for group members
@@ -237,7 +244,8 @@ class CostEstimationView(LoginRequiredMixin, View):
     to add an Estimation on a Product object cost"""
 
     def get(self, request, pk):
-        """Method GET to print user informations"""
+        """Method GET to print CostEstimationForm"""
+
         product = Product.objects.get(id=pk)
         group_member = GroupMember.objects.get(
             user=self.request.user,
@@ -257,8 +265,8 @@ class CostEstimationView(LoginRequiredMixin, View):
 
     def post(self, request, pk):
         """Method POST to send datas input by user
-        and modify a User object (user account)"""
-        # if this is a POST request we need to process the form data
+        in CostEstimationForm to estimate a product cost"""
+
         product = Product.objects.get(id=pk)
         group_member = GroupMember.objects.get(
             user=self.request.user,

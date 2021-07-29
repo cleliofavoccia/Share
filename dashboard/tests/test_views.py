@@ -1,4 +1,4 @@
-"""Tests of dashboard django views"""
+"""Tests of dashboard app views"""
 
 from django.test import TestCase
 from django.urls import reverse
@@ -7,7 +7,6 @@ from group_member.models import GroupMember
 from group.models import Group
 from user.models import User
 from product.models import Product
-from collective_decision.models import Estimation
 
 
 class ExplorerTest(TestCase):
@@ -70,7 +69,8 @@ class ExplorerTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_view_know_all_communities_where_user_has_suscribed(self):
-
+        """Test Explorer return a correct
+        group_member_list context variable"""
         user = User.objects.get(username='Frodon')
         self.client.force_login(user)
         response = self.client.get(reverse('dashboard:explorer'))
@@ -86,7 +86,7 @@ class ExplorerTest(TestCase):
         )
 
     def test_view_print_all_non_private_communities(self):
-
+        """Test Explorer don't print private communities"""
         user = User.objects.get(username='Frodon')
         self.client.force_login(user)
 
@@ -148,7 +148,7 @@ class MyCommunitiesTest(TestCase):
         )
 
     def test_redirect_if_not_logged_in(self):
-        """Test user can't access to GroupInscriptionView generic view
+        """Test user can't access to MyCommunities generic list view
          and it is redirect to login form"""
 
         response = self.client.get(
@@ -161,7 +161,8 @@ class MyCommunitiesTest(TestCase):
         )
 
     def test_view_uses_correct_template(self):
-        """Test Explorer view use the correct template"""
+        """Test MyCommunities generic list view use
+        the correct template"""
 
         user = User.objects.get(username='Frodon')
         self.client.force_login(user)
@@ -176,7 +177,8 @@ class MyCommunitiesTest(TestCase):
         )
 
     def test_view_url_accessible_by_name(self):
-        """Test Explorer view can accessible by name"""
+        """Test MyCommunities generic list view
+        can accessible by name"""
 
         user = User.objects.get(username='Frodon')
         self.client.force_login(user)
@@ -189,6 +191,8 @@ class MyCommunitiesTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_view_print_all_communities_where_user_has_suscribed(self):
+        """Test Explorer return a correct
+        group_member_list context variable"""
 
         user = User.objects.get(username='Frodon')
         self.client.force_login(user)

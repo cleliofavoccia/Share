@@ -21,6 +21,7 @@
             <p>Nombre de points : {{ product.group.points }}</p>
             <p>Nombre de produits : {{ products_number }}</p>
             <p>Points par utilisateur : {{ product.group.members_points }}</p>
+            <p>Mes points : {{ member.points_posseded }}</p>
             <p>Adresse : {{ product.group.address }}</p>
             {% if product.group.url %}
                 <a href="{{ product.group.url }}">Site web ou Discord de la communauté</a>
@@ -50,9 +51,7 @@
             {% endif %}
             <div class="col d-flex flex-row">
                 <p>Coût : {{ product.points }}</p>
-                {% if product.user_provider == member %}
-                <a class="ms-5" href="{% url 'collective_decision:estimation' product.pk %}">Estimez ou réestimez son coût</a>
-                {% endif %}
+                <a id="estimation" class="ms-5" href="{% url 'collective_decision:estimation' product.pk %}">Estimez ou réestimez son coût</a>
             </div>
             <div>
                 {% if not product.tenant %}
@@ -65,7 +64,15 @@
                 {% else %}
                 <a class="btn btn-outline-secondary disabled" href="">Indisponible</a>
                 {% if product.user_provider == member %}
-                <a class="btn btn-outline-primary" href="">Livré</a>
+                {% if not delivered %}
+                <form method="POST" action="{% url 'product:delivery' %}">
+                        {% csrf_token %}
+                        <button class="btn btn-outline-primary" value="submit">Livrer</button>
+                        <input type="hidden" name="product" value="{{ product.id }}"/>
+                </form>
+                {% else %}
+                <a class="btn btn-outline-secondary disabled" href="">Livré</a>
+                {% endif %}
                 {% endif %}
                 {% endif %}
                 {% if member %}
@@ -78,10 +85,10 @@
                 </form>
                 {% endif %}
                 {% if product.user_provider == member %}
-                <a class="btn btn-outline-secondary" href="{% url 'product:modify_product' product.group.pk product.pk %}">Modifier</a>
+                <a id="modify-product" class="btn btn-outline-secondary" href="{% url 'product:modify_product' product.group.pk product.pk %}">Modifier</a>
                 <form method="POST" action="{% url 'product:delete_product' %}">
                         {% csrf_token %}
-                        <button class="btn btn-outline-danger" value="submit">Supprimer</button>
+                        <button id="delete-product" class="btn btn-outline-danger" value="submit">Supprimer</button>
                         <input type="hidden" name="product_to_delete" value="{{ product.id }}"/>
                         <input type="hidden" name="group" value="{{ product.group.id }}"/>
                 </form>
