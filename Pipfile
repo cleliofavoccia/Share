@@ -11,6 +11,7 @@ webdriver-manager = "*"
 coverage = "*"
 cronitor = "*"
 sentry-sdk = "*"
+django-extensions = "*"
 
 [dev-packages]
 
