@@ -23,4 +23,4 @@ before_script:
 
 # command to run tests
 script:
-  - python manage.py test
+  - pipenv run python manage.py test
