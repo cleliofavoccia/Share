@@ -13,6 +13,7 @@ cronitor = "*"
 sentry-sdk = "*"
 django-extensions = "*"
 django-allauth = "*"
+pillow = "*"
 
 [dev-packages]
 
