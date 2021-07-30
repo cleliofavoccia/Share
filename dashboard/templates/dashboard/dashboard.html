@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+{% block content %}
+<body>
+<div class="container-fluid">
+  <a id="create-community" role="button" href="{% url 'group:group_inscription' %}" class="btn btn-outline-primary mb-3">Créer une communauté</a>
+  {% for community in communities %}
+  <div class="row">
+<!--    List Community group for PC  -->
+    <div class="col-3 d-none d-lg-block">
+        <div class="list-group">
+            <div class="list-group-item list-group-item-action">
+                <p class="community_id" hidden>{{ community.pk }}</p>
+                <div class="d-flex w-100 justify-content-between">
+                    <a id="community-page" href="{% url 'group:community' community.pk %}"><h5 class="mb-1">{{ community.name }}</h5></a>
+                    {% if community.image %}
+                    <img class="group-image" src="{{ community.image.url }}">
+                    {% endif %}
+                    <div style="display: flex; flex-direction: column">
+                        {% if not community.name in group_member_list %}
+                        {% if user.is_authenticated %}
+                        <form method="POST" action="{% url 'group_member:add_group_members' %}">
+                            {% csrf_token %}
+                            <button value="submit" class="btn btn-outline-primary">Rejoindre</button>
+                            <input type="hidden" name="user" value="{{ user.id }}"/>
+                            <input type="hidden" name="group" value="{{ community.id }}"/>
+                        </form>
+                        {% else %}
+                        <a id="join-community" role="button" href="{% url 'group:community' community.pk %}" class="btn btn-outline-primary">Rejoindre</a>
+                        {% endif %}
+                        {% endif %}
+                        <a role="button" href="{% url 'group:community' community.pk %}" class="btn btn-outline-primary">Catalogue</a>
+                    </div>
+                </div>
+                <p class="mb-1">Membres : {{ community.members.count }}</p>
+                <p class="mb-1">Points : {{ community.points }}</p>
+                <p class="mb-1">Produits : {{ community.products_number }}</p>
+                <p class="mb-1">Points par utilisateur : {{ community.members_points }}</p>
+                <p class="mb-1">Adresse : {{ community.address }}</p>
+                <small>Small description</small>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="row row-cols-2" >
+            {% for product in community.group_owns_product.all|slice:":4" %}
+            <div id="products" class="col">
+                    <div class="card mb-3" style="max-width: 350px;">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                {% if product.image %}
+                                <img class="product-image" src="{{ product.image.url }}" alt="...">
+                                {% endif %}
+                            </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                    <p class="card-text">{{ product.points }}</p>
+                                    <p class="card-text">Utilisations restantes : 3</p>
+                                    <p class="card-text"><a class="text-muted" href="{% url 'product:product' product.pk %}">Voir produit</a></p>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+            </div>
+            {% endfor %}
+    </div>
+    </div>
+  </div>
+  <hr style="background-color: #000000; height: 5px; margin-bottom: 30px;">
+  {% endfor %}
+</div>
+</body>
+<style>
+    .product-image{
+        width: 120px;
+    }
+
+    .group-image{
+        width: 100px;
+    }
+
+    .list-group-item.active{
+        color: #000000 !important;
+        background-color: #ffff !important;
+        border-color: #0d6efd !important;
+</style>
+{% endblock content %}
+</html>

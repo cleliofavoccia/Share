@@ -18,7 +18,7 @@ from .forms import CommunityResearchForm
 class Explorer(ListView):
     """Generic class-based Group list view to print all public communities"""
     model = Group
-    template_name = 'dashboard/explorer.html'
+    template_name = 'dashboard/dashboard.html'
 
     def get_queryset(self):
         """Method that return supplementary attributes for Group objects"""
@@ -92,22 +92,22 @@ class MyCommunities(LoginRequiredMixin, ListView):
     """Generic class-based GroupMember list view to print all communities
     where user has suscribed"""
     model = GroupMember
-    template_name = 'dashboard/my_communities.html'
+    template_name = 'dashboard/dashboard.html'
 
     def get_context_data(self, **kwargs):
         """Method that return an enriched context"""
         user = self.request.user
         context = super().get_context_data(**kwargs)
-        my_communities = GroupMember.objects.filter(user=user)
-        context['my_communities'] = my_communities
+        my_communities = Group.objects.filter(members=user)
+        context['communities'] = my_communities
 
         # Calculate communities's products cost, total products cost,
         # points per community member
         for community in my_communities:
             # Total products cost
-            community.group.points = 0
+            community.points = 0
             # Communities's products cost
-            for product in community.group.group_owns_product.all():
+            for product in community.group_owns_product.all():
                 cost_estimations = Estimation.objects.filter(product=product)
                 estimation_numbers = cost_estimations.count()
                 sum_product_cost = 0
@@ -120,47 +120,37 @@ class MyCommunities(LoginRequiredMixin, ListView):
                 product.save()
                 # Increment total products cost
                 try:
-                    community.group.points += (
+                    community.points += (
                             sum_product_cost // estimation_numbers
                     )
                 except ZeroDivisionError:
-                    community.group.points = 0
+                    community.points = 0
             # Points per community member
             try:
-                community.group.members_points = (
-                        community.group.points // community.group.members.count()
+                community.members_points = (
+                        community.points // community.members.count()
                 )
             except ZeroDivisionError:
-                community.group.members_points = 0
+                community.members_points = 0
             # Save points per community member for each user
             community_members = GroupMember.objects.filter(
-                group=community.group
+                group=community
             )
             for group_member in community_members:
-                group_member.points_posseded = community.group.members_points
+                group_member.points_posseded = community.members_points
                 group_member.points_posseded -= group_member.points_penalty
                 group_member.save()
 
-            community.group.save()
+            community.save()
 
         return context
-
-
-class GroupProductsView(View):
-
-    def get(self, request, pk):
-
-        group = Group.objects.get(id=pk)
-        products = Product.objects.filter(group=group)
-
-        return HttpResponse(serializers.serialize("json", products))
 
 
 class CommunityResearchView(ListView):
     """Generic class-based GroupMember list view to print all communities
     where user has suscribed"""
     model = Group
-    template_name = 'dashboard/explorer.html'
+    template_name = 'dashboard/dashboard.html'
 
     def get_context_data(self, **kwargs):
         """Method that return an enriched context"""

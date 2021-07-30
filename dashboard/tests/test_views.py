@@ -56,7 +56,7 @@ class ExplorerTest(TestCase):
 
         self.assertTemplateUsed(
             response,
-            'dashboard/explorer.html'
+            'dashboard/dashboard.html'
         )
 
     def test_view_url_accessible_by_name(self):
@@ -173,7 +173,7 @@ class MyCommunitiesTest(TestCase):
 
         self.assertTemplateUsed(
             response,
-            'dashboard/my_communities.html'
+            'dashboard/dashboard.html'
         )
 
     def test_view_url_accessible_by_name(self):
@@ -199,10 +199,10 @@ class MyCommunitiesTest(TestCase):
 
         response = self.client.get(reverse('dashboard:my_communities'))
 
-        user_communities = GroupMember.objects.all().filter(user=user)
+        user_communities = Group.objects.filter(members=user)
 
         view_communities = list()
-        for community in response.context['my_communities']:
+        for community in response.context['communities']:
             view_communities.append(community)
 
         test_communities = list()
