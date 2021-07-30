@@ -30,7 +30,9 @@ def update_communities_informations():
 
             # Increment total products cost
             try:
-                community.points += product.points
+                community.points += (
+                        sum_product_cost // estimation_numbers
+                )
             except ZeroDivisionError:
                 community.points = 0
         # Points per community member
@@ -40,11 +42,14 @@ def update_communities_informations():
             )
         except ZeroDivisionError:
             community.members_points = 0
-
         # Save points per community member for each user
-        community_members = GroupMember.objects.filter(group=community)
+        community_members = GroupMember.objects.filter(
+            group=community
+        )
         for group_member in community_members:
             group_member.points_posseded = community.members_points
+            group_member.points_posseded -= group_member.points_penalty
             group_member.save()
 
         community.save()
+    return 'Update !'

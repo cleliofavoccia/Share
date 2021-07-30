@@ -4,6 +4,7 @@ from django.views.generic import DetailView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, render
 
+from point_provider.utils import update_communities_informations
 from group_member.models import GroupMember
 from product.models import Product
 from group.models import Group
@@ -102,44 +103,14 @@ class GroupVoteView(LoginRequiredMixin, DetailView):
         context['group_products_list'] = group_products_list
         context['members_number'] = members_number
         context['products_number'] = products_number
-
-        # Calculate communities's products cost, total products cost,
-        # points per user, and group_members points posseded
-
-        # Total products cost
-        community.points = 0
-        # Community's products cost
-        for product in group_products_list:
-            cost_estimations = Estimation.objects.filter(product=product)
-            estimation_numbers = cost_estimations.count()
-            sum_product_cost = 0
-            for estimation in cost_estimations:
-                sum_product_cost += estimation.cost
-            try:
-                product.points = sum_product_cost // estimation_numbers
-                product.save()
-                # Increment total products cost
-                community.points += sum_product_cost // estimation_numbers
-            except ZeroDivisionError:
-                product.points = 0
-                community.points = 0
-        # Points per community member
-        try:
-            community.members_points = (
-                    community.points // community.members.count()
-            )
-        except ZeroDivisionError:
-            community.members_points = 0
-
         community_members = GroupMember.objects.filter(group=community)
         context['community_members'] = community_members
 
-        for group_member in community_members:
-            # Save points per community member for each user
-            group_member.points_posseded = community.members_points
-            group_member.points_posseded -= group_member.points_penalty
-            group_member.save()
+        # Calculate communities's products cost, total products cost,
+        # points per community member
+        update_communities_informations()
 
+        for group_member in community_members:
             # Create Decisions objects for group members
             # who have made no decision
             try:
@@ -152,8 +123,6 @@ class GroupVoteView(LoginRequiredMixin, DetailView):
                     group=community,
                     group_member=group_member
                 )
-
-        community.save()
 
         if user.is_authenticated:
             group_member_list = list()

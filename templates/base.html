@@ -10,25 +10,42 @@
   </head>
   <header>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
     <a class="navbar-brand" href="{% url 'dashboard:explorer' %}">SHARE</a>
-      <form method="get" action="{% url 'dashboard:results' %}">
-        {{ research_form }}
-      </form>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="{% url 'website:about' %}">A propos</a>
-        <a class="nav-link active" aria-current="page" href="{% url 'dashboard:explorer' %}">Explorer</a>
-        {% if not user.is_authenticated %}
+    <!-- Toggler/collapsibe Button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+    <!-- Navbar links -->
+    <div class="collapse navbar-collapse" id="menu">
+      <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'website:about' %}">A propos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'dashboard:explorer' %}">Explorer</a>
+          </li>
+          {% if not user.is_authenticated %}
+          <li class="nav-item">
             <a id="button-login" class="nav-link active" aria-current="page" href="{% url 'account_login' %}">Se connecter</a>
-        {% else %}
+          </li>
+          {% else %}
+          <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{% url 'dashboard:my_communities' %}">Mes communautés</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{% url 'product:rented_products' %}">Mes produits loués</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{% url 'product:supplied_products' %}">Mes produits fournis</a>
+          </li>
+          <li class="nav-item">
             <a id="button-account" class="nav-link active" aria-current="page" href="{% url 'user:account' %}">Mon Compte</a>
+          </li>
+          <li class="nav-item">
             <a id="button-logout" class="nav-link active" aria-current="page" href="{% url 'account_logout' %}">Se déconnecter</a>
+          </li>
         {% endif %}
-      </div>
+      </ul>
     </div>
   </div>
 </nav>
@@ -50,16 +67,16 @@
   </body>
   <!-- Footer-->
     {% block footer %}
-    <footer class="bg-dark py-5 mt-5">
-            <div class="row justify-content-around">
-                <div class="col-2 offset-md-1">
-                    <a class="link-light" href="#">Mentions légales</a>
-                </div>
-                <div class="col-2">
-                    <a class="link-light" href="{% url 'index' %}">Contact</a>
-                </div>
+    <footer class="bg-dark py-5 mt-5 w-100">
+        <div class="row justify-content-around">
+            <div class="col-2 offset-md-1">
+                <a class="link-light" href="#">Mentions légales</a>
+            </div>
+            <div class="col-2">
+                <a class="link-light" href="{% url 'index' %}">Contact</a>
             </div>
         </div>
+    </div>
     </footer>
     {% endblock footer %}
 <style>

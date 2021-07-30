@@ -4,6 +4,7 @@ from django.views.generic import DetailView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 
+from point_provider.utils import update_communities_informations
 from product.models import Product
 from group_member.models import GroupMember
 from collective_decision.models import Estimation, Decision
@@ -27,49 +28,17 @@ class CommunityDetailView(DetailView):
         group_products_list = Product.objects.filter(group=community)
         members_number = GroupMember.objects.filter(group=community).count()
         products_number = Product.objects.filter(group=community).count()
+        community_members = GroupMember.objects.filter(
+            group=community
+        )
 
         context['group_products_list'] = group_products_list
         context['members_number'] = members_number
         context['products_number'] = products_number
 
         # Calculate communities's products cost, total products cost,
-        # points per user, and group_members points posseded
-
-        # Total products cost
-        community.points = 0
-        # Community's products cost
-        for product in group_products_list:
-            cost_estimations = Estimation.objects.filter(product=product)
-            estimation_numbers = cost_estimations.count()
-            sum_product_cost = 0
-            for estimation in cost_estimations:
-                sum_product_cost += estimation.cost
-            try:
-                product.points = sum_product_cost // estimation_numbers
-            except ZeroDivisionError:
-                product.points = 0
-            product.save()
-
-            # Increment total products cost
-            try:
-                community.points += sum_product_cost // estimation_numbers
-            except ZeroDivisionError:
-                community.points = 0
-        # Points per community member
-        try:
-            community.members_points = (
-                    community.points // community.members.count()
-            )
-        except ZeroDivisionError:
-            community.members_points = 0
-        # Save points per community member for each user
-        community_members = GroupMember.objects.filter(group=community)
-        for group_member in community_members:
-            group_member.points_posseded = community.members_points
-            group_member.points_posseded -= group_member.points_penalty
-            group_member.save()
-
-        community.save()
+        # points per community member
+        update_communities_informations()
 
         if user.is_authenticated:
             group_member_list = list()

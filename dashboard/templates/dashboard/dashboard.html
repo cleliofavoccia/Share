@@ -13,29 +13,31 @@
   {% for community in communities %}
   <div class="row">
 <!--    List Community group for PC  -->
-    <div class="col-3 d-none d-lg-block">
+    <div class="col-12 col-lg-4">
         <div class="list-group">
             <div class="list-group-item list-group-item-action">
                 <p class="community_id" hidden>{{ community.pk }}</p>
                 <div class="d-flex w-100 justify-content-between">
-                    <a id="community-page" href="{% url 'group:community' community.pk %}"><h5 class="mb-1">{{ community.name }}</h5></a>
+                    <a id="community-page" href="{% url 'group:community' community.pk %}"><h5 class="mb-1 pe-2">{{ community.name }}</h5></a>
                     {% if community.image %}
-                    <img class="group-image" src="{{ community.image.url }}">
+                    <img class="group-image pe-2" src="{{ community.image.url }}">
+                    {% else %}
+                    <img class="group-image pe-2" src="{% static 'social-media.png' %}">
                     {% endif %}
                     <div style="display: flex; flex-direction: column">
                         {% if not community.name in group_member_list %}
                         {% if user.is_authenticated %}
                         <form method="POST" action="{% url 'group_member:add_group_members' %}">
                             {% csrf_token %}
-                            <button value="submit" class="btn btn-outline-primary">Rejoindre</button>
+                            <button value="submit" class="btn btn-outline-primary" style="min-width: 100px;">Rejoindre</button>
                             <input type="hidden" name="user" value="{{ user.id }}"/>
                             <input type="hidden" name="group" value="{{ community.id }}"/>
                         </form>
                         {% else %}
-                        <a id="join-community" role="button" href="{% url 'group:community' community.pk %}" class="btn btn-outline-primary">Rejoindre</a>
+                        <a id="join-community" role="button" href="{% url 'group:community' community.pk %}" class="btn btn-outline-primary me-0">Rejoindre</a>
                         {% endif %}
                         {% endif %}
-                        <a role="button" href="{% url 'group:community' community.pk %}" class="btn btn-outline-primary">Catalogue</a>
+                        <a role="button" href="{% url 'group:community' community.pk %}" class="btn btn-outline-primary me-0">Catalogue</a>
                     </div>
                 </div>
                 <p class="mb-1">Membres : {{ community.members.count }}</p>
