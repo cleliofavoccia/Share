@@ -84,7 +84,7 @@
                             {% if product.rental_end %}
                             <p class="card-text">Fin de location : {{ product.rental_end }}</p>
                             {% endif %}
-                            <p class="card-text"><a class="text-muted" href="{% url 'product:product' product.pk %}">Voir produit</a></p>
+                            <p class="card-text"><a name="{{ product.name }}" class="text-muted" href="{% url 'product:product' product.pk %}">Voir produit</a></p>
                     </div>
                 </div>
                 </div>
