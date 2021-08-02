@@ -58,6 +58,7 @@ class GroupMemberInscriptionForm(forms.Form):
         )
         if group_member and commit:
             group_member.delete()
+
         return group_member
 
 

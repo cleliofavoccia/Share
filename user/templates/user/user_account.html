@@ -6,6 +6,7 @@
 
 <!-- Content-->
 {% block content %}
+{% include 'messages.html' %}
 <div class="container mt-5">
     <h1>Mes informations</h1>
     <p id="pseudo">Pseudonyme : {{ user.username }}</p>
@@ -35,13 +36,13 @@
     <div class="form-group">
         <label class="mt-3">Adresse : </label>
         <br/>
-        <label>Rue : </label>
+        <label class="d-block">Rue : </label>
         {{ address_form.street }}
-        <label>Ville : </label>
+        <label class="d-block">Ville : </label>
         {{ address_form.city }}
-        <label>Code postal : </label>
+        <label class="d-block">Code postal : </label>
         {{ address_form.postal_code }}
-        <label>Pays : </label>
+        <label class="d-block">Pays : </label>
         {{ address_form.country }}
     </div>
     <input id="button-submit" class="btn btn-primary mt-5" type="submit" value="Modifier">

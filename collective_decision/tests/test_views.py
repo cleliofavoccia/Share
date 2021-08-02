@@ -85,7 +85,7 @@ class GroupMemberDeleteVoteGroupTest(TestCase):
 
         self.assertRedirects(
             false_response,
-            reverse('website:fail')
+            reverse('index')
         )
 
 
@@ -164,7 +164,7 @@ class GroupMemberAgainstDeleteVoteGroupTest(TestCase):
 
         self.assertRedirects(
             false_response,
-            reverse('website:fail')
+            reverse('index')
         )
 
 
@@ -233,7 +233,7 @@ class GroupMemberModifyVoteGroupTest(TestCase):
 
         false_request = {
             'group_member': ['1'],
-            'group': ['Y']
+            'group': ['6']
                         }
         false_response = self.client.post(
             reverse('collective_decision:modify_vote_group'),
@@ -242,7 +242,7 @@ class GroupMemberModifyVoteGroupTest(TestCase):
 
         self.assertRedirects(
             false_response,
-            reverse('website:fail')
+            reverse('index')
         )
 
 
@@ -321,7 +321,7 @@ class GroupMemberAgainstModifyVoteGroupTest(TestCase):
 
         self.assertRedirects(
             false_response,
-            reverse('website:fail')
+            reverse('index')
         )
 
 
@@ -537,7 +537,7 @@ class CostEstimationViewTest(TestCase):
 
         self.assertRedirects(
             true_response,
-            reverse('index')
+            reverse("product:product", args=[product.pk])
         )
 
         false_request = {

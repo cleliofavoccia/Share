@@ -3,6 +3,7 @@
 from django.views.generic import DetailView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, render
+from django.contrib import messages
 
 from point_provider.utils import update_communities_informations
 from group_member.models import GroupMember
@@ -21,13 +22,24 @@ class GroupMemberDeleteVoteGroup(LoginRequiredMixin, View):
         """Method POST Group and GroupMember instance
         to GroupeMemberVoteForm"""
         form = GroupMemberVoteForm(request.POST)
+
         if form.is_valid():
             form.save_delete_group_vote(request.user)
+            messages.warning(
+                request,
+                "Vous avez voté POUR supprimer le groupe."
+            )
             return redirect(
                 "collective_decision:vote",
                 pk=request.POST['group']
             )
-        return redirect('website:fail')
+
+        messages.error(
+            request,
+            "Une erreur est survenue, réessayez de voter"
+            "pour annuler le groupe ou contactez un adminsitrateur"
+        )
+        return redirect('index')
 
 
 class GroupMemberAgainstDeleteVoteGroup(LoginRequiredMixin, View):
@@ -38,13 +50,24 @@ class GroupMemberAgainstDeleteVoteGroup(LoginRequiredMixin, View):
         """Method POST Group and GroupMember instance
         to GroupeMemberVoteForm"""
         form = GroupMemberVoteForm(request.POST)
+
         if form.is_valid():
             form.save_against_delete_group_vote(request.user)
+            messages.success(
+                request,
+                "Vous avez voté CONTRE supprimer le groupe."
+            )
             return redirect(
                 "collective_decision:vote",
                 pk=request.POST['group']
             )
-        return redirect('website:fail')
+
+        messages.error(
+            request,
+            "Une erreur est survenue, réessayez de voter"
+            "pour garder le groupe ou contactez un adminsitrateur"
+        )
+        return redirect('index')
 
 
 class GroupMemberModifyVoteGroup(LoginRequiredMixin, View):
@@ -55,13 +78,24 @@ class GroupMemberModifyVoteGroup(LoginRequiredMixin, View):
         """Method POST Group and GroupMember instance
         to GroupeMemberVoteForm"""
         form = GroupMemberVoteForm(request.POST)
+
         if form.is_valid():
             form.save_modify_group_vote(request.user)
+            messages.warning(
+                request,
+                "Vous avez voté POUR modifier le groupe."
+            )
             return redirect(
                 "collective_decision:vote",
                 pk=request.POST['group']
             )
-        return redirect('website:fail')
+
+        messages.error(
+            request,
+            "Une erreur est survenue, réessayez de voter"
+            "pour modifier le groupe ou contactez un adminsitrateur"
+        )
+        return redirect('index')
 
 
 class GroupMemberAgainstModifyVoteGroup(LoginRequiredMixin, View):
@@ -72,13 +106,24 @@ class GroupMemberAgainstModifyVoteGroup(LoginRequiredMixin, View):
         """Method POST Group and GroupMember instance
         to GroupeMemberVoteForm"""
         form = GroupMemberVoteForm(request.POST)
+
         if form.is_valid():
             form.save_against_modify_group_vote(request.user)
+            messages.success(
+                request,
+                "Vous avez voté CONTRE modifier le groupe."
+            )
             return redirect(
                 "collective_decision:vote",
                 pk=request.POST['group']
             )
-        return redirect('website:fail')
+
+        messages.error(
+            request,
+            "Une erreur est survenue, réessayez de voter"
+            "pour ne pas modifier le groupe ou contactez un adminsitrateur"
+        )
+        return redirect('index')
 
 
 class GroupVoteView(LoginRequiredMixin, DetailView):
@@ -137,7 +182,6 @@ class GroupVoteView(LoginRequiredMixin, DetailView):
 
         # Verify modification group decisions of community members
         verify_modify_votes = list()
-
         for member in community_members:
             decision = Decision.objects.get(
                 group=community,
@@ -161,7 +205,6 @@ class GroupVoteView(LoginRequiredMixin, DetailView):
 
         # Verify delete group decisions of community members
         verify_delete_votes = list()
-
         for member in community_members:
             decision = Decision.objects.get(
                 group=community,
@@ -214,7 +257,6 @@ class CostEstimationView(LoginRequiredMixin, View):
 
     def get(self, request, pk):
         """Method GET to print CostEstimationForm"""
-
         product = Product.objects.get(id=pk)
         group_member = GroupMember.objects.get(
             user=self.request.user,
@@ -235,7 +277,6 @@ class CostEstimationView(LoginRequiredMixin, View):
     def post(self, request, pk):
         """Method POST to send datas input by user
         in CostEstimationForm to estimate a product cost"""
-
         product = Product.objects.get(id=pk)
         group_member = GroupMember.objects.get(
             user=self.request.user,
@@ -243,20 +284,19 @@ class CostEstimationView(LoginRequiredMixin, View):
         )
 
         if request.method == 'POST':
-            # create a form instance and
-            # populate it with data from the request:
 
             estimation_form = CostEstimationForm(
                 request.POST,
             )
-            # check whether it's valid:
+
             if estimation_form.is_valid():
 
                 estimation = estimation_form.save(commit=False)
                 estimation.group_member = group_member
                 estimation.product = product
 
-                # Verify if an Estimation already exist and
+                # Verify if an Estimation already exist
+                # before save it and
                 # delete it if it the case
                 try:
                     existant_estimation = Estimation.objects.get(
@@ -268,9 +308,17 @@ class CostEstimationView(LoginRequiredMixin, View):
                 except Estimation.DoesNotExist:
                     estimation.save()
 
-                # redirect to a new URL:
-                return redirect('index')
+                messages.success(
+                    request,
+                    "Votre estimation a été prise en compte."
+                )
+                return redirect('product:product', product.pk)
             else:
+                messages.error(
+                    request,
+                    "Votre estimation n'a pas été prise en compte."
+                    "Veuillez réessayer ou contacter un administrateur."
+                )
                 return render(request, 'product/product_inscription.html',
                               {
                                'estimation_form': estimation_form,

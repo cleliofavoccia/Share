@@ -3,11 +3,12 @@
 from django.views.generic import DetailView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
+from django.contrib import messages
 
 from point_provider.utils import update_communities_informations
 from product.models import Product
 from group_member.models import GroupMember
-from collective_decision.models import Estimation, Decision
+from collective_decision.models import Decision
 
 from .models import Group
 from .forms import GroupInscriptionForm, AddressForm
@@ -105,26 +106,37 @@ class GroupInscriptionView(LoginRequiredMixin, View):
     def post(self, request):
         """Method POST to send datas input by user
         and register a Group object (community)"""
-        # if this is a POST request we need to process the form data
         if request.method == 'POST':
-            # create a form instance and
-            # populate it with data from the request:
-            group_form = GroupInscriptionForm(request.POST)
-            address_form = AddressForm(request.POST)
-            # check whether it's valid:
-            if group_form.is_valid() and address_form.is_valid():
 
+            group_form = GroupInscriptionForm(
+                request.POST,
+                request.FILES,
+            )
+            address_form = AddressForm(request.POST)
+
+            if group_form.is_valid() and address_form.is_valid():
                 group_form.save()
                 address_form.save()
                 group = Group.objects.get(
                     name=request.POST['name']
                 )
+                # Atomatically add creator
+                # as a group member
                 GroupMember.objects.create(
                     user=request.user, group=group
                 )
-                # redirect to a new URL:
-                return redirect('index')
+                messages.success(
+                    request,
+                    "Vous avez ajouté une nouvelle communauté !"
+                )
+                return redirect('group:community', group.pk)
+
             else:
+                messages.error(
+                    request,
+                    "Une erreur est survenue, réessayez de remplir"
+                    "le formulaire ou contactez un administrateur"
+                )
                 return render(request, 'group/group_inscription.html',
                               {'product_form': group_form,
                                'address_form': address_form}
@@ -157,14 +169,12 @@ class GroupChangeView(LoginRequiredMixin, View):
     def post(self, request, pk):
         """Method POST to send datas input by user
         and modify a User object (user account)"""
-
         group = Group.objects.get(id=pk)
 
         if request.method == 'POST':
-            # create a form instance and
-            # populate it with data from the request:
             group_form = GroupInscriptionForm(
                 request.POST,
+                request.FILES,
                 instance=group
             )
             address_form = AddressForm(
@@ -172,15 +182,21 @@ class GroupChangeView(LoginRequiredMixin, View):
                 instance=group.address
             )
 
-            # check whether it's valid:
             if group_form.is_valid() and address_form.is_valid():
-
                 group_form.save()
                 address_form.save()
-
-                # redirect to a new URL:
+                messages.success(
+                    request,
+                    "Vous avez bien modifié la communauté !"
+                )
                 return redirect('group:community', group.pk)
+
             else:
+                messages.error(
+                    request,
+                    "Une erreur est survenue, réessayez de remplir"
+                    "le formulaire ou contactez un administrateur"
+                )
                 return render(
                     request, 'group/group_modification.html',
                     {

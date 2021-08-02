@@ -7,6 +7,7 @@
     <title>Dashboard</title>
 </head>
 {% block content %}
+{% include 'messages.html' %}
 <body>
 <div class="container-fluid">
   <a id="create-community" role="button" href="{% url 'group:group_inscription' %}" class="btn btn-outline-primary mb-3">Créer une communauté</a>
@@ -20,9 +21,9 @@
                 <div class="d-flex w-100 justify-content-between">
                     <a id="community-page" href="{% url 'group:community' community.pk %}"><h5 class="mb-1 pe-2">{{ community.name }}</h5></a>
                     {% if community.image %}
-                    <img class="group-image pe-2" src="{{ community.image.url }}">
+                    <img class="group-image pe-2" src="{{ community.image.url }}" title="Image de la communauté {{ community.name }} : {% if community.address %} {{ community.address }} {% else %} {{ community.url }} {% endif %}">
                     {% else %}
-                    <img class="group-image pe-2" src="{% static 'social-media.png' %}">
+                    <img class="group-image pe-2" alt="Image de la communauté {{ community.name }}" title="Image de la communauté {{ community.name }} : {% if community.address %} {{ community.address }} {% else %} {{ community.url }} {% endif %}">
                     {% endif %}
                     <div style="display: flex; flex-direction: column">
                         {% if not community.name in group_member_list %}
@@ -44,8 +45,12 @@
                 <p class="mb-1">Points : {{ community.points }}</p>
                 <p class="mb-1">Produits : {{ community.products_number }}</p>
                 <p class="mb-1">Points par utilisateur : {{ community.members_points }}</p>
+                {% if community.address %}
                 <p class="mb-1">Adresse : {{ community.address }}</p>
-                <small>Small description</small>
+                {% endif %}
+                {% if community.url %}
+                <p class="mb-1">Adresse URL : {{ community.url }}</p>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -53,18 +58,22 @@
         <div class="row row-cols-2" >
             {% for product in community.group_owns_product.all|slice:":4" %}
             <div id="products" class="col">
-                    <div class="card mb-3" style="max-width: 350px;">
+                    <div class="card mb-3" style="min-width: 350px; min-height: 200px;">
                         <div class="row g-0">
                             <div class="col-md-4">
                                 {% if product.image %}
-                                <img class="product-image" src="{{ product.image.url }}" alt="...">
+                                <img class="product-image" src="{{ product.image.url }}" title="Image du produit {{ product.name }} : {{ product.description }}">
+                                {% else %}
+                                <img class="product-image ms-3" alt="Image du produit {{ product.name }}" title="Image du produit {{ product.name }} : {{ product.description }}">
                                 {% endif %}
                             </div>
                         <div class="col-md-8">
                             <div class="card-body">
                                 <h5 class="card-title">{{ product.name }}</h5>
-                                    <p class="card-text">{{ product.points }}</p>
-                                    <p class="card-text">Utilisations restantes : 3</p>
+                                    <p class="card-text">Coût : {{ product.points }}</p>
+                                    {% if product.rental_end %}
+                                    <p class="card-text">Fin de location : {{ product.rental_end }}</p>
+                                    {% endif %}
                                     <p class="card-text"><a class="text-muted" href="{% url 'product:product' product.pk %}">Voir produit</a></p>
                             </div>
                         </div>
@@ -75,13 +84,14 @@
     </div>
     </div>
   </div>
-  <hr style="background-color: #000000; height: 5px; margin-bottom: 30px;">
+  <hr style="background-color: #000000; height: 3px; margin-bottom: 30px; margin-top: 30px;">
   {% endfor %}
 </div>
 </body>
 <style>
     .product-image{
         width: 120px;
+        padding-top: 30px;
     }
 
     .group-image{

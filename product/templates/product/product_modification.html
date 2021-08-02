@@ -6,6 +6,7 @@
 
 <!-- Content-->
 {% block content %}
+{% include 'messages.html' %}
 <div class="container mt-5">
   <h1>Modifier {{ product.name }}</h1>
     <div class="col-8">
@@ -15,13 +16,13 @@
             <img class="group-image" src="{{ group.image.url }}">
             {% endif %}
         </div>
-        <p>Nombre de membres : {{ members_number }}</p>
+        <p>Nombre de membres : {{ group.members.count }}</p>
         <p>Nombre de points : {{ group.points }}</p>
-        <p>Nombre de produits : {{ products_number }}</p>
+        <p>Nombre de produits : {{ group.group_owns_product.count }}</p>
         <p>Points par utilisateur : {{ group.members_points }}</p>
         <p>Adresse : {{ group.address }}</p>
     </div>
-<form method="post">
+<form enctype="multipart/form-data" method="post">
     {% csrf_token %}
     <div class="form-group">
         <label>Nom du produit : </label>

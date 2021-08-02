@@ -3,6 +3,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 
 from .forms import ChangeUserForm, AddressUserForm
 
@@ -29,10 +30,8 @@ class UserDetailView(LoginRequiredMixin, View):
     def post(self, request):
         """Method POST to send datas input by user
         and modify a User object (user account)"""
-        # if this is a POST request we need to process the form data
         if request.method == 'POST':
-            # create a form instance and
-            # populate it with data from the request:
+
             user_form = ChangeUserForm(
                 request.POST, instance=self.request.user
             )
@@ -40,14 +39,23 @@ class UserDetailView(LoginRequiredMixin, View):
                 request.POST,
                 instance=self.request.user.address
             )
-            # check whether it's valid:
+
             if user_form.is_valid() and address_form.is_valid():
                 user_form.save()
                 address_form.save()
 
-                # redirect to a new URL:
+                messages.success(
+                    request,
+                    "Vos données ont été mise à jour"
+                )
                 return redirect('user:account')
+
             else:
+                messages.error(
+                    request,
+                    "Une erreur est survenue, réessayez vos"
+                    "modifications ou contactez un administrateur"
+                )
                 return render(
                     request,
                     'user/user_account.html',

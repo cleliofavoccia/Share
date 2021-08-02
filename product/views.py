@@ -10,6 +10,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.utils import timezone
+from django.contrib import messages
 
 from point_provider.utils import update_communities_informations
 from group.models import Group
@@ -65,6 +66,11 @@ class ProductDetailView(DetailView):
             for community_inscription in group_member:
                 group_member_list.append(community_inscription.group.name)
             context['group_member_list'] = group_member_list
+
+        try:
+            context['error_msg'] = kwargs['error_msg']
+        except KeyError:
+            pass
 
         return context
 
@@ -180,7 +186,6 @@ class ProductInscriptionView(LoginRequiredMixin, View):
     def post(self, request, pk):
         """Method POST to send datas input by user
         and modify a User object (user account)"""
-
         group = Group.objects.get(id=pk)
         group_member = GroupMember.objects.get(
             user=self.request.user,
@@ -188,15 +193,14 @@ class ProductInscriptionView(LoginRequiredMixin, View):
         )
 
         if request.method == 'POST':
-            # create a form instance and
-            # populate it with data from the request:
             product_form = ProductInscriptionForm(
                 request.POST,
+                request.FILES,
             )
             estimation_form = CostEstimationForm(
                 request.POST,
             )
-            # check whether it's valid:
+
             if product_form.is_valid() and estimation_form.is_valid():
                 product = product_form.save(commit=False)
                 product.group = group
@@ -215,7 +219,6 @@ class ProductInscriptionView(LoginRequiredMixin, View):
 
                 # Send an email to all community members
                 community_members = GroupMember.objects.filter(group=group)
-
                 for member in community_members:
                     subject = f'Voter pour le coût du nouveau produit : {product}'
                     html_message = render_to_string(
@@ -238,9 +241,20 @@ class ProductInscriptionView(LoginRequiredMixin, View):
                         html_message=html_message
                     )
 
-                # redirect to a new URL:
+                messages.success(
+                    request,
+                    "Votre produit a bien été enregistré !"
+                    "Les autres membres pourront estimer à leur tour"
+                    "son coût de location"
+                )
                 return redirect('group:community', product.group.pk)
+
             else:
+                messages.error(
+                    request,
+                    "Une erreur est survenue, réessayez d'inscrire"
+                    "un produit à la communauté ou contactez un adminsitrateur"
+                )
                 return render(
                     request,
                     'product/product_inscription.html',
@@ -260,13 +274,11 @@ class ProductChangeView(LoginRequiredMixin, View):
     def get(self, request, pk, id):
         """Method GET to print user informations"""
         group = Group.objects.get(id=pk)
-        print(group)
         group_member = GroupMember.objects.get(
             user=self.request.user,
             group=group
         )
         product = Product.objects.get(id=id)
-        print(product)
 
         estimation = Estimation.objects.get(
             group_member=group_member,
@@ -292,7 +304,6 @@ class ProductChangeView(LoginRequiredMixin, View):
     def post(self, request, pk, id):
         """Method POST to send datas input by user
         and modify a User object (user account)"""
-
         group = Group.objects.get(id=pk)
         group_member = GroupMember.objects.get(
             user=self.request.user,
@@ -300,24 +311,21 @@ class ProductChangeView(LoginRequiredMixin, View):
         )
 
         product = Product.objects.get(id=id)
-
         estimation = Estimation.objects.get(
             group_member=group_member,
             product=product
         )
 
         if request.method == 'POST':
-            # create a form instance and
-            # populate it with data from the request:
             product_form = ProductInscriptionForm(
-                request.POST,
+                request.POST, request.FILES,
                 instance=product
             )
             estimation_form = CostEstimationForm(
                 request.POST,
                 instance=estimation
             )
-            # check whether it's valid:
+
             if product_form.is_valid() and estimation_form.is_valid():
                 product = product_form.save(commit=False)
                 product.group = group
@@ -336,7 +344,6 @@ class ProductChangeView(LoginRequiredMixin, View):
 
                 # Send an email to all community members
                 community_members = GroupMember.objects.filter(group=group)
-
                 for member in community_members:
                     subject = f'Voter pour le coût du produit modifié : {product}'
                     html_message = render_to_string(
@@ -359,9 +366,19 @@ class ProductChangeView(LoginRequiredMixin, View):
                         html_message=html_message
                     )
 
-                # redirect to a new URL:
-                return redirect('group:community', product.group.pk)
+                messages.success(
+                    request,
+                    "Vos modifications ont bien été enregistrées !"
+                    "Les autres membres vont être prévenu"
+                )
+                return redirect('product:product', product.pk)
+
             else:
+                messages.error(
+                    request,
+                    "Une erreur est survenue, réessayez de modifier"
+                    "votre produit ou contactez un adminsitrateur"
+                )
                 return render(request, 'product/product_modification.html',
                               {'product_form': product_form,
                                'estimation_form': estimation_form,
@@ -378,19 +395,25 @@ class ProductSuppressionView(LoginRequiredMixin, View):
     def post(self, request):
         """Method POST to send datas input by user
         and modify a User object (user account)"""
-
         if request.method == 'POST':
-            # create a form instance and
-            # populate it with data from the request:
             form = ProductSuppressionForm(
                 request.POST,
             )
 
-            # check whether it's valid:
             if form.is_valid():
                 form.delete()
+                messages.success(
+                    request,
+                    "Votre produit a bien été supprimé"
+                )
                 return redirect('group:community', request.POST['group'])
-            return redirect('website:fail')
+
+            messages.error(
+                request,
+                "Une erreur est survenue, réessayez de supprimer"
+                "votre produit ou contactez un adminsitrateur"
+            )
+            return redirect('group:community', request.POST['group'])
 
 
 def do_delivery(request):

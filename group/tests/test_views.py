@@ -39,7 +39,7 @@ class CommunityDetailViewTest(TestCase):
         if not suscribed to community"""
         group = Group.objects.get(name="La communauté de l'anneau")
 
-        response = self.client.get(
+        self.client.get(
             reverse("group:community", args=[group.pk])
         )
         self.assertRaises(KeyError)
@@ -63,7 +63,10 @@ class CommunityDetailViewTest(TestCase):
         response = self.client.get(
             reverse("group:community", args=[group.pk])
         )
-        self.assertEqual(group_member_list, response.context['group_member_list'])
+        self.assertEqual(
+            group_member_list,
+            response.context['group_member_list']
+        )
 
     def test_view_url_accessible_by_name(self):
         """Test view can accessible by CommunityDetailView
@@ -128,11 +131,6 @@ class GroupInscriptionViewTest(TestCase):
             email='frodon@gmail.com',
             password='sam'
         )
-        cls.group = Group.objects.create(name="La communauté de l'anneau")
-        cls.group_member = GroupMember.objects.create(
-            user=cls.user,
-            group=cls.group
-        )
 
     def test_redirect_if_not_logged_in(self):
         """Test user can't access to GroupInscriptionView generic view
@@ -151,8 +149,6 @@ class GroupInscriptionViewTest(TestCase):
         GroupInscriptionView generic view's name"""
         user = User.objects.get(username='Frodon')
         self.client.force_login(user)
-        group = Group.objects.get(name="La communauté de l'anneau")
-        group_member = GroupMember.objects.get(user=user)
 
         get_response = self.client.get(
             reverse('group:group_inscription'),
@@ -162,14 +158,14 @@ class GroupInscriptionViewTest(TestCase):
             reverse('group:group_inscription'),
             data={
                     'csrfmiddlewaretoken':
-                        ['eU8bKFfWaGjL6hNrogiml87GzqsxvzjR'
-                         'gDWyJ2px8Yv30cwy0gkCpQWeFNDiIM8S'],
-                     'name': ['Comté'],
-                     'image': [''],
-                     'street': ['2 chemin vert'],
-                     'city': ['Saquet'],
-                     'postal_code': ['02540'],
-                     'country': ['Terre du milieu'],
+                    ['eU8bKFfWaGjL6hNrogiml87GzqsxvzjR'
+                     'gDWyJ2px8Yv30cwy0gkCpQWeFNDiIM8S'],
+                    'name': ['Comté'],
+                    'image': [''],
+                    'street': ['2 chemin vert'],
+                    'city': ['Saquet'],
+                    'postal_code': ['02540'],
+                    'country': ['Terre du milieu'],
                  }
         )
 
@@ -180,28 +176,30 @@ class GroupInscriptionViewTest(TestCase):
     def test_view_verify_datas_with_form(self):
         """Test GroupInscriptionView generic view
         verify datas correctly"""
-        self.client.force_login(self.user)
-        group = Group.objects.get(name="La communauté de l'anneau")
-        group_member = GroupMember.objects.get(user=self.user)
+        user = User.objects.get(username='Frodon')
+        self.client.force_login(user)
+
         true_request = {
                     'csrfmiddlewaretoken':
-                        ['eU8bKFfWaGjL6hNrogiml87GzqsxvzjR'
-                         'gDWyJ2px8Yv30cwy0gkCpQWeFNDiIM8S'],
-                     'name': ['Comté'],
-                     'image': [''],
-                     'street': ['2 chemin vert'],
-                     'city': ['Saquet'],
-                     'postal_code': ['02540'],
-                     'country': ['Terre du milieu'],
+                    ['eU8bKFfWaGjL6hNrogiml87GzqsxvzjR'
+                     'gDWyJ2px8Yv30cwy0gkCpQWeFNDiIM8S'],
+                    'name': ['Comté'],
+                    'image': [''],
+                    'street': ['2 chemin vert'],
+                    'city': ['Saquet'],
+                    'postal_code': ['02540'],
+                    'country': ['Terre du milieu'],
                  }
         true_response = self.client.post(
             reverse('group:group_inscription'),
             data=true_request
         )
 
+        group_member = GroupMember.objects.get(user=user)
+
         self.assertRedirects(
             true_response,
-            reverse('index')
+            reverse('group:community', args=[group_member.group.pk])
         )
 
         false_request = {

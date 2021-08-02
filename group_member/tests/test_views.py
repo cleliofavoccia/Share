@@ -2,6 +2,7 @@
 
 from django.test import TestCase
 from django.urls import reverse
+from django.urls.exceptions import NoReverseMatch
 
 from group.models import Group
 from user.models import User
@@ -76,15 +77,14 @@ class GroupMemberInscriptionTest(TestCase):
             'user': ['1'],
             'group': ['Y']
                         }
-        false_response = self.client.post(
-            reverse('group_member:add_group_members'),
-            data=false_request
-        )
 
-        self.assertRedirects(
-            false_response,
-            reverse('website:fail')
-        )
+        try:
+            self.client.post(
+                reverse('group_member:add_group_members'),
+                data=false_request
+            )
+        except NoReverseMatch:
+            self.assertRaises(NoReverseMatch)
 
 
 class GroupMemberUnsubscribeTest(TestCase):
@@ -151,18 +151,17 @@ class GroupMemberUnsubscribeTest(TestCase):
         )
 
         false_request = {
-            'user': ['1'],
-            'group': ['Y']
+            'user': ['2'],
+            'group': ['Y'],
         }
-        false_response = self.client.post(
-            reverse('group_member:delete_group_members'),
-            data=false_request
-        )
 
-        self.assertRedirects(
-            false_response,
-            reverse('website:fail')
-        )
+        try:
+            self.client.post(
+                reverse('group_member:delete_group_members'),
+                data=false_request
+            )
+        except NoReverseMatch:
+            self.assertRaises(NoReverseMatch)
 
 
 class GroupMemberRentalTest(TestCase):
@@ -263,12 +262,11 @@ class GroupMemberRentalTest(TestCase):
             'group_member': ['1'],
             'product': ['Y']
                         }
-        false_response = self.client.post(
-            reverse('group_member:rent'),
-            data=false_request
-        )
 
-        self.assertRedirects(
-            false_response,
-            reverse('website:fail')
-        )
+        try:
+            self.client.post(
+                reverse('group_member:rent'),
+                data=false_request
+            )
+        except NoReverseMatch:
+            self.assertRaises(NoReverseMatch)

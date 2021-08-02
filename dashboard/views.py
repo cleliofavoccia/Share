@@ -1,17 +1,12 @@
 """Manage dashboard app views"""
-import json
 
-from django.views.generic import ListView, View
+from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
-from django.http import HttpResponse
-from django.core import serializers
 
 from point_provider.utils import update_communities_informations
 from group.models import Group
-from product.models import Product
 from group_member.models import GroupMember
-from collective_decision.models import Estimation
 
 
 class Explorer(ListView):

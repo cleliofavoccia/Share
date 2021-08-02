@@ -8,13 +8,16 @@
 </head>
 <body>
 {% block content %}
+{% include 'messages.html' %}
 <div class="container">
     <div class="row">
         <div class="col mt-5">
             <div class="col d-flex flex-row">
                     <h1>{{ product.group.name }}</h1>
                     {% if product.group.image %}
-                    <img class="group-image" src="{{ product.group.image.url }}">
+                    <img class="group-image" src="{{ product.group.image.url }}" title="Image du produit {{ product.group.name }} : {{ product.group.address }}">
+                    {% else %}
+                    <img class="group-image ms-3" alt="Image du produit {{ product.group.name }}" title="Image du produit {{ product.group.name }} : {{ product.group.address }}">
                     {% endif %}
             </div>
             <p>Nombre de membres : {{ members_number }}</p>
@@ -41,7 +44,9 @@
         <div class="col">
             <h1 class="mt-5">{{ product.name }}</h1>
             {% if product.image %}
-            <img style="width: 300px;" src="{{ product.image.url }}">
+            <img class="product-image" src="{{ product.image.url }}" title="Image du produit {{ product.name }} : {{ product.description }}">
+            {% else %}
+            <img class="product-image mb-3" alt="Image du produit {{ product.name }}" title="Image du produit {{ product.name }} : {{ product.description }}">
             {% endif %}
             <p>{{ product.description }}</p>
             {% if product.user_provider %}
@@ -92,7 +97,6 @@
                         <input type="hidden" name="product_to_delete" value="{{ product.id }}"/>
                         <input type="hidden" name="group" value="{{ product.group.id }}"/>
                 </form>
-
                 {% endif %}
                 {% endif %}
             </div>
@@ -101,8 +105,7 @@
 </div>
 <style>
     .product-image{
-        width: 180px;
-        height: 100px;
+        width: 300px;
     }
     .group-image{
         width: 100px;

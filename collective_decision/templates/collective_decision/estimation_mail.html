@@ -15,7 +15,9 @@
 <div class="col">
       <h1 class="mt-5">{{ product.name }}</h1>
       {% if product.image %}
-      <img style="width: 300px;" src="{{ product.image.url }}">
+      <img class="product-image" src="{{ product.image.url }}" title="Image du produit {{ product.name }} : {{ product.description }}">
+      {% else %}
+      <img class="product-image ms-3" alt="Image du produit {{ product.name }}" title="Image du produit {{ product.name }} : {{ product.description }}">
       {% endif %}
       <p>{{ product.description }}</p>
 </div>

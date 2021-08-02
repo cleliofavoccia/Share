@@ -2,6 +2,7 @@
 
 from django.test import TestCase
 from django.urls import reverse
+from django.urls.exceptions import NoReverseMatch
 
 from group.models import Group
 from group_member.models import GroupMember
@@ -505,12 +506,11 @@ class ProductSuppressionViewTest(TestCase):
             'group_member': ['1'],
             'group': ['Y']
                         }
-        false_response = self.client.post(
-            reverse('product:delete_product'),
-            data=false_request
-        )
 
-        self.assertRedirects(
-            false_response,
-            reverse('website:fail')
-        )
+        try:
+            self.client.post(
+                reverse('product:delete_product'),
+                data=false_request
+            )
+        except NoReverseMatch:
+            self.assertRaises(NoReverseMatch)
