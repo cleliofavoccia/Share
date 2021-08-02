@@ -2,7 +2,7 @@
 
 Mettre en commun des biens pour davantage d'émancipation matérielle avec
 un système de gestion d'emprunt qui donne un intérêt à la fois individuel et collectif de
-partager ses biens avec sa famille, ses amis ou encore ses voisins !
+partager avec sa famille, ses amis ou encore ses voisins !
 
 # Le système Share
 
@@ -17,7 +17,7 @@ pour avoir accès à des objets de plus en plus intéressants.
 Le système Share permet à chaque utilisateur d'une communauté à mettre un bien en location au sein
 d'une communauté. Lorsqu'un bien est soumis à la communauté, chaque membre doit lui donner une 
 valeur en point - la valeur du point représente le nombre maximal de jour que l'on peut emprunter
-cet objet et le nombre de point qu'un utilisateur doit accumuler pour pouvoir emprunter cet objet. 
+cet objet et le nombre de points qu'un utilisateur doit accumuler pour pouvoir emprunter cet objet. 
 Une fois que tout le monde lui a donné une valeur, le produit prend la valeur moyenne des votes 
 utilisateurs comme coût en point.
 
