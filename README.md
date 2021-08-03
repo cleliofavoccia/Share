@@ -1,12 +1,16 @@
 # Sommaire
 [Qu'est-ce que Share ?](#qu'est-ce-que-share)
+
 [Le système Share](#le-système-share)
 - [Ajout d'un produit](#ajout-d'un-produit)
 - [Obtenir des points](#obtenir-des-points)
   - [Particularité](#particularité)
+
 [Stack technique](#stack-technique)
+
 [Installation](#installation)
 - [Git](#git)
+
 [Lancer l'application](#lancer-l'application)
 - [En local](#en-local)
 - [Conformité du code](#conformité-du-code)
