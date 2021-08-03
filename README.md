@@ -90,3 +90,19 @@ Pour obtenir la PS5, il faut :
 Lorsque le produit est emprunté, pour chaque jour qu'on le 
 possède, on récupère un point par jour.
 Lorsqu'on rend l'objet à la communauté, on récupère tous ses points.
+
+# Installation
+
+## Git
+Utiliser la commande git suivante : ```git clone https://github.com/cleliofavoccia/Share.git```
+
+
+# Lancer l'application
+
+## En local
+Activer un environnement virtuel et charger les variables d'environnements.
+Lancer la commande suivante pour lancer l'application : ```python manage.py runserver```
+
+## Conformité du code
+Lancer flake8 avec la commande suivante : ```flake8 --exclude=./*/migrations/,settings/ --format=html --htmldir=flake-report
+```
