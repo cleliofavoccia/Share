@@ -41,16 +41,6 @@ class Product(models.Model):
 
     rental_end = models.DateTimeField(null=True, blank=True)
 
-    # class Meta:
-    #     constraints = [
-    #         models.CheckConstraint(
-    #             check=models.Q(user_provider=True) & models.Q(group_provider=False),
-    #             name='if_user_provider_is_true_group_provider_is_false'),
-    #         models.CheckConstraint(
-    #             check=models.Q(user_provider=False) & models.Q(group_provider=True),
-    #             name='if_group_provider_is_true_user_provider_is_false'),
-    #     ]
-
     def __str__(self):
         """Print attribute as title's object in Django admin"""
         return '%s, %s, %s' % (

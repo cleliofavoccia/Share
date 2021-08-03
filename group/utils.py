@@ -2,7 +2,6 @@
 
 from group.models import Group
 from collective_decision.models import Estimation
-from product.models import Product
 from group_member.models import GroupMember
 
 
@@ -35,14 +34,14 @@ def update_communities_informations():
             # Increment total products cost to community
             try:
                 community.points += (
-                        sum_product_cost // estimation_numbers
+                    sum_product_cost // estimation_numbers
                 )
             except ZeroDivisionError:
                 community.points = 0
         # Points per community member
         try:
             community.members_points = (
-                    community.points // community.members.count()
+                community.points // community.members.count()
             )
         except ZeroDivisionError:
             community.members_points = 0

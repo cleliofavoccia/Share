@@ -27,4 +27,4 @@ urlpatterns = [
     path('delivery/',
          views.do_delivery,
          name='delivery'),
-    ]
+]

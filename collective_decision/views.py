@@ -265,14 +265,15 @@ class CostEstimationView(LoginRequiredMixin, View):
 
         estimation_form = CostEstimationForm(request.POST)
 
-        return render(request, 'collective_decision/cost_estimation.html',
-                      {
-                          'estimation_form': estimation_form,
-                          'group_member': group_member,
-                          'product': product,
-                          'group': product.group
-                       },
-                      )
+        return render(
+            request, 'collective_decision/cost_estimation.html',
+            {
+                'estimation_form': estimation_form,
+                'group_member': group_member,
+                'product': product,
+                'group': product.group
+            },
+        )
 
     def post(self, request, pk):
         """Method POST to send datas input by user
@@ -319,11 +320,12 @@ class CostEstimationView(LoginRequiredMixin, View):
                     "Votre estimation n'a pas été prise en compte."
                     "Veuillez réessayer ou contacter un administrateur."
                 )
-                return render(request, 'product/product_inscription.html',
-                              {
-                               'estimation_form': estimation_form,
-                               'group': product.group,
-                               'group_member': group_member,
-                               'product': product
-                               }
-                              )
+                return render(
+                    request, 'product/product_inscription.html',
+                    {
+                        'estimation_form': estimation_form,
+                        'group': product.group,
+                        'group_member': group_member,
+                        'product': product
+                    }
+                )

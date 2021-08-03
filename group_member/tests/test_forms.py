@@ -205,7 +205,7 @@ class GroupMemberRentalFormTest(TestCase):
         except Group.DoesNotExist:
             group = {'name': 'Mordor', 'id': '3'}
         try:
-            group_member =GroupMember.objects.get(
+            group_member = GroupMember.objects.get(
                 user=user,
                 group=int(group['id'])
             )
@@ -344,4 +344,7 @@ class GroupMemberRentalFormTest(TestCase):
 
         self.cleaned_data['group_member'] = group_member.id
 
-        self.assertEqual(group_member, GroupMemberRentalForm.clean_group_member(self))
+        self.assertEqual(
+            group_member,
+            GroupMemberRentalForm.clean_group_member(self)
+        )

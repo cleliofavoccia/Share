@@ -98,9 +98,8 @@ class UtilsTest(TestCase):
 
         product_cost = (
             (
-                    estimation1.cost +
-                    estimation2.cost
-            )
-            // 2)
+                estimation1.cost + estimation2.cost
+            ) // 2
+        )
 
         self.assertEqual(product.points, product_cost)

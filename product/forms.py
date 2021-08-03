@@ -1,8 +1,8 @@
 """Manage product app forms"""
 
 from django import forms
+
 from collective_decision.models import Estimation
-from group_member.models import GroupMember
 from group.models import Group
 
 from .models import Product
@@ -62,7 +62,6 @@ class ProductSuppressionForm(forms.Form):
         """Delete the object GroupMember request by user"""
 
         product = self.cleaned_data['product_to_delete']
-        group = self.cleaned_data['group']
 
         if product and commit:
             product.delete()

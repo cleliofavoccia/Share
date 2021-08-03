@@ -15,4 +15,4 @@ urlpatterns = [
     path('modify_group/<int:pk>/',
          views.GroupChangeView.as_view(),
          name='modify_group'),
-    ]
+]

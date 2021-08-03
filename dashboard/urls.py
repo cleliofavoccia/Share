@@ -2,7 +2,7 @@
 
 from django.urls import path
 
-from .views import *
+from .views import Explorer, MyCommunities, CommunityResearchView
 
 app_name = 'dashboard'
 urlpatterns = [

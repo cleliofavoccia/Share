@@ -184,7 +184,9 @@ class ChromeFunctionalTestCases(StaticLiveServerTestCase):
 
         self.driver.find_element_by_css_selector('#join-community').click()
 
-        self.driver.find_element_by_css_selector('#collective-decision').click()
+        self.driver.find_element_by_css_selector(
+            '#collective-decision'
+        ).click()
 
         self.driver.find_element_by_css_selector('#vote-to-modify').click()
 
@@ -208,7 +210,9 @@ class ChromeFunctionalTestCases(StaticLiveServerTestCase):
 
         self.driver.find_element_by_css_selector('#join-community').click()
 
-        self.driver.find_element_by_css_selector('#collective-decision').click()
+        self.driver.find_element_by_css_selector(
+            '#collective-decision'
+        ).click()
 
         self.driver.find_element_by_css_selector('#vote-to-modify').click()
 
@@ -234,7 +238,9 @@ class ChromeFunctionalTestCases(StaticLiveServerTestCase):
 
         self.driver.find_element_by_css_selector('#join-community').click()
 
-        self.driver.find_element_by_css_selector('#collective-decision').click()
+        self.driver.find_element_by_css_selector(
+            '#collective-decision'
+        ).click()
 
         self.driver.find_element_by_css_selector('#vote-to-delete').click()
 
@@ -258,7 +264,9 @@ class ChromeFunctionalTestCases(StaticLiveServerTestCase):
 
         self.driver.find_element_by_css_selector('#join-community').click()
 
-        self.driver.find_element_by_css_selector('#collective-decision').click()
+        self.driver.find_element_by_css_selector(
+            '#collective-decision'
+        ).click()
 
         self.driver.find_element_by_css_selector('#vote-to-delete').click()
 

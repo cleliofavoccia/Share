@@ -67,8 +67,14 @@ class GroupMemberRentalForm(forms.Form):
     (GroupMember objects),
     to rent products (Product object)"""
 
-    product = forms.IntegerField(widget=forms.HiddenInput(), required=True)
-    group_member = forms.IntegerField(widget=forms.HiddenInput(), required=True)
+    product = forms.IntegerField(
+        widget=forms.HiddenInput(),
+        required=True
+    )
+    group_member = forms.IntegerField(
+        widget=forms.HiddenInput(),
+        required=True
+    )
 
     def clean_product(self):
         """Return the Product object since the id input
@@ -88,7 +94,9 @@ class GroupMemberRentalForm(forms.Form):
         try:
             group_member = GroupMember.objects.get(id=group_member_id)
         except GroupMember.DoesNotExist:
-            raise forms.ValidationError("Ce membre de la communauté n'existe pas !")
+            raise forms.ValidationError(
+                "Ce membre de la communauté n'existe pas !"
+            )
 
         return group_member
 

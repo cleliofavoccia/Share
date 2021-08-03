@@ -1,13 +1,12 @@
 """Tests of product django models"""
 
 from django.test import TestCase
-from django.db import IntegrityError
 
 from user.models import User
 from group.models import Group
 from group_member.models import GroupMember
 from geolocalisation.models import Address
-from collective_decision.models import Estimation, Decision
+from collective_decision.models import Estimation
 
 from ..models import Product
 
@@ -119,7 +118,6 @@ class ProductModelTest(TestCase):
     def test_delete_product_not_delete_group(self):
         """Test if Product object is deleted, Group
         objects are deleted"""
-        user = User.objects.get(username='Frodon')
         product = Product.objects.get(name="Dague")
         product.delete()
 
@@ -146,25 +144,3 @@ class ProductModelTest(TestCase):
             estimation = 'DoesNotExist'
 
         self.assertEqual(estimation, 'DoesNotExist')
-
-    # def test_constraints_one_user_provider_or_group_provider_per_product(self):
-    #     """Test if constraint of one user_provider or group_provider
-    #     per Product object is respected"""
-    #     user = User.objects.get(username='Frodon')
-    #     group = Group.objects.get(name="La communauté de l'anneau")
-    #     group_member = GroupMember.objects.get(
-    #         user=user,
-    #         group=group
-    #     )
-    #     try:
-    #         product = Product.objects.create(
-    #             name='Claymore',
-    #             user_provider=group_member,
-    #             group_provider=group,
-    #             group=group,
-    #         )
-    #         product.save()
-    #     except IntegrityError:
-    #         product = 'IntegrityError'
-    #
-    #     self.assertEqual(product, 'IntegrityError')

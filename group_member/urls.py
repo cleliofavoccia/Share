@@ -18,4 +18,4 @@ urlpatterns = [
     path('cancel_rent/',
          views.GroupMemberRentalAnnulation.as_view(),
          name='cancel_rent'),
-    ]
+]

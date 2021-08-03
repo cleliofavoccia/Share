@@ -18,7 +18,9 @@ from group_member.models import GroupMember
 from collective_decision.models import Estimation
 
 from .models import Product
-from .forms import ProductInscriptionForm, CostEstimationForm, ProductSuppressionForm
+from .forms import ProductInscriptionForm, \
+    CostEstimationForm, \
+    ProductSuppressionForm
 
 
 class ProductDetailView(DetailView):
@@ -180,7 +182,7 @@ class ProductInscriptionView(LoginRequiredMixin, View):
                           'estimation_form': estimation_form,
                           'group': group,
                           'group_member': group_member
-                       },
+                      },
                       )
 
     def post(self, request, pk):
@@ -220,13 +222,19 @@ class ProductInscriptionView(LoginRequiredMixin, View):
                 # Send an email to all community members
                 community_members = GroupMember.objects.filter(group=group)
                 for member in community_members:
-                    subject = f'Voter pour le coût du nouveau produit : {product}'
+                    subject = (
+                        f'Voter pour le coût du nouveau produit : {product}'
+                    )
                     html_message = render_to_string(
                         'collective_decision/estimation_mail.html',
                         {
                             'username': f'{member.user.username}',
                             'product': product,
-                            'estimation_link': 'http://127.0.0.1:8000/collective_decision/estimation/' + str(product.pk)
+                            'estimation_link':
+                                ('http://127.0.0.1:8000/'
+                                 'collective_decision/'
+                                 'estimation/' + str(product.pk)
+                                 )
                         }
                     )
                     plain_message = strip_tags(html_message)
@@ -264,7 +272,7 @@ class ProductInscriptionView(LoginRequiredMixin, View):
                         'group': group,
                         'group_member': group_member
                     }
-                    )
+                )
 
 
 class ProductChangeView(LoginRequiredMixin, View):
@@ -345,7 +353,9 @@ class ProductChangeView(LoginRequiredMixin, View):
                 # Send an email to all community members
                 community_members = GroupMember.objects.filter(group=group)
                 for member in community_members:
-                    subject = f'Voter pour le coût du produit modifié : {product}'
+                    subject = (
+                        f'Voter pour le coût du produit modifié : {product}'
+                    )
                     html_message = render_to_string(
                         'collective_decision/estimation_mail.html',
                         {
@@ -431,5 +441,3 @@ def do_delivery(request):
     product.save()
 
     return redirect('product:product', product.pk)
-
-

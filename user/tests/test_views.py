@@ -5,7 +5,6 @@ from django.urls import reverse
 
 from group.models import Group
 from group_member.models import GroupMember
-from collective_decision.models import Decision
 
 from ..models import User
 
@@ -97,18 +96,18 @@ class UserDetailViewTest(TestCase):
         self.client.force_login(user)
 
         true_request = {
-                'csrfmiddlewaretoken':
-                    ['XlB7R5P9ZjOlIHL3HsNfEoXqcDwC3KuFzg'
-                     'rRow6qZwGn8EvBlY0W3OllMdNhaKY6'],
-                'username': ['sam'],
-                'last_name': ['Saquet'],
-                'first_name': ['Frodon'],
-                'email': ['frodonsam@live.fr'],
-                'street': ['2 rue Mordor'],
-                'city': ['Comté'],
-                'postal_code': ['95130'],
-                'country': ['Terre du Milieu']
-            }
+            'csrfmiddlewaretoken':
+            ['XlB7R5P9ZjOlIHL3HsNfEoXqcDwC3KuFzg'
+             'rRow6qZwGn8EvBlY0W3OllMdNhaKY6'],
+            'username': ['sam'],
+            'last_name': ['Saquet'],
+            'first_name': ['Frodon'],
+            'email': ['frodonsam@live.fr'],
+            'street': ['2 rue Mordor'],
+            'city': ['Comté'],
+            'postal_code': ['95130'],
+            'country': ['Terre du Milieu']
+        }
 
         true_response = self.client.post(
             reverse('user:account'),

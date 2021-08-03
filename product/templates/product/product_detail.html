@@ -89,7 +89,7 @@
                         <input type="hidden" name="group_member" value="{{ member.id }}"/>
                 </form>
                 {% endif %}
-                {% if product.user_provider == member %}
+                {% if product.user_provider == member or product.group_provider %}
                 <a id="modify-product" class="btn btn-outline-secondary" href="{% url 'product:modify_product' product.group.pk product.pk %}">Modifier</a>
                 <form method="POST" action="{% url 'product:delete_product' %}">
                         {% csrf_token %}

@@ -24,4 +24,4 @@ urlpatterns = [
          views.CostEstimationView.as_view(),
          name='estimation'
          ),
-    ]
+]

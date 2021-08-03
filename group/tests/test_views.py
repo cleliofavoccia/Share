@@ -157,16 +157,16 @@ class GroupInscriptionViewTest(TestCase):
         post_response = self.client.post(
             reverse('group:group_inscription'),
             data={
-                    'csrfmiddlewaretoken':
-                    ['eU8bKFfWaGjL6hNrogiml87GzqsxvzjR'
-                     'gDWyJ2px8Yv30cwy0gkCpQWeFNDiIM8S'],
-                    'name': ['Comté'],
-                    'image': [''],
-                    'street': ['2 chemin vert'],
-                    'city': ['Saquet'],
-                    'postal_code': ['02540'],
-                    'country': ['Terre du milieu'],
-                 }
+                'csrfmiddlewaretoken':
+                ['eU8bKFfWaGjL6hNrogiml87GzqsxvzjR'
+                 'gDWyJ2px8Yv30cwy0gkCpQWeFNDiIM8S'],
+                'name': ['Comté'],
+                'image': [''],
+                'street': ['2 chemin vert'],
+                'city': ['Saquet'],
+                'postal_code': ['02540'],
+                'country': ['Terre du milieu'],
+            }
         )
 
         # Check that we got a response "success"
@@ -180,16 +180,16 @@ class GroupInscriptionViewTest(TestCase):
         self.client.force_login(user)
 
         true_request = {
-                    'csrfmiddlewaretoken':
-                    ['eU8bKFfWaGjL6hNrogiml87GzqsxvzjR'
-                     'gDWyJ2px8Yv30cwy0gkCpQWeFNDiIM8S'],
-                    'name': ['Comté'],
-                    'image': [''],
-                    'street': ['2 chemin vert'],
-                    'city': ['Saquet'],
-                    'postal_code': ['02540'],
-                    'country': ['Terre du milieu'],
-                 }
+            'csrfmiddlewaretoken':
+            ['eU8bKFfWaGjL6hNrogiml87GzqsxvzjR'
+             'gDWyJ2px8Yv30cwy0gkCpQWeFNDiIM8S'],
+            'name': ['Comté'],
+            'image': [''],
+            'street': ['2 chemin vert'],
+            'city': ['Saquet'],
+            'postal_code': ['02540'],
+            'country': ['Terre du milieu'],
+        }
         true_response = self.client.post(
             reverse('group:group_inscription'),
             data=true_request
@@ -205,7 +205,7 @@ class GroupInscriptionViewTest(TestCase):
         false_request = {
             'group_member': ['1'],
             'group': ['Y']
-                        }
+        }
         false_response = self.client.post(
             reverse('group:group_inscription'),
             data=false_request

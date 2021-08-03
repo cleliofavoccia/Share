@@ -1,7 +1,5 @@
 """Command to manage product delivery"""
 
-import datetime
-
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from django.core.mail import send_mail
@@ -20,13 +18,11 @@ class Command(BaseCommand):
         """Method to compare current datetime
         and end rental product datetime to
         delete product tenant at the end
-        of rental"""
+        of rental and send an email
+        to let it be known"""
 
         products = Product.objects.all()
         today = timezone.now()
-
-        # To use in test mode
-        # today_test = datetime.datetime(2021, 8, 21)
 
         for product in products:
 

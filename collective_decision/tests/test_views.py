@@ -63,7 +63,7 @@ class GroupMemberDeleteVoteGroupTest(TestCase):
         true_request = {
             'group_member': group_member.id,
             'group': group.id
-                        }
+        }
         true_response = self.client.post(
             reverse('collective_decision:delete_vote_group'),
             data=true_request
@@ -77,7 +77,7 @@ class GroupMemberDeleteVoteGroupTest(TestCase):
         false_request = {
             'group_member': ['1'],
             'group': ['Y']
-                        }
+        }
         false_response = self.client.post(
             reverse('collective_decision:delete_vote_group'),
             data=false_request
@@ -142,7 +142,7 @@ class GroupMemberAgainstDeleteVoteGroupTest(TestCase):
         true_request = {
             'group_member': group_member.id,
             'group': group.id
-                        }
+        }
         true_response = self.client.post(
             reverse('collective_decision:against_delete_vote_group'),
             data=true_request
@@ -156,7 +156,7 @@ class GroupMemberAgainstDeleteVoteGroupTest(TestCase):
         false_request = {
             'group_member': ['1'],
             'group': ['Y']
-                        }
+        }
         false_response = self.client.post(
             reverse('collective_decision:against_delete_vote_group'),
             data=false_request
@@ -220,7 +220,7 @@ class GroupMemberModifyVoteGroupTest(TestCase):
         true_request = {
             'group_member': group_member.id,
             'group': group.id
-                        }
+        }
         true_response = self.client.post(
             reverse('collective_decision:modify_vote_group'),
             data=true_request
@@ -234,7 +234,7 @@ class GroupMemberModifyVoteGroupTest(TestCase):
         false_request = {
             'group_member': ['1'],
             'group': ['6']
-                        }
+        }
         false_response = self.client.post(
             reverse('collective_decision:modify_vote_group'),
             data=false_request
@@ -293,13 +293,15 @@ class GroupMemberAgainstModifyVoteGroupTest(TestCase):
     def test_view_verify_datas_with_form(self):
         """Test GroupMemberAgainstModifyVoteGroup generic view
         verify datas correctly"""
-        self.client.force_login(self.user)
+        user = User.objects.get(username='Frodon')
+        self.client.force_login(user)
         group = Group.objects.get(name="La communauté de l'anneau")
         group_member = GroupMember.objects.get(user=self.user)
+
         true_request = {
             'group_member': group_member.id,
             'group': group.id
-                        }
+        }
         true_response = self.client.post(
             reverse('collective_decision:against_modify_vote_group'),
             data=true_request
@@ -313,7 +315,7 @@ class GroupMemberAgainstModifyVoteGroupTest(TestCase):
         false_request = {
             'group_member': ['1'],
             'group': ['Y']
-                        }
+        }
         false_response = self.client.post(
             reverse('collective_decision:against_modify_vote_group'),
             data=false_request
@@ -525,11 +527,11 @@ class CostEstimationViewTest(TestCase):
         product = Product.objects.get(name="Epée")
 
         true_request = {
-                'csrfmiddlewaretoken':
-                ['2NFhGPdsobAfUWtJZFxBnkUL7uSdSe5hj'
-                    '17l20tZbFZaLtxaTbx9NbKaZDfwTMfU'],
-                'cost': ['25']
-            }
+            'csrfmiddlewaretoken':
+            ['2NFhGPdsobAfUWtJZFxBnkUL7uSdSe5hj'
+             '17l20tZbFZaLtxaTbx9NbKaZDfwTMfU'],
+            'cost': ['25']
+        }
         true_response = self.client.post(
             reverse("collective_decision:estimation", args=[product.pk]),
             data=true_request
@@ -543,7 +545,7 @@ class CostEstimationViewTest(TestCase):
         false_request = {
             'group_member': ['1'],
             'group': ['Y']
-                        }
+        }
         false_response = self.client.post(
             reverse("collective_decision:estimation", args=[product.pk]),
             data=false_request

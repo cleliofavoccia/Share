@@ -381,14 +381,14 @@ class ProductInscriptionViewTest(TestCase):
         group = Group.objects.get(name="La communauté de l'anneau")
 
         true_request = {
-                'csrfmiddlewaretoken':
+            'csrfmiddlewaretoken':
                 ['2NFhGPdsobAfUWtJZFxBnkUL7uSdSe5hj'
                     '17l20tZbFZaLtxaTbx9NbKaZDfwTMfU'],
                 'name': ['claymore'],
                 'image': [''],
                 'description': ['claymore pas terrible'],
                 'cost': ['25']
-            }
+        }
         true_response = self.client.post(
             reverse('product:add_product', args=[group.pk]),
             data=true_request
@@ -402,7 +402,7 @@ class ProductInscriptionViewTest(TestCase):
         false_request = {
             'group_member': ['1'],
             'group': ['Y']
-                        }
+        }
         false_response = self.client.post(
             reverse('product:add_product', args=[group.pk]),
             data=false_request
@@ -486,12 +486,12 @@ class ProductSuppressionViewTest(TestCase):
         self.client.force_login(user)
 
         true_request = {
-                'csrfmiddlewaretoken':
-                    ['CRzyY84t1qcw7QkDzKQ9NKkjopJecxvC3ncK44'
-                     'gH1Ku7BzCUE0aJ1twhklZ57lQo'],
+            'csrfmiddlewaretoken':
+                ['CRzyY84t1qcw7QkDzKQ9NKkjopJecxvC3ncK44'
+                 'gH1Ku7BzCUE0aJ1twhklZ57lQo'],
                 'product_to_delete': [f'{product.pk}'],
                 'group': [f'{group.pk}']
-            }
+        }
         true_response = self.client.post(
             reverse('product:delete_product'),
             data=true_request
@@ -505,7 +505,7 @@ class ProductSuppressionViewTest(TestCase):
         false_request = {
             'group_member': ['1'],
             'group': ['Y']
-                        }
+        }
 
         try:
             self.client.post(

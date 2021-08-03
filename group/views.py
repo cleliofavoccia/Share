@@ -161,9 +161,9 @@ class GroupChangeView(LoginRequiredMixin, View):
         return render(
             request, 'group/group_modification.html',
             {
-                  'group_form': group_form,
-                  'address_form': address_form
-              }
+                'group_form': group_form,
+                'address_form': address_form
+            }
         )
 
     def post(self, request, pk):

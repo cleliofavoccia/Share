@@ -62,7 +62,7 @@ class GroupMemberInscriptionTest(TestCase):
         true_request = {
             'user': user.id,
             'group': group.id
-                        }
+        }
         true_response = self.client.post(
             reverse('group_member:add_group_members'),
             data=true_request
@@ -76,7 +76,7 @@ class GroupMemberInscriptionTest(TestCase):
         false_request = {
             'user': ['1'],
             'group': ['Y']
-                        }
+        }
 
         try:
             self.client.post(
@@ -247,7 +247,7 @@ class GroupMemberRentalTest(TestCase):
         true_request = {
             'group_member': group_member.id,
             'product': product.id
-                        }
+        }
         true_response = self.client.post(
             reverse('group_member:rent'),
             data=true_request
@@ -261,7 +261,7 @@ class GroupMemberRentalTest(TestCase):
         false_request = {
             'group_member': ['1'],
             'product': ['Y']
-                        }
+        }
 
         try:
             self.client.post(

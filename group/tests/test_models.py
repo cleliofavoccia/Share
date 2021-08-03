@@ -59,7 +59,8 @@ class GroupModelTest(TestCase):
         with Address object"""
         address = Address.objects.get(street='2 rue Isildur')
         group_address = Group.objects.get(address=address)
-        self.assertEqual(self.group.address, address)
+
+        self.assertEqual(group_address.address, address)
 
     def test_group_has_decisions(self):
         """Test Group object has relation
