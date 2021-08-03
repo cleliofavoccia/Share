@@ -105,4 +105,4 @@ Lancer la commande suivante pour lancer l'application : ```python manage.py runs
 
 ## Conformité du code
 Lancer flake8 pour vérifier la conformité du code avec la commande suivante : ```flake8 --exclude=./*/migrations/,settings/ --format=html --htmldir=flake-report```
-```
+Pour consulter les résultats de la vérification : Aller dans le dossier flake-report nouvellement créer -> Ouvrir index.html
