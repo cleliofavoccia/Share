@@ -101,6 +101,7 @@ Utiliser la commande git suivante : ```git clone https://github.com/cleliofavocc
 
 ## En local
 Activer un environnement virtuel et charger les variables d'environnements.
+
 Lancer la commande suivante pour lancer l'application : ```python manage.py runserver```
 
 ## Conformité du code
