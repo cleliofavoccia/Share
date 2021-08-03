@@ -8,7 +8,7 @@ from user.models import User
 from product.models import Product
 from collective_decision.models import Estimation
 
-from point_provider.utils import update_communities_informations
+from group.utils import update_communities_informations
 
 
 class UtilsTest(TestCase):

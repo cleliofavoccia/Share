@@ -4,7 +4,7 @@ from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
 
-from point_provider.utils import update_communities_informations
+from group.utils import update_communities_informations
 from group.models import Group
 from group_member.models import GroupMember
 

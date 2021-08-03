@@ -35,7 +35,6 @@ INSTALLED_APPS = [
     'geolocalisation.apps.GeolocalisationConfig',
     'group.apps.GroupConfig',
     'group_member.apps.GroupMemberConfig',
-    'point_provider.apps.PointProviderConfig',
     'product.apps.ProductConfig',
     'user.apps.UserConfig',
     'website.apps.WebsiteConfig',

@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
-from point_provider.utils import update_communities_informations
+from group.utils import update_communities_informations
 from product.models import Product
 from group_member.models import GroupMember
 from collective_decision.models import Decision

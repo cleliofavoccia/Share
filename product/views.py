@@ -12,7 +12,7 @@ from django.utils.html import strip_tags
 from django.utils import timezone
 from django.contrib import messages
 
-from point_provider.utils import update_communities_informations
+from group.utils import update_communities_informations
 from group.models import Group
 from group_member.models import GroupMember
 from collective_decision.models import Estimation
