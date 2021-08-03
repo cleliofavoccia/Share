@@ -104,5 +104,5 @@ Activer un environnement virtuel et charger les variables d'environnements.
 Lancer la commande suivante pour lancer l'application : ```python manage.py runserver```
 
 ## Conformité du code
-Lancer flake8 avec la commande suivante : ```flake8 --exclude=./*/migrations/,settings/ --format=html --htmldir=flake-report
+Lancer flake8 pour vérifier la conformité du code avec la commande suivante : ```flake8 --exclude=./*/migrations/,settings/ --format=html --htmldir=flake-report```
 ```
