@@ -11,7 +11,7 @@
   <h1>Modifier {{ product.name }}</h1>
     <div class="col-8">
         <div class="col d-flex flex-row align-items-center">
-            <h1 class="pe-5 mt-3">{{ group.name }}</h1>
+            <a href="{% url 'group:community' group.pk %}"><h1 class="pe-5 mt-3">{{ group.name }}</h1></a>
             {% if group.image %}
             <img class="group-image" src="{{ group.image.url }}">
             {% endif %}
