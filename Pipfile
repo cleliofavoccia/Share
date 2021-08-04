@@ -15,6 +15,7 @@ django-extensions = "*"
 django-allauth = "*"
 pillow = "*"
 flake8-html = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 
