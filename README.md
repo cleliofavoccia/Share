@@ -1,3 +1,20 @@
+# Sommaire
+[Qu'est-ce que Share ?](#qu'est-ce-que-share)
+
+[Le système Share](#le-système-share)
+- [Ajout d'un produit](#ajout-d'un-produit)
+- [Obtenir des points](#obtenir-des-points)
+  - [Particularité](#particularité)
+
+[Stack technique](#stack-technique)
+
+[Installation](#installation)
+- [Git](#git)
+
+[Lancer l'application](#lancer-l'application)
+- [En local](#en-local)
+- [Conformité du code](#conformité-du-code)
+
 # Qu'est-ce que Share ?
 
 Mettre en commun des biens pour davantage d'émancipation matérielle avec
@@ -9,11 +26,11 @@ partager avec sa famille, ses amis ou encore ses voisins !
 Le système Share consiste à louer un produit à sa communauté avec un système de points
 qui permet de réguler le droit que l'on a sur un objet, la durée de son utilisation et 
 d'encourager les utilisateurs de la communauté à apporter davantage d'objets à l'emprunt
-pour avoir accès à des objets de plus en plus intéressants.
+pour avoir accès à des objets de plus en plus intéressants. Les points ne sont pas attribués au mérite de celui qui apportera 
+le plus d’objets à la communauté mais simplement à l’importance que la communauté revêt pour ses membres. 
+C’est le nombre d’objets partagés en communauté qui est récompensé.
 
-## Un système de points ?
-
-### Ajout d'un produit
+## Ajout d'un produit
 Le système Share permet à chaque utilisateur d'une communauté à mettre un bien en location au sein
 d'une communauté. Lorsqu'un bien est soumis à la communauté, chaque membre doit lui donner une 
 valeur en point - la valeur du point représente le nombre maximal de jour que l'on peut emprunter
@@ -21,7 +38,7 @@ cet objet et le nombre de points qu'un utilisateur doit accumuler pour pouvoir e
 Une fois que tout le monde lui a donné une valeur, le produit prend la valeur moyenne des votes 
 utilisateurs comme coût en point.
 
-### Comment avoir des points pour emprunter les objets proposés par la communauté ?
+## Obtenir des points
 Les utilisateurs d'une communauté obtiennent les points en fonction des coûts des 
 objets mis en location. Ils obtiennent le nombre de points totaux des objets mis en location
 divisé par le nombre d'utilisateur. 
@@ -38,7 +55,7 @@ Le total des objets en location est de 24 points.
 Chaque utilisateur reçoit 8 points.
 ```
 
-### Comment puis-je obtenir la PS5 ?
+### Particularité
 
 Avec le système Share, le produit 
 le plus cher est inaccessible à chaque utilsateur qui fait parti de la communauté, 
@@ -49,7 +66,6 @@ Cela encourage la collectivité
 individuellement profiter d'objets plus intéressants, tout en faisant profiter la 
 collectivité par effet.
 
-#### Règle d'or
 Pour obtenir le produit le plus cher, il faut que la communauté
 possède en points l'équivalent de x exemplaire du produit le plus cher
 avec x = le nombre d'utilisateur.
@@ -74,7 +90,7 @@ Pour obtenir la PS5, il faut :
 
     Le total des objets en location est de 60 points.
 
-    Chaque utilisateur reçoit 20 points. Chaque utilsateur peur acheter la PS5.
+    Chaque utilisateur reçoit 20 points. Chaque utilsateur peut acheter la PS5.
     
  - Avoir 3 PS5
     Il y a trois PS5 et une NITENDO64. 
@@ -86,10 +102,24 @@ Pour obtenir la PS5, il faut :
     Chaque utilisateur reçoit 20 points. Chaque utilsateur peur acheter la PS5.
 ```
 
-### Récupérer ses points pour avoir d'autres objets
+## Récupérer des points
 Lorsque le produit est emprunté, pour chaque jour qu'on le 
 possède, on récupère un point par jour.
 Lorsqu'on rend l'objet à la communauté, on récupère tous ses points.
+Il est possible de rendre l’objet quand on veut durant la location.
+
+# Stack technique
+Base de données : PostgreSQL et ORM Django
+Administrateur d’application : Django avec le pattern design MVT (Modèle, Vue, Templates)
+Interface graphique : Bootstrap
+Environnement virtuel : Pipenv
+Logiciel de gestion des versions : Git
+Service web d’hébergement de gestion des versions : GitHub
+Serveur d’application : Gunicorn
+Serveur web : Nginx
+Système de monitoring : Supervisord
+Tâches CRON : Cronitor
+Système de logs : Sentry
 
 # Installation
 
