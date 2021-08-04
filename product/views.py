@@ -178,6 +178,7 @@ class ProductInscriptionView(LoginRequiredMixin, View):
             user=self.request.user,
             group=group
         )
+
         product_form = ProductInscriptionForm(request.POST)
         estimation_form = CostEstimationForm(request.POST)
 
@@ -186,7 +187,7 @@ class ProductInscriptionView(LoginRequiredMixin, View):
                           'product_form': product_form,
                           'estimation_form': estimation_form,
                           'group': group,
-                          'group_member': group_member
+                          'group_member': group_member,
                       },
                       )
 
@@ -276,7 +277,7 @@ class ProductInscriptionView(LoginRequiredMixin, View):
                         'product_form': product_form,
                         'estimation_form': estimation_form,
                         'group': group,
-                        'group_member': group_member
+                        'group_member': group_member,
                     }
                 )
 
@@ -294,17 +295,23 @@ class ProductChangeView(LoginRequiredMixin, View):
         )
         product = Product.objects.get(id=id)
 
-        estimation = Estimation.objects.get(
-            group_member=group_member,
-            product=product
-        )
-
-        product_form = ProductInscriptionForm(
-            instance=product,
-        )
-        estimation_form = CostEstimationForm(
-            instance=estimation,
-        )
+        try:
+            estimation = Estimation.objects.get(
+                group_member=group_member,
+                product=product
+            )
+            product_form = ProductInscriptionForm(
+                instance=product,
+            )
+            estimation_form = CostEstimationForm(
+                instance=estimation,
+            )
+        # If the user don't have make any estimation
+        except Estimation.DoesNotExist:
+            product_form = ProductInscriptionForm(
+                instance=product,
+            )
+            estimation_form = CostEstimationForm()
 
         return render(request, 'product/product_modification.html',
                       {
