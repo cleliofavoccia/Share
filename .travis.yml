@@ -9,8 +9,7 @@ addons:
 
 # command to install dependencies
 install:
-  - pip install pipenv
-  - pipenv install
+  - pip install -r requirements.txt
 
 # database to use
 env: DJANGO_SETTINGS_MODULE=settings.travis
@@ -23,4 +22,4 @@ before_script:
 
 # command to run tests
 script:
-  - pipenv run python manage.py test
+  - python manage.py test
