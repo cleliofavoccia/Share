@@ -5,6 +5,7 @@ from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
+from .models import User
 from .forms import ChangeUserForm, AddressUserForm
 
 
@@ -42,7 +43,13 @@ class UserDetailView(LoginRequiredMixin, View):
 
             if user_form.is_valid() and address_form.is_valid():
                 user_form.save()
-                address_form.save()
+                address = address_form.save()
+                user = User.objects.get(
+                    email=request.POST['email']
+                )
+                # Add an address to group
+                user.address = address
+                user.save()
 
                 messages.success(
                     request,

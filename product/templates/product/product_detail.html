@@ -68,8 +68,8 @@
                 </form>
                 {% else %}
                 <a class="btn btn-outline-secondary disabled" href="">Indisponible</a>
-                {% if product.user_provider == member %}
-                {% if not delivered %}
+                {% if product.user_provider == member or product.group_provider %}
+                {% if not product.delivered %}
                 <form method="POST" action="{% url 'product:delivery' %}">
                         {% csrf_token %}
                         <button class="btn btn-outline-primary" value="submit">Livrer</button>

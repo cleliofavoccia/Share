@@ -30,9 +30,18 @@ class ProductDetailView(DetailView):
     model = Product
 
     def get_context_data(self, **kwargs):
+        """Method that return an enriched context
+        to template"""
+
+        # Calculate communities's products cost, total products cost,
+        # points per community member
+        update_communities_informations()
+
         user = self.request.user
         context = super().get_context_data(**kwargs)
         product = super().get_object()
+
+        context['product'] = product
         community = product.group
 
         try:
@@ -49,10 +58,6 @@ class ProductDetailView(DetailView):
         group_products_list = Product.objects.filter(group=community)
         members_number = GroupMember.objects.filter(group=community).count()
         products_number = Product.objects.filter(group=community).count()
-
-        # Calculate communities's products cost, total products cost,
-        # points per community member
-        update_communities_informations()
 
         context['group_products_list'] = group_products_list
         context['members_number'] = members_number
@@ -252,8 +257,8 @@ class ProductInscriptionView(LoginRequiredMixin, View):
                 messages.success(
                     request,
                     "Votre produit a bien été enregistré !"
-                    "Les autres membres pourront estimer à leur tour"
-                    "son coût de location"
+                    " Les autres membres pourront estimer à leur tour"
+                    " son coût de location"
                 )
                 return redirect('group:community', product.group.pk)
 
@@ -261,7 +266,8 @@ class ProductInscriptionView(LoginRequiredMixin, View):
                 messages.error(
                     request,
                     "Une erreur est survenue, réessayez d'inscrire"
-                    "un produit à la communauté ou contactez un adminsitrateur"
+                    " un produit à la communauté ou"
+                    " contactez un adminsitrateur"
                 )
                 return render(
                     request,
@@ -379,7 +385,7 @@ class ProductChangeView(LoginRequiredMixin, View):
                 messages.success(
                     request,
                     "Vos modifications ont bien été enregistrées !"
-                    "Les autres membres vont être prévenu"
+                    " Les autres membres vont être prévenu"
                 )
                 return redirect('product:product', product.pk)
 
@@ -411,12 +417,19 @@ class ProductSuppressionView(LoginRequiredMixin, View):
             )
 
             if form.is_valid():
-                form.delete()
-                messages.success(
-                    request,
-                    "Votre produit a bien été supprimé"
-                )
-                return redirect('group:community', request.POST['group'])
+                if form.delete() == 'OK':
+                    messages.success(
+                        request,
+                        "Votre produit a bien été supprimé"
+                    )
+                    return redirect('group:community', request.POST['group'])
+                else:
+                    messages.error(
+                        request,
+                        "Vous ne pouvez pas supprimé le"
+                        " produit tant qu'il est loué"
+                    )
+                    return redirect('group:community', request.POST['group'])
 
             messages.error(
                 request,

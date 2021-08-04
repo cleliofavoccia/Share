@@ -63,6 +63,7 @@ class ProductSuppressionForm(forms.Form):
 
         product = self.cleaned_data['product_to_delete']
 
-        if product and commit:
+        if product and commit and not product.tenant:
             product.delete()
-        return product
+            return 'OK'
+        return 'NOT'

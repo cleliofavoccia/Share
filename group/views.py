@@ -22,6 +22,13 @@ class CommunityDetailView(DetailView):
     model = Group
 
     def get_context_data(self, **kwargs):
+        """Method that return an enriched context
+        to template"""
+
+        # Calculate communities's products cost, total products cost,
+        # points per community member
+        update_communities_informations()
+
         user = self.request.user
         context = super().get_context_data(**kwargs)
         community = super().get_object()
@@ -36,10 +43,6 @@ class CommunityDetailView(DetailView):
         context['group_products_list'] = group_products_list
         context['members_number'] = members_number
         context['products_number'] = products_number
-
-        # Calculate communities's products cost, total products cost,
-        # points per community member
-        update_communities_informations()
 
         if user.is_authenticated:
             group_member_list = list()
@@ -116,10 +119,14 @@ class GroupInscriptionView(LoginRequiredMixin, View):
 
             if group_form.is_valid() and address_form.is_valid():
                 group_form.save()
-                address_form.save()
+                address = address_form.save()
                 group = Group.objects.get(
                     name=request.POST['name']
                 )
+                # Add an address to group
+                group.address = address
+                group.save()
+
                 # Atomatically add creator
                 # as a group member
                 GroupMember.objects.create(
@@ -184,7 +191,13 @@ class GroupChangeView(LoginRequiredMixin, View):
 
             if group_form.is_valid() and address_form.is_valid():
                 group_form.save()
-                address_form.save()
+                address = address_form.save()
+                group = Group.objects.get(
+                    name=request.POST['name']
+                )
+                # Add an address to group
+                group.address = address
+                group.save()
                 messages.success(
                     request,
                     "Vous avez bien modifié la communauté !"

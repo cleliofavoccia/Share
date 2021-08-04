@@ -68,7 +68,7 @@
     <div class="row">
         {% for product in group_products_list %}
         <div class="col">
-            <div class="card mb-3" style="min-width: 350px; min-height: 200px;">
+            <div class="card mb-3 mt-2" style="min-width: 350px; min-height: 200px;">
                 <div class="row g-0">
                     <div class="col-md-4">
                         {% if product.image %}
@@ -99,12 +99,20 @@
                 </form>
                 {% else %}
                 <a class="btn btn-outline-secondary disabled" href="">Indisponible</a>
-                {% if product.user_provider == member %}
-                <a class="btn btn-outline-primary" href="">Livré</a>
+                {% if not product.delivered %}
+                {% if product.user_provider == group_member or product.group_provider %}
+                <form method="POST" action="{% url 'product:delivery' %}">
+                        {% csrf_token %}
+                        <button class="btn btn-outline-primary" value="submit">Livrer</button>
+                        <input type="hidden" name="product" value="{{ product.id }}"/>
+                </form>
+                {% endif %}
+                {% else %}
+                <a class="btn btn-outline-secondary disabled" href="">Livré</a>
                 {% endif %}
                 {% endif %}
-                {% if member %}
-                {% if product.tenant == member %}
+                {% if group_member %}
+                {% if product.tenant == group_member %}
                 <form method="POST" action="{% url 'group_member:cancel_rent' %}">
                         {% csrf_token %}
                         <button class="btn btn-outline-danger" value="submit">Rendre</button>
@@ -112,8 +120,8 @@
                         <input type="hidden" name="group_member" value="{{ group_member.id }}"/>
                 </form>
                 {% endif %}
-                {% if product.user_provider == member %}
-                <a class="btn btn-outline-light" href="">Modifier</a>
+                {% if product.user_provider == group_member or product.group_provider %}
+                <a class="btn btn-outline-secondary" href="{% url 'product:modify_product' product.group.pk product.pk %}">Modifier</a>
                 <form method="POST" action="{% url 'product:delete_product' %}">
                         {% csrf_token %}
                         <button class="btn btn-outline-danger" value="submit">Supprimer</button>
@@ -134,11 +142,17 @@
 </div>
 <style>
     .product-image{
-        width: 180px;
-        height: 100px;
+        max-width: 130px;
+        max-height: 150px;
     }
     .group-image{
         width: 100px;
+    }
+    .card{
+        min-width: 350px;
+        min-height: 200px;
+        max-width: 350px;
+        max-height: 200px;
     }
 </style>
 {% endblock content %}

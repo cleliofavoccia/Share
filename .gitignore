@@ -1,6 +1,7 @@
 .coverage
 .env
 .idea/
+*.pyc
 collective_decision/__pycache__/
 collective_decision/migrations/__pycache__/
 dashboard/__pycache__/
@@ -27,3 +28,4 @@ static
 Le système de points
 images_tests
 media
+flake-report/

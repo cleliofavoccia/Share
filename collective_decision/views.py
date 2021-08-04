@@ -135,7 +135,8 @@ class GroupVoteView(LoginRequiredMixin, DetailView):
     template_name = 'collective_decision/vote.html'
 
     def get_context_data(self, **kwargs):
-        """Method that return an enriched context"""
+        """Method that return an enriched context
+        to template"""
 
         user = self.request.user
         context = super().get_context_data(**kwargs)
