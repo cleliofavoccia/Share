@@ -17,7 +17,7 @@
                     {% if product.group.image %}
                     <img class="group-image" src="{{ product.group.image.url }}" title="Image du produit {{ product.group.name }} : {{ product.group.address }}">
                     {% else %}
-                    <img class="group-image ms-3" alt="Image du produit {{ product.group.name }}" title="Image du produit {{ product.group.name }} : {{ product.group.address }}">
+                    <img class="group-image ms-3" src="{% static 'social-media.png' %}" alt="Image du produit {{ product.group.name }}" title="Image du produit {{ product.group.name }} : {{ product.group.address }}">
                     {% endif %}
             </div>
             <p>Nombre de membres : {{ members_number }}</p>
@@ -46,7 +46,7 @@
             {% if product.image %}
             <img class="product-image" src="{{ product.image.url }}" title="Image du produit {{ product.name }} : {{ product.description }}">
             {% else %}
-            <img class="product-image mb-3" alt="Image du produit {{ product.name }}" title="Image du produit {{ product.name }} : {{ product.description }}">
+            <img class="product-image mb-3" src="{% static 'social-media.png' %}" alt="Image du produit {{ product.name }}" title="Image du produit {{ product.name }} : {{ product.description }}">
             {% endif %}
             <p>{{ product.description }}</p>
             {% if product.user_provider %}
