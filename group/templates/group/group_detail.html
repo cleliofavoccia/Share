@@ -72,9 +72,9 @@
                 <div class="row g-0">
                     <div class="col-md-4">
                         {% if product.image %}
-                        <img class="product-image" src="{{ product.image.url }}" title="Image du produit {{ product.name }} : {{ product.description }}">
+                        <img class="product-image mt-3" src="{{ product.image.url }}" title="Image du produit {{ product.name }} : {{ product.description }}">
                         {% else %}
-                        <img class="product-image mt-3 ms-3" src="{% static 'social-media.png' %}" alt="Image du produit {{ product.name }}" title="Image du produit {{ product.name }} : {{ product.description }}">
+                        <img class="product-image mt-3" src="{% static 'social-media.png' %}" alt="Image du produit {{ product.name }}" title="Image du produit {{ product.name }} : {{ product.description }}">
                         {% endif %}
                     </div>
                 <div class="col-md-8">

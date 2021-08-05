@@ -23,7 +23,7 @@
                     {% if community.image %}
                     <img class="group-image pe-2" src="{{ community.image.url }}" title="Image de la communauté {{ community.name }} : {% if community.address %} {{ community.address }} {% else %} {{ community.url }} {% endif %}">
                     {% else %}
-                    <img class="group-image pe-2" alt="Image de la communauté {{ community.name }}" title="Image de la communauté {{ community.name }} : {% if community.address %} {{ community.address }} {% else %} {{ community.url }} {% endif %}">
+                    <img class="group-image pe-2" src="{% static 'social-media.png' %}" alt="Image de la communauté {{ community.name }}" title="Image de la communauté {{ community.name }} : {% if community.address %} {{ community.address }} {% else %} {{ community.url }} {% endif %}">
                     {% endif %}
                     <div style="display: flex; flex-direction: column">
                         {% if not community.name in group_member_list %}
@@ -62,9 +62,9 @@
                         <div class="row g-0">
                             <div class="col-md-4">
                                 {% if product.image %}
-                                <img class="product-image" src="{{ product.image.url }}" title="Image du produit {{ product.name }} : {{ product.description }}">
+                                <img class="product-image ms-3" src="{{ product.image.url }}" title="Image du produit {{ product.name }} : {{ product.description }}">
                                 {% else %}
-                                <img class="product-image ms-3" alt="Image du produit {{ product.name }}" title="Image du produit {{ product.name }} : {{ product.description }}">
+                                <img class="product-image ms-3" src="{% static 'social-media.png' %}" alt="Image du produit {{ product.name }}" title="Image du produit {{ product.name }} : {{ product.description }}">
                                 {% endif %}
                             </div>
                         <div class="col-md-8">
