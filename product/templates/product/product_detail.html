@@ -61,6 +61,9 @@
                 {% endif %}
                 <a id="estimation" class="ms-5" href="{% url 'collective_decision:estimation' product.pk %}">Estimez ou réestimez son coût</a>
             </div>
+            {% if product.rental_end %}
+            <p class="card-text">Fin de location : {{ product.rental_end }}</p>
+            {% endif %}
             <div>
                 {% if not product.tenant %}
                 <form method="POST" action="{% url 'group_member:rent' %}">
