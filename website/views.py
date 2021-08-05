@@ -6,13 +6,19 @@ from django.shortcuts import render
 
 
 class AboutView(TemplateView):
-    """View to print vote not changed"""
+    """View to print about text"""
 
     template_name = "website/about.html"
 
 
+class LegalMentionsView(TemplateView):
+    """View to print legal mentions text"""
+
+    template_name = "website/legal_mentions.html"
+
+
 class FailView(LoginRequiredMixin, View):
-    """View to print vote not changed"""
+    """View to print error to user"""
 
     def get(self, request):
         """Method GET to print fail message"""
