@@ -124,6 +124,7 @@ class GroupMemberRentalForm(forms.Form):
         group_member.points_penalty = 0
 
         product.tenant = None
+        product.delivered = False
 
         if commit:
             group_member.save()
