@@ -27,7 +27,7 @@ cronitor.api_key = os.getenv('CRONITOR_KEY')
 
 
 # monitor any function
-@cronitor.job('QWpptg')
+@cronitor.job('KaGpPf')
 def check_rent_delivery(args):
     call_command('delivery')
 
