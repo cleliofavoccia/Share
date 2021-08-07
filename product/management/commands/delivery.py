@@ -44,6 +44,7 @@ class Command(BaseCommand):
 
                     product.tenant = None
                     product.delivered = False
+                    product.rental_end = None
 
                     product.save()
 
