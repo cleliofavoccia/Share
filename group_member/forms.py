@@ -125,6 +125,7 @@ class GroupMemberRentalForm(forms.Form):
 
         product.tenant = None
         product.delivered = False
+        product.rental_end = None
 
         if commit:
             group_member.save()
