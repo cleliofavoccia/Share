@@ -1,7 +1,6 @@
 from settings.base import *
 
 import sentry_sdk
-import cronitor
 
 from sentry_sdk.integrations.django import DjangoIntegration
 from django.core.management import call_command
