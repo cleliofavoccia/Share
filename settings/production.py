@@ -1,7 +1,6 @@
 from settings.base import *
 
 import sentry_sdk
-import cronitor
 
 from sentry_sdk.integrations.django import DjangoIntegration
 from django.core.management import call_command
@@ -20,26 +19,6 @@ sentry_sdk.init(
     # django.contrib.auth) you may enable sending PII data.
     send_default_pii=True
 )
-
-# Cronitor
-
-cronitor.api_key = os.getenv('CRONITOR_KEY')
-
-
-# monitor any function
-@cronitor.job('KaGpPf')
-def check_rent_delivery(args):
-    call_command('delivery')
-
-
-# Or embed telemetry events in your application
-monitor = cronitor.Monitor('KaGpPf')
-# send a run event (a job/process has started)
-monitor.ping(state='run')
-# send a complete event (a job/process has completed successfully)
-monitor.ping(state='complete')
-# send a failure event
-monitor.ping(state='fail')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
